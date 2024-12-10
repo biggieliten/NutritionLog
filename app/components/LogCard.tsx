@@ -1,39 +1,32 @@
 import { useContext } from "react";
-import { View, Text } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import { GlobalContext } from "../state/GlobalState/GlobalContext";
-import { GlobalContextType } from "../types/types";
+import { GlobalContextType, Log } from "../types/types";
 
-export const LogCard = (dailyGoal: any, currentMacros: any) => {
+export const LogCard = (log: Log) => {
   return (
-    <View>
-      <Text>Daily Progress</Text>
-      <View>
-        {currentMacros.map((c: any) => (
-          <Text>{c.calories}</Text>
-        ))}
-        /
-        {dailyGoal.map((d: any) => (
-          <Text>{d.calories}</Text>
-        ))}
-      </View>
-      {/* <Text>
-        Calories: {currentMacros.calories}/{dailyGoal.calories}kcal
-      </Text>
-      <Text>
-        Protein: {currentMacros.protein}/{dailyGoal.protein}g
-      </Text>
-      <Text>
-        Carbs: {currentMacros.carbs}/{dailyGoal.carbs}g
-      </Text>
-      <Text>
-        Fat: {currentMacros.fat}/{dailyGoal.fat}g
-      </Text>
-      <Text>
-        Fiber: {currentMacros.fiber}/{dailyGoal.fiber}g
-      </Text>
-      <Text>
-        Sugar: {currentMacros.sugar}/{dailyGoal.sugar}g
-      </Text> */}
+    <View style={styles.container}>
+      <Text>Date: {log.date}</Text>
+      <Text>Calories: {log.calories}</Text>
+      <Text>Protein: {log.protein}</Text>
+      <Text>Carbohydrates: {log.carbohydrates}</Text>
+      <Text>Fat: {log.fat}</Text>
+      <Text>Fiber: {log.fiber}</Text>
+      <Text>Sugar: {log.sugar}</Text>
     </View>
   );
 };
+const styles = StyleSheet.create({
+  container: {
+    padding: 20,
+    margin: 10,
+
+    height: "auto",
+    width: 250,
+    backgroundColor: "lightgrey",
+  },
+  text: {
+    fontSize: 20,
+    fontWeight: "bold",
+  },
+});

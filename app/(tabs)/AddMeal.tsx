@@ -70,7 +70,7 @@ export default function AddMeal() {
         placeholder="Enter weight in grams"
       />
       <Pressable onPress={handleSetWeight}>
-        <Text>Add Meal</Text>
+        <Text>Add macros</Text>
       </Pressable>
       <Pressable
         onPress={() => {
@@ -92,7 +92,7 @@ export default function AddMeal() {
           //   setMacroLogs([]);
         }}
       >
-        <Text>Set Meal</Text>
+        <Text>Set daily progress</Text>
       </Pressable>
       <Pressable style={{ marginTop: 30 }} onPress={clearAsyncStorage}>
         <Text>Clear macroLogs</Text>

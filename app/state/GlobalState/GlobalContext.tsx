@@ -38,7 +38,7 @@ export const GlobalProvider = ({ children }: any) => {
         if (savedLogs) {
           setMacroLogs(JSON.parse(savedLogs));
         } else {
-          setMacroLogs([]); // Initialize with an empty array
+          setMacroLogs([]);
         }
       } catch (error) {
         console.error("Error loading macroLogs:", error);
@@ -47,6 +47,7 @@ export const GlobalProvider = ({ children }: any) => {
 
     loadMacroLogs();
   }, [macroLogs]);
+
   useEffect(() => {
     const initializeApp = async () => {
       try {
@@ -87,13 +88,12 @@ export const GlobalProvider = ({ children }: any) => {
           ...macroLogs,
           {
             date: lastSavedDate,
-            ...currentMacros, // Use the current macros directly
+            ...currentMacros,
           },
         ];
 
         setMacroLogs(updatedLogs);
 
-        // Save logs and reset macros
         try {
           await AsyncStorage.setItem("macroLogs", JSON.stringify(updatedLogs));
           console.log("Logs saved:", updatedLogs);
@@ -133,95 +133,6 @@ export const GlobalProvider = ({ children }: any) => {
 
     saveMacros();
   }, [currentMacros]);
-
-  //   // Load current macros from async storage
-  //   useEffect(() => {
-  //     const loadMacros = async () => {
-  //       try {
-  //         const storedMacros = await AsyncStorage.getItem("currentMacros");
-  //         if (storedMacros) {
-  //           setCurrentMacros(JSON.parse(storedMacros));
-  //         }
-  //       } catch (error) {
-  //         console.log("Error loading current macros:", error);
-  //       }
-  //     };
-  //     loadMacros();
-  //   }, []);
-
-  //   // Load logs from async storage
-  //   useEffect(() => {
-  //     const loadLogs = async () => {
-  //       try {
-  //         const storedLogs = await AsyncStorage.getItem("macroLogs");
-  //         if (storedLogs) {
-  //           setMacroLogs(JSON.parse(storedLogs));
-  //           console.log("Loaded logs from AsyncStorage:", JSON.parse(storedLogs));
-  //         }
-  //       } catch (error) {
-  //         console.log("Error loading logs from AsyncStorage:", error);
-  //       }
-  //     };
-  //     loadLogs();
-  //   }, []);
-
-  //   // Save current macros to async storage
-  //   useEffect(() => {
-  //     const saveMacros = async () => {
-  //       try {
-  //         await AsyncStorage.setItem(
-  //           "currentMacros",
-  //           JSON.stringify(currentMacros)
-  //         );
-  //       } catch (error) {
-  //         console.log("Error saving current macros:", error);
-  //       }
-  //     };
-  //     saveMacros();
-  //   }, [currentMacros]);
-
-  //   // Check for new day and update logs
-  //   useEffect(() => {
-  //     const checkForNewDay = async () => {
-  //       const today = getToday();
-  //       if (today !== lastSavedDate) {
-  //         // Save current macros to logs
-  //         const newLog: Log = {
-  //           date: lastSavedDate,
-  //           ...currentMacros,
-  //         };
-  //         const updatedLogs = [...macroLogs, newLog];
-  //         setMacroLogs(updatedLogs);
-
-  //         // Save logs to async storage
-  //         try {
-  //           await AsyncStorage.setItem("macroLogs", JSON.stringify(updatedLogs));
-  //           console.log("Logs saved:", updatedLogs);
-  //         } catch (error) {
-  //           console.log("Error saving macro logs:", error);
-  //         }
-
-  //         // Reset current macros for the new day
-  //         setCurrentMacros({
-  //           calories: 0,
-  //           protein: 0,
-  //           carbohydrates: 0,
-  //           fat: 0,
-  //           fiber: 0,
-  //           sugar: 0,
-  //         });
-
-  //         // Update last saved date
-  //         setLastSavedDate(today);
-  //         try {
-  //           await AsyncStorage.setItem("lastSavedDate", today);
-  //         } catch (error) {
-  //           console.log("Error saving last saved date:", error);
-  //         }
-  //       }
-  //     };
-  //     checkForNewDay();
-  //   }, [lastSavedDate]);
 
   return (
     <GlobalContext.Provider
