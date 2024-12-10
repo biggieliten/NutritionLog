@@ -15,6 +15,7 @@ export default function AddMeal() {
     setMacroLogs,
     macroLogs,
     setLastSavedDate,
+    dailyGoal,
   } = useContext(GlobalContext);
   const [weight, setWeight] = useState<number>(0);
   const [input, setInput] = useState<string>("");
@@ -55,48 +56,55 @@ export default function AddMeal() {
     }
   };
   return (
-    <View style={{}}>
-      <Text>{UPCContent.product.product_name}</Text>
-      {Object.entries(macros).map(([key, value]) => (
-        <Text key={key}>
-          {key.charAt(0).toUpperCase() + key.slice(1)}:{" "}
-          {roundTwoDecimals(value)} {nutriments[`${key}_unit`] || ""}
-        </Text>
-      ))}
-      <TextInput
-        keyboardType="numeric"
-        onChangeText={(input) => setInput(input)}
-        style={{ borderWidth: 1 }}
-        placeholder="Enter weight in grams"
-      />
-      <Pressable onPress={handleSetWeight}>
-        <Text>Add macros</Text>
-      </Pressable>
-      <Pressable
-        onPress={() => {
-          const updatedMacros = {
-            calories: macros.kcal + currentMacros.calories,
-            protein: macros.proteins + currentMacros.protein,
-            carbohydrates: macros.carbohydrates + currentMacros.carbohydrates,
-            fat: macros.fat + currentMacros.fat,
-            fiber: macros.fiber + currentMacros.fiber,
-            sugar: macros.sugars + currentMacros.sugar,
-          };
-          if (updatedMacros) {
-            setCurrentMacros(updatedMacros);
-          }
-          console.log(getToday());
-          console.log(currentMacros, "macroLogs in AddMeal");
-          //   setLastSavedDate("2024-12-24");
+    <View>
+      {dailyGoal.calories ? (
+        <View style={{}}>
+          <Text>{UPCContent.product.product_name}</Text>
+          {Object.entries(macros).map(([key, value]) => (
+            <Text key={key}>
+              {key.charAt(0).toUpperCase() + key.slice(1)}:{" "}
+              {roundTwoDecimals(value)} {nutriments[`${key}_unit`] || ""}
+            </Text>
+          ))}
+          <TextInput
+            keyboardType="numeric"
+            onChangeText={(input) => setInput(input)}
+            style={{ borderWidth: 1 }}
+            placeholder="Enter weight in grams"
+          />
+          <Pressable onPress={handleSetWeight}>
+            <Text>Add macros</Text>
+          </Pressable>
+          <Pressable
+            onPress={() => {
+              const updatedMacros = {
+                calories: macros.kcal + currentMacros.calories,
+                protein: macros.proteins + currentMacros.protein,
+                carbohydrates:
+                  macros.carbohydrates + currentMacros.carbohydrates,
+                fat: macros.fat + currentMacros.fat,
+                fiber: macros.fiber + currentMacros.fiber,
+                sugar: macros.sugars + currentMacros.sugar,
+              };
+              if (updatedMacros) {
+                setCurrentMacros(updatedMacros);
+              }
+              console.log(getToday());
+              console.log(currentMacros, "macroLogs in AddMeal");
+              //   setLastSavedDate("2024-12-24");
 
-          //   setMacroLogs([]);
-        }}
-      >
-        <Text>Set daily progress</Text>
-      </Pressable>
-      <Pressable style={{ marginTop: 30 }} onPress={clearAsyncStorage}>
-        <Text>Clear macroLogs</Text>
-      </Pressable>
+              //   setMacroLogs([]);
+            }}
+          >
+            <Text>Set daily progress</Text>
+          </Pressable>
+          <Pressable style={{ marginTop: 30 }} onPress={clearAsyncStorage}>
+            <Text>Clear macroLogs</Text>
+          </Pressable>
+        </View>
+      ) : (
+        <Text>No product found for this UPC.</Text>
+      )}
     </View>
   );
 }

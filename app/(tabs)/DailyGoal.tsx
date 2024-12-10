@@ -54,10 +54,7 @@ export default function SetGoal() {
         onChangeText={(text) => setGoal({ ...dailyGoal, fat: Number(text) })}
       />
 
-      <Pressable
-        style={{ borderWidth: 1, margin: 10 }}
-        onPress={handleSaveGoal}
-      >
+      <Pressable style={{ borderWidth: 1, margin: 0 }} onPress={handleSaveGoal}>
         <Text>Save Goal</Text>
       </Pressable>
     </View>

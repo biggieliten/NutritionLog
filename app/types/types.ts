@@ -21,6 +21,7 @@ export type Macros = {
   fat: number;
   fiber: number;
   sugar: number;
+  date?: string;
 };
 
 export type nutriments = {

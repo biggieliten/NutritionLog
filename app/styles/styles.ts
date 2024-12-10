@@ -14,6 +14,7 @@ export const stylesIndex = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     width: "100%",
+    backgroundColor: "#2A2A2A",
   },
 
   dailyProgressContainer: {
@@ -24,7 +25,7 @@ export const stylesIndex = StyleSheet.create({
     padding: 10,
     marginTop: 10,
 
-    backgroundColor: "lightgrey",
+    backgroundColor: "#515151",
     borderRadius: 15,
   },
   camera: {

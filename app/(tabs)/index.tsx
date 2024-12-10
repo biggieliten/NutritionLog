@@ -4,6 +4,9 @@ import { GlobalContext } from "../state/GlobalState/GlobalContext";
 import { LogCard } from "../components/LogCard";
 import { Log } from "../types/types";
 import { stylesIndex } from "../styles/styles";
+import { AnimatedCircularProgress } from "react-native-circular-progress";
+import { divisionToPercentage } from "../utils/divisionToPercentage";
+import { Link } from "expo-router";
 
 export default function Index() {
   const {
@@ -13,6 +16,12 @@ export default function Index() {
     setLastSavedDate,
     setCurrentMacros,
   } = useContext(GlobalContext);
+
+  const percentageOfDailyCalories = divisionToPercentage(
+    currentMacros.calories,
+    dailyGoal.calories
+  );
+  //   console.log(percentageOfDailyCalories, "divisionToPercentage");
 
   return (
     <ScrollView contentContainerStyle={stylesIndex.container}>
@@ -33,10 +42,67 @@ export default function Index() {
         <Text>Simulate date change</Text>
       </Pressable>
       <View style={stylesIndex.dailyProgressContainer}>
-        <Text>Daily Progress</Text>
-        <Text>
+        {dailyGoal.calories <= 0 ? (
+          <View
+            style={{
+              width: 85,
+              margin: 10,
+              padding: 5,
+
+              backgroundColor: "white",
+              borderRadius: 10,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Link href="/DailyGoal">
+              <Text
+                style={{
+                  textAlign: "center",
+                }}
+              >
+                Set daily calorie goal
+              </Text>
+            </Link>
+          </View>
+        ) : (
+          <>
+            <Text>Daily Progress</Text>
+            <View>
+              <AnimatedCircularProgress
+                size={120}
+                width={10}
+                fill={Number(percentageOfDailyCalories)}
+                tintColor="#00e0ff"
+                rotation={70}
+                backgroundColor="#3d5875"
+              >
+                {() => (
+                  <>
+                    <Text>Cals</Text>
+                    <Text style={{ fontSize: 18 }}>
+                      {dailyGoal.calories <= 0
+                        ? `0%`
+                        : `${percentageOfDailyCalories}%`}
+                    </Text>
+                  </>
+                )}
+              </AnimatedCircularProgress>
+
+              {/* <ProgressCircle
+		 percent={percentageOfDailyCalories}
+		 radius={50}
+		 // borderWidth={8}
+		 >
+		 <Text style={{ fontSize: 18 }}>{"30%"}</Text>
+		 </ProgressCircle> */}
+            </View>
+          </>
+        )}
+
+        {/* <Text>
           Calories: {currentMacros.calories} / {dailyGoal.calories}
-        </Text>
+        </Text> */}
         <Text>
           Protein: {currentMacros.protein} / {dailyGoal.protein}
         </Text>

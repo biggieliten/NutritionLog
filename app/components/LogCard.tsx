@@ -6,13 +6,12 @@ import { GlobalContextType, Log } from "../types/types";
 export const LogCard = (log: Log) => {
   return (
     <View style={styles.container}>
-      <Text>Date: {log.date}</Text>
-      <Text>Calories: {log.calories}</Text>
-      <Text>Protein: {log.protein}</Text>
-      <Text>Carbohydrates: {log.carbohydrates}</Text>
-      <Text>Fat: {log.fat}</Text>
-      <Text>Fiber: {log.fiber}</Text>
-      <Text>Sugar: {log.sugar}</Text>
+      {Object.entries(log).map(([key, value]) => (
+        <Text key={key} style={styles.text}>
+          {key.charAt(0).toUpperCase() + key.slice(1)}:{" "}
+          {value === log.date ? value : Math.round(value)}
+        </Text>
+      ))}
     </View>
   );
 };
@@ -23,10 +22,13 @@ const styles = StyleSheet.create({
 
     height: "auto",
     width: 250,
-    backgroundColor: "lightgrey",
+
+    backgroundColor: "#515151",
+    borderRadius: 15,
   },
   text: {
     fontSize: 20,
     fontWeight: "bold",
+    color: "white",
   },
 });
