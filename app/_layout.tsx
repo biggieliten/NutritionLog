@@ -1,10 +1,12 @@
 import { Stack } from "expo-router";
-
+import { GlobalProvider } from "./state/GlobalState/GlobalContext";
 export default function RootLayout() {
   return (
-    <Stack>
-      {/* <Stack.Screen name="(drawers)" options={{ headerShown: false }} /> */}
-      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-    </Stack>
+    <GlobalProvider>
+      <Stack>
+        {/* <Stack.Screen name="(drawers)" options={{ headerShown: false }} /> */}
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      </Stack>
+    </GlobalProvider>
   );
 }

@@ -1,8 +1,84 @@
-import { View, Text } from "react-native";
+import { View, Text, StyleSheet, Pressable } from "react-native";
+import { CameraView } from "expo-camera";
+import { useContext, useState } from "react";
+import { BarcodeScanningResult } from "expo-camera";
+import { GlobalContext } from "../state/GlobalState/GlobalContext";
+import { UPC } from "../types/types";
+import { useGet } from "../hooks/useGet";
+
 export default function Scanner() {
+  const [flashState, setFlashState] = useState(false);
+  const [upcScanned, setUpcScanned] = useState<boolean>(true);
+  const { setScannedUPC, scannedUPC, setUPCContent } =
+    useContext(GlobalContext);
+  //   const UPCURL = `https://world.openfoodfacts.org/api/v0/product/${scannedUPC}.json`;
+  const UPCURL = `https://world.openfoodfacts.org/api/v0/product/7318690499541.json`;
+  const { data } = useGet<UPC>(UPCURL);
+
+  //   console.log(data, "data on scan");
+  //   const handleBarcodeScan = (upc: BarcodeScanningResult) => {
+  //     if (upc != null && upcScanned === false) {
+  //       //   console.log(upc.data, typeof upc.data);
+  //       setScannedUPC(upc.data);
+  //       setUpcScanned(true);
+  //       //   return upc.data;
+  //     }
+  //   };
+
+  if (data) {
+    setUPCContent(data);
+  }
+
   return (
-    <View>
-      <Text>Scanner</Text>
-    </View>
+    <>
+      <View style={styles.container}>
+        <CameraView
+          style={styles.camera}
+          barcodeScannerSettings={{ barcodeTypes: ["upc_a", "upc_e", "ean13"] }}
+          enableTorch={flashState}
+          //   onBarcodeScanned={(upc) =>
+          //     handleBarcodeScan(upc as BarcodeScanningResult)
+          //   }
+        />
+        <Pressable
+          style={styles.scanButton}
+          onPress={() => setUpcScanned(false)}
+        >
+          <Text>Scan</Text>
+        </Pressable>
+        <Pressable
+          style={styles.flashButton}
+          onPress={() => setFlashState(!flashState)}
+        >
+          <Text>Flash</Text>
+        </Pressable>
+      </View>
+    </>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+  },
+  camera: {
+    flex: 1,
+  },
+  flashButton: {
+    position: "absolute",
+    bottom: 30,
+    marginLeft: 20,
+    backgroundColor: "white",
+    padding: 10,
+    borderRadius: 5,
+  },
+  scanButton: {
+    position: "absolute",
+    bottom: 30,
+    marginLeft: 80,
+    backgroundColor: "white",
+    padding: 10,
+    borderRadius: 5,
+  },
+});
