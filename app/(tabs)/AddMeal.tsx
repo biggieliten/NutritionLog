@@ -1,15 +1,16 @@
-import { TextInput, View, Text, Pressable } from "react-native";
+import { TextInput, View, Text, Pressable, ScrollView } from "react-native";
 import { GlobalContext } from "../state/GlobalState/GlobalContext";
 import { useContext, useState } from "react";
 import { macroCalculator } from "../utils/macroCalculator";
 import roundTwoDecimals from "../utils/roundTwoDecimals";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getToday } from "../utils/todaysDate";
+import { stylesAddMeal } from "../styles/styles";
 
 export default function AddMeal() {
   const {
     scannedUPC,
-    UPCContent,
+    UPCContent: UPCContent,
     setCurrentMacros,
     currentMacros,
     setMacroLogs,
@@ -56,12 +57,14 @@ export default function AddMeal() {
     }
   };
   return (
-    <View>
+    <ScrollView contentContainerStyle={stylesAddMeal.container}>
       {dailyGoal.calories ? (
-        <View style={{}}>
-          <Text>{UPCContent.product.product_name}</Text>
+        <View style={stylesAddMeal.contentContainer}>
+          <Text style={stylesAddMeal.title}>
+            {UPCContent.product.product_name}
+          </Text>
           {Object.entries(macros).map(([key, value]) => (
-            <Text key={key}>
+            <Text key={key} style={stylesAddMeal.text}>
               {key.charAt(0).toUpperCase() + key.slice(1)}:{" "}
               {roundTwoDecimals(value)} {nutriments[`${key}_unit`] || ""}
             </Text>
@@ -69,13 +72,14 @@ export default function AddMeal() {
           <TextInput
             keyboardType="numeric"
             onChangeText={(input) => setInput(input)}
-            style={{ borderWidth: 1 }}
+            style={stylesAddMeal.input}
             placeholder="Enter weight in grams"
           />
-          <Pressable onPress={handleSetWeight}>
-            <Text>Add macros</Text>
+          <Pressable onPress={handleSetWeight} style={stylesAddMeal.button}>
+            <Text style={stylesAddMeal.buttonText}>Calculate Macros</Text>
           </Pressable>
           <Pressable
+            style={stylesAddMeal.button}
             onPress={() => {
               const updatedMacros = {
                 calories: macros.kcal + currentMacros.calories,
@@ -96,15 +100,15 @@ export default function AddMeal() {
               //   setMacroLogs([]);
             }}
           >
-            <Text>Set daily progress</Text>
+            <Text style={stylesAddMeal.buttonText}>Set daily progress</Text>
           </Pressable>
-          <Pressable style={{ marginTop: 30 }} onPress={clearAsyncStorage}>
-            <Text>Clear macroLogs</Text>
+          <Pressable style={stylesAddMeal.button} onPress={clearAsyncStorage}>
+            <Text style={stylesAddMeal.buttonText}>Clear macroLogs</Text>
           </Pressable>
         </View>
       ) : (
         <Text>No product found for this UPC.</Text>
       )}
-    </View>
+    </ScrollView>
   );
 }

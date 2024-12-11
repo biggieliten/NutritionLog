@@ -15,6 +15,9 @@ export default function Index() {
     macroLogs,
     setLastSavedDate,
     setCurrentMacros,
+    setDailyGoal,
+
+    setMacroLogs,
   } = useContext(GlobalContext);
 
   const percentageOfDailyCalories = divisionToPercentage(
@@ -28,7 +31,16 @@ export default function Index() {
       <Pressable
         style={{ borderWidth: 1, margin: 10, padding: 5, width: 80 }}
         onPress={() => {
-          setLastSavedDate("2024-12-29");
+          setLastSavedDate("2024-12-31");
+          setDailyGoal({
+            calories: 0,
+            protein: 0,
+            carbohydrates: 0,
+            fat: 0,
+            fiber: 0,
+            sugar: 0,
+          });
+          //   setMacroLogs([]);
           //   setCurrentMacros({
           //     calories: 0,
           //     protein: 0,
@@ -42,12 +54,13 @@ export default function Index() {
         <Text>Simulate date change</Text>
       </Pressable>
       <View style={stylesIndex.dailyProgressContainer}>
+        <Text>Daily Macros</Text>
         {dailyGoal.calories <= 0 ? (
           <View
             style={{
-              width: 85,
+              width: "70%",
               margin: 10,
-              padding: 5,
+              padding: 8,
 
               backgroundColor: "white",
               borderRadius: 10,
@@ -88,21 +101,10 @@ export default function Index() {
                   </>
                 )}
               </AnimatedCircularProgress>
-
-              {/* <ProgressCircle
-		 percent={percentageOfDailyCalories}
-		 radius={50}
-		 // borderWidth={8}
-		 >
-		 <Text style={{ fontSize: 18 }}>{"30%"}</Text>
-		 </ProgressCircle> */}
             </View>
           </>
         )}
 
-        {/* <Text>
-          Calories: {currentMacros.calories} / {dailyGoal.calories}
-        </Text> */}
         <Text>
           Protein: {currentMacros.protein} / {dailyGoal.protein}
         </Text>
@@ -126,7 +128,7 @@ export default function Index() {
           marginTop: 15,
         }}
       >
-        Past Logs
+        History
       </Text>
       {macroLogs.length > 0 ? (
         macroLogs.map((log: Log, index: number) => (

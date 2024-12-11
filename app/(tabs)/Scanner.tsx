@@ -9,21 +9,26 @@ import { useGet } from "../hooks/useGet";
 export default function Scanner() {
   const [flashState, setFlashState] = useState(false);
   const [upcScanned, setUpcScanned] = useState<boolean>(true);
-  const { setScannedUPC, scannedUPC, setUPCContent } =
-    useContext(GlobalContext);
-  //   const UPCURL = `https://world.openfoodfacts.org/api/v0/product/${scannedUPC}.json`;
+  const {
+    setScannedUPC,
+    scannedUPC,
+    setUPCContent: setUPCContent,
+  } = useContext(GlobalContext);
+  //   const UPCURL = `https://world.openfoodfacts.org/api/v0/product/${
+  //     scannedUPC || null
+  //   }.json`;
   const UPCURL = `https://world.openfoodfacts.org/api/v0/product/7318690499541.json`;
   const { data } = useGet<UPC>(UPCURL);
 
   //   console.log(data, "data on scan");
-  //   const handleBarcodeScan = (upc: BarcodeScanningResult) => {
-  //     if (upc != null && upcScanned === false) {
-  //       //   console.log(upc.data, typeof upc.data);
-  //       setScannedUPC(upc.data);
-  //       setUpcScanned(true);
-  //       //   return upc.data;
-  //     }
-  //   };
+  const handleBarcodeScan = (upc: BarcodeScanningResult) => {
+    if (upc != null && upcScanned === false) {
+      //   console.log(upc.data, typeof upc.data);
+      setScannedUPC(upc.data);
+      setUpcScanned(true);
+      //   return upc.data;
+    }
+  };
 
   if (data) {
     setUPCContent(data);
@@ -36,9 +41,9 @@ export default function Scanner() {
           style={styles.camera}
           barcodeScannerSettings={{ barcodeTypes: ["upc_a", "upc_e", "ean13"] }}
           enableTorch={flashState}
-          //   onBarcodeScanned={(upc) =>
-          //     handleBarcodeScan(upc as BarcodeScanningResult)
-          //   }
+          onBarcodeScanned={(upc) =>
+            handleBarcodeScan(upc as BarcodeScanningResult)
+          }
         />
         <Pressable
           style={styles.scanButton}

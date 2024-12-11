@@ -31,6 +31,8 @@ export const GlobalProvider = ({ children }: any) => {
     fiber: 0,
     sugar: 0,
   });
+
+  // Loading macroLogs whenever the state changes.
   useEffect(() => {
     const loadMacroLogs = async () => {
       try {
@@ -48,15 +50,17 @@ export const GlobalProvider = ({ children }: any) => {
     loadMacroLogs();
   }, [macroLogs]);
 
+  // Loading all data from AsyncStorage on app start. (When GlobalProvider is mounted)
   useEffect(() => {
-    const initializeApp = async () => {
+    const loadAppData = async () => {
       try {
-        // Load data from AsyncStorage
-        const [storedMacros, storedLogs, storedDate] = await Promise.all([
-          AsyncStorage.getItem("currentMacros"),
-          AsyncStorage.getItem("macroLogs"),
-          AsyncStorage.getItem("lastSavedDate"),
-        ]);
+        const [storedMacros, storedLogs, storedDate, storedDailyGoal] =
+          await Promise.all([
+            AsyncStorage.getItem("currentMacros"),
+            AsyncStorage.getItem("macroLogs"),
+            AsyncStorage.getItem("lastSavedDate"),
+            AsyncStorage.getItem("dailyGoal"),
+          ]);
 
         if (storedMacros) {
           setCurrentMacros(JSON.parse(storedMacros));
@@ -71,15 +75,32 @@ export const GlobalProvider = ({ children }: any) => {
           setLastSavedDate(today);
           await AsyncStorage.setItem("lastSavedDate", today);
         }
+        if (storedDailyGoal) {
+          setDailyGoal(JSON.parse(storedDailyGoal));
+        }
       } catch (error) {
-        console.error("Error initializing app data:", error);
+        console.error("Error loading app data:", error);
       }
       //   [macroLogs];
     };
 
-    initializeApp();
+    loadAppData();
   }, []);
 
+  // Saving the dailyGoal to AsyncStorage whenever it changes.
+  useEffect(() => {
+    const storedDailyGoal = async () => {
+      try {
+        await AsyncStorage.setItem("dailyGoal", JSON.stringify(dailyGoal));
+        console.log("Saved dailyGoal:", dailyGoal);
+      } catch (error) {
+        console.log("Error saving daily goal:", error);
+      }
+    };
+    storedDailyGoal();
+  }, [dailyGoal]);
+
+  // Function to add the currentMacros / dailyProgress on date change.
   useEffect(() => {
     const checkForNewDay = async () => {
       const today = getToday();
@@ -143,8 +164,8 @@ export const GlobalProvider = ({ children }: any) => {
         setUPCContent,
         dailyGoal,
         setDailyGoal,
-        setCurrentMacros,
         currentMacros,
+        setCurrentMacros,
 
         macroLogs,
         setMacroLogs,

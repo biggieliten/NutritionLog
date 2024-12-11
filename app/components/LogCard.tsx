@@ -23,8 +23,14 @@ const styles = StyleSheet.create({
     height: "auto",
     width: 250,
 
-    backgroundColor: "#515151",
+    backgroundColor: "#91AC8F",
     borderRadius: 15,
+
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 2,
   },
   text: {
     fontSize: 20,
