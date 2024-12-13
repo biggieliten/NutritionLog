@@ -7,6 +7,7 @@ import { stylesIndex } from "../styles/styles";
 import { AnimatedCircularProgress } from "react-native-circular-progress";
 import { divisionToPercentage } from "../utils/divisionToPercentage";
 import { Link } from "expo-router";
+// import { containerShadow } from "../styles/styles";
 
 export default function Index() {
   const {
@@ -28,8 +29,17 @@ export default function Index() {
 
   return (
     <ScrollView contentContainerStyle={stylesIndex.container}>
+      {/* <Text style={{ position: "absolute", top: 20 }}>Log</Text> */}
       <Pressable
-        style={{ borderWidth: 1, margin: 10, padding: 5, width: 80 }}
+        style={{
+          //   ...containerShadow.containerShadow,
+          borderRadius: 10,
+          marginBottom: 10,
+          padding: 7,
+          width: "40%",
+          backgroundColor: "#91AC8F",
+          marginTop: 50,
+        }}
         onPress={() => {
           setLastSavedDate("2024-12-31");
           setDailyGoal({
@@ -51,14 +61,35 @@ export default function Index() {
           //   });
         }}
       >
-        <Text>Simulate date change</Text>
+        <Text
+          style={{
+            color: "white",
+            fontWeight: "bold",
+            fontSize: 15,
+            textAlign: "center",
+          }}
+        >
+          Simulate date change
+        </Text>
       </Pressable>
       <View style={stylesIndex.dailyProgressContainer}>
-        <Text>Daily Macros</Text>
+        <Text
+          style={[
+            {
+              color: "#ffff",
+              fontWeight: "bold",
+              marginBottom: 20,
+              marginTop: 10,
+              fontSize: 20,
+            },
+          ]}
+        >
+          Daily Progress
+        </Text>
         {dailyGoal.calories <= 0 ? (
           <View
             style={{
-              width: "70%",
+              width: "100%",
               margin: 10,
               padding: 8,
 
@@ -72,6 +103,7 @@ export default function Index() {
               <Text
                 style={{
                   textAlign: "center",
+                  color: "#4B5945",
                 }}
               >
                 Set daily calorie goal
@@ -80,19 +112,21 @@ export default function Index() {
           </View>
         ) : (
           <>
-            <Text>Daily Progress</Text>
-            <View>
+            <View style={{ height: 200 }}>
               <AnimatedCircularProgress
-                size={120}
+                size={200}
                 width={10}
                 fill={Number(percentageOfDailyCalories)}
-                tintColor="#00e0ff"
+                tintColor="#66785F"
                 rotation={70}
-                backgroundColor="#3d5875"
+                backgroundColor="#B2C9AD"
               >
                 {() => (
                   <>
-                    <Text>Cals</Text>
+                    <Text>Calories</Text>
+                    <Text>
+                      {currentMacros.calories} / {dailyGoal.calories}
+                    </Text>
                     <Text style={{ fontSize: 18 }}>
                       {dailyGoal.calories <= 0
                         ? `0%`
@@ -101,31 +135,45 @@ export default function Index() {
                   </>
                 )}
               </AnimatedCircularProgress>
+              <View
+                style={{
+                  flex: 1,
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Text style={{ flex: 1 }}>
+                  Protein: {currentMacros.protein} / {dailyGoal.protein}
+                </Text>
+                <Text style={{ flex: 1 }}>
+                  Carbs: {currentMacros.carbohydrates} /{" "}
+                  {dailyGoal.carbohydrates}
+                </Text>
+                <Text style={{ flex: 1 }}>
+                  Fat: {currentMacros.fat} / {dailyGoal.fat}
+                </Text>
+              </View>
             </View>
           </>
         )}
 
-        <Text>
-          Protein: {currentMacros.protein} / {dailyGoal.protein}
-        </Text>
-        <Text>
-          Carbs: {currentMacros.carbohydrates} / {dailyGoal.carbohydrates}
-        </Text>
-        <Text>
-          Fat: {currentMacros.fat} / {dailyGoal.fat}
-        </Text>
-        <Text>
+        {/* <Text>
           Fiber: {currentMacros.fiber} / {dailyGoal.fiber}
         </Text>
         <Text>
           Sugar: {currentMacros.sugar} / {dailyGoal.sugar}
-        </Text>
+        </Text> */}
       </View>
 
       <Text
         style={{
           width: 70,
           marginTop: 15,
+          color: "#ffff",
+          fontWeight: "bold",
+          marginBottom: 20,
+
+          fontSize: 20,
         }}
       >
         History
