@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, Pressable } from "react-native";
 import { CameraView } from "expo-camera";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { BarcodeScanningResult } from "expo-camera";
 import { GlobalContext } from "../state/GlobalState/GlobalContext";
 import { UPC } from "../types/types";
@@ -14,25 +14,24 @@ export default function Scanner() {
     scannedUPC,
     setUPCContent: setUPCContent,
   } = useContext(GlobalContext);
-  //   const UPCURL = `https://world.openfoodfacts.org/api/v0/product/${
-  //     scannedUPC || null
-  //   }.json`;
-  const UPCURL = `https://world.openfoodfacts.org/api/v0/product/7318690499541.json`;
+  const UPCURL = `https://world.openfoodfacts.org/api/v0/product/${
+    scannedUPC || null
+  }.json`;
+  //   const UPCURL = `https://world.openfoodfacts.org/api/v0/product/7318690499541.json`;
   const { data } = useGet<UPC>(UPCURL);
 
-  //   console.log(data, "data on scan");
   const handleBarcodeScan = (upc: BarcodeScanningResult) => {
     if (upc != null && upcScanned === false) {
-      //   console.log(upc.data, typeof upc.data);
       setScannedUPC(upc.data);
       setUpcScanned(true);
-      //   return upc.data;
     }
   };
 
-  if (data) {
-    setUPCContent(data);
-  }
+  useEffect(() => {
+    if (data) {
+      setUPCContent(data);
+    }
+  }, [data, setUPCContent]);
 
   return (
     <>
