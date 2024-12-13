@@ -2,7 +2,7 @@ import { createContext, useContext, useState, useEffect } from "react";
 import { GlobalContextType, UPC, Log, Macros } from "@/app/types/types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getToday } from "@/app/utils/todaysDate";
-import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
+import { loadFromAsyncStorage, saveToAsyncStorage } from "@/app/hooks/storage";
 
 export const GlobalContext = createContext<GlobalContextType>(
   {} as GlobalContextType
@@ -32,56 +32,47 @@ export const GlobalProvider = ({ children }: any) => {
     sugar: 0,
   });
 
-  // Loading macroLogs whenever the state changes.
-  useEffect(() => {
-    const loadMacroLogs = async () => {
-      try {
-        const savedLogs = await AsyncStorage.getItem("macroLogs");
-        if (savedLogs) {
-          setMacroLogs(JSON.parse(savedLogs));
-        } else {
-          setMacroLogs([]);
-        }
-      } catch (error) {
-        console.error("Error loading macroLogs:", error);
-      }
-    };
-
-    loadMacroLogs();
-  }, [macroLogs]);
+  const initialState = {
+    scannedUPC,
+    setScannedUPC,
+    UPCContent,
+    setUPCContent,
+    dailyGoal,
+    setDailyGoal,
+    currentMacros,
+    setCurrentMacros,
+    macroLogs,
+    setMacroLogs,
+    setLastSavedDate,
+  };
 
   // Loading all data from AsyncStorage on app start. (When GlobalProvider is mounted)
   useEffect(() => {
     const loadAppData = async () => {
+      const today = getToday();
+
       try {
         const [storedMacros, storedLogs, storedDate, storedDailyGoal] =
           await Promise.all([
-            AsyncStorage.getItem("currentMacros"),
-            AsyncStorage.getItem("macroLogs"),
-            AsyncStorage.getItem("lastSavedDate"),
-            AsyncStorage.getItem("dailyGoal"),
+            loadFromAsyncStorage("currentMacros"),
+            loadFromAsyncStorage("macroLogs"),
+            loadFromAsyncStorage("lastSavedDate"),
+            loadFromAsyncStorage("dailyGoal"),
           ]);
 
-        if (storedMacros) {
-          setCurrentMacros(JSON.parse(storedMacros));
-        }
-        if (storedLogs) {
-          setMacroLogs(JSON.parse(storedLogs));
-        }
+        setCurrentMacros(storedMacros);
+        setMacroLogs(storedLogs);
+        setDailyGoal(storedDailyGoal);
+
         if (storedDate) {
           setLastSavedDate(storedDate);
         } else {
-          const today = getToday();
           setLastSavedDate(today);
-          await AsyncStorage.setItem("lastSavedDate", today);
-        }
-        if (storedDailyGoal) {
-          setDailyGoal(JSON.parse(storedDailyGoal));
+          await saveToAsyncStorage("lastSavedDate", today);
         }
       } catch (error) {
         console.error("Error loading app data:", error);
       }
-      //   [macroLogs];
     };
 
     loadAppData();
@@ -90,12 +81,7 @@ export const GlobalProvider = ({ children }: any) => {
   // Saving the dailyGoal to AsyncStorage whenever it changes.
   useEffect(() => {
     const storedDailyGoal = async () => {
-      try {
-        await AsyncStorage.setItem("dailyGoal", JSON.stringify(dailyGoal));
-        console.log("Saved dailyGoal:", dailyGoal);
-      } catch (error) {
-        console.log("Error saving daily goal:", error);
-      }
+      await saveToAsyncStorage("dailyGoal", dailyGoal);
     };
     storedDailyGoal();
   }, [dailyGoal]);
@@ -115,24 +101,20 @@ export const GlobalProvider = ({ children }: any) => {
 
         setMacroLogs(updatedLogs);
 
-        try {
-          await AsyncStorage.setItem("macroLogs", JSON.stringify(updatedLogs));
-          console.log("Logs saved:", updatedLogs);
+        await saveToAsyncStorage("macroLogs", updatedLogs);
+        console.log("Logs saved:", updatedLogs);
 
-          setCurrentMacros({
-            calories: 0,
-            protein: 0,
-            carbohydrates: 0,
-            fat: 0,
-            fiber: 0,
-            sugar: 0,
-          });
+        setCurrentMacros({
+          calories: 0,
+          protein: 0,
+          carbohydrates: 0,
+          fat: 0,
+          fiber: 0,
+          sugar: 0,
+        });
 
-          setLastSavedDate(today);
-          await AsyncStorage.setItem("lastSavedDate", today);
-        } catch (error) {
-          console.log("Error saving macro logs or date:", error);
-        }
+        setLastSavedDate(today);
+        await saveToAsyncStorage("lastSavedDate", today);
       }
     };
 
@@ -140,38 +122,15 @@ export const GlobalProvider = ({ children }: any) => {
   }, [lastSavedDate]);
 
   useEffect(() => {
-    const saveMacros = async () => {
-      try {
-        await AsyncStorage.setItem(
-          "currentMacros",
-          JSON.stringify(currentMacros)
-        );
-        console.log("Saved currentMacros:", currentMacros);
-      } catch (error) {
-        console.log("Error saving current macros:", error);
-      }
+    const saveCurrentMacros = async () => {
+      await saveToAsyncStorage("currentMacros", currentMacros);
     };
 
-    saveMacros();
+    saveCurrentMacros();
   }, [currentMacros]);
 
   return (
-    <GlobalContext.Provider
-      value={{
-        scannedUPC,
-        setScannedUPC,
-        UPCContent,
-        setUPCContent,
-        dailyGoal,
-        setDailyGoal,
-        currentMacros,
-        setCurrentMacros,
-
-        macroLogs,
-        setMacroLogs,
-        setLastSavedDate,
-      }}
-    >
+    <GlobalContext.Provider value={initialState}>
       {children}
     </GlobalContext.Provider>
   );

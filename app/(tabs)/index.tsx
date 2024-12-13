@@ -139,54 +139,53 @@ export default function Index() {
                 )}
               </AnimatedCircularProgress>
             </View>
+            <Text
+              style={{
+                color: "white",
+                fontSize: 20,
+                fontWeight: "bold",
+              }}
+            >
+              Protein: {currentMacros.protein} / {dailyGoal.protein}
+            </Text>
+            <Text
+              style={{
+                color: "white",
+                fontSize: 20,
+                fontWeight: "bold",
+              }}
+            >
+              Carbs: {currentMacros.carbohydrates} / {dailyGoal.carbohydrates}
+            </Text>
+            <Text
+              style={{
+                color: "white",
+                fontSize: 20,
+                fontWeight: "bold",
+              }}
+            >
+              Fat: {currentMacros.fat} / {dailyGoal.fat}
+            </Text>
+            <Text
+              style={{
+                color: "white",
+                fontSize: 20,
+                fontWeight: "bold",
+              }}
+            >
+              Fiber: {currentMacros.fiber} / {dailyGoal.fiber}
+            </Text>
+            <Text
+              style={{
+                color: "white",
+                fontSize: 20,
+                fontWeight: "bold",
+              }}
+            >
+              Sugar: {currentMacros.sugar} / {dailyGoal.sugar}
+            </Text>
           </>
         )}
-
-        <Text
-          style={{
-            color: "white",
-            fontSize: 20,
-            fontWeight: "bold",
-          }}
-        >
-          Protein: {currentMacros.protein} / {dailyGoal.protein}
-        </Text>
-        <Text
-          style={{
-            color: "white",
-            fontSize: 20,
-            fontWeight: "bold",
-          }}
-        >
-          Carbs: {currentMacros.carbohydrates} / {dailyGoal.carbohydrates}
-        </Text>
-        <Text
-          style={{
-            color: "white",
-            fontSize: 20,
-            fontWeight: "bold",
-          }}
-        >
-          Fat: {currentMacros.fat} / {dailyGoal.fat}
-        </Text>
-        <Text
-          style={{
-            color: "white",
-            fontSize: 20,
-            fontWeight: "bold",
-          }}
-        >
-          Fiber: {currentMacros.fiber} / {dailyGoal.fiber}
-        </Text>
-        <Text
-          style={{
-            color: "white",
-            fontSize: 20,
-            fontWeight: "bold",
-          }}
-        >
-          Sugar: {currentMacros.sugar} / {dailyGoal.sugar}
-        </Text>
       </View>
 
       <Text
@@ -203,7 +202,7 @@ export default function Index() {
           <LogCard key={index} {...log} />
         ))
       ) : (
-        <Text>No logs available</Text>
+        <Text style={{ color: "white" }}>No logs available</Text>
       )}
     </ScrollView>
   );
