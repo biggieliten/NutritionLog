@@ -34,7 +34,7 @@ export const stylesIndex = StyleSheet.create({
   dailyProgressContainer: {
     justifyContent: "center",
     alignItems: "center",
-    width: 150,
+    width: "70%",
 
     padding: 10,
     marginTop: 10,

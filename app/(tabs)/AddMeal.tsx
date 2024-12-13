@@ -58,7 +58,7 @@ export default function AddMeal() {
   };
   return (
     <ScrollView contentContainerStyle={stylesAddMeal.container}>
-      {dailyGoal.calories ? (
+      {scannedUPC ? (
         <View style={stylesAddMeal.contentContainer}>
           <Text style={stylesAddMeal.title}>
             {UPCContent.product.product_name}
