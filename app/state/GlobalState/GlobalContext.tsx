@@ -46,6 +46,24 @@ export const GlobalProvider = ({ children }: any) => {
     setLastSavedDate,
   };
 
+  // Loading macroLogs whenever the state changes.
+  useEffect(() => {
+    const loadMacroLogs = async () => {
+      try {
+        const savedLogs = await AsyncStorage.getItem("macroLogs");
+        if (savedLogs) {
+          setMacroLogs(JSON.parse(savedLogs));
+        } else {
+          setMacroLogs([]);
+        }
+      } catch (error) {
+        console.error("Error loading macroLogs:", error);
+      }
+    };
+
+    loadMacroLogs();
+  }, [macroLogs]);
+
   // Loading all data from AsyncStorage on app start. (When GlobalProvider is mounted)
   useEffect(() => {
     const loadAppData = async () => {
