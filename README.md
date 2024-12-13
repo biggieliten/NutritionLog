@@ -19,3 +19,9 @@ Clone the repository:
    npm install
    npm expo start
    ```
+## Tech Stack
+ - React Native, TS
+ - Expo router
+
+## API
+   [Open Food Facts API](https://world.openfoodfacts.org/)
