@@ -39,14 +39,6 @@ export default function AddMeal() {
 
   const handleSetWeight = () => {
     setWeight(Number(input));
-    // setCurrentMacros({
-    //   calories: currentMacros.calories,
-    //   protein: currentMacros.protein,
-    //   carbohydrates: currentMacros.carbohydrates,
-    //   fat: currentMacros.fat,
-    //   fiber: currentMacros.fiber,
-    //   sugar: currentMacros.sugar,
-    // });
   };
   const clearAsyncStorage = async () => {
     try {
@@ -58,7 +50,7 @@ export default function AddMeal() {
   };
   return (
     <ScrollView contentContainerStyle={stylesAddMeal.container}>
-      {scannedUPC ? (
+      {UPCContent ? (
         <View style={stylesAddMeal.contentContainer}>
           <Text style={stylesAddMeal.title}>
             {UPCContent.product.product_name}
@@ -93,11 +85,6 @@ export default function AddMeal() {
               if (updatedMacros) {
                 setCurrentMacros(updatedMacros);
               }
-              console.log(getToday());
-              console.log(currentMacros, "macroLogs in AddMeal");
-              //   setLastSavedDate("2024-12-24");
-
-              //   setMacroLogs([]);
             }}
           >
             <Text style={stylesAddMeal.buttonText}>Set daily progress</Text>

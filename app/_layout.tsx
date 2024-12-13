@@ -1,6 +1,5 @@
 import { Stack } from "expo-router";
 import { GlobalProvider } from "./state/GlobalState/GlobalContext";
-// import { StatusBar } from "expo-status-bar";
 
 export default function RootLayout() {
   return (

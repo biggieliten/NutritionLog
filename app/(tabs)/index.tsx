@@ -24,7 +24,6 @@ export default function Index() {
     currentMacros.calories,
     dailyGoal.calories
   );
-  //   console.log(percentageOfDailyCalories, "divisionToPercentage");
 
   return (
     <ScrollView contentContainerStyle={stylesIndex.container}>
