@@ -1,19 +1,18 @@
 import { useContext, useState, useEffect } from "react";
 import { View, Text, TextInput, Pressable, ScrollView } from "react-native";
-import { GlobalContext } from "../state/GlobalState/GlobalContext";
 import { stylesDailyGoal } from "../styles/styles";
+import { useDailyGoalStore } from "../store/useDailyGoalStore";
 
 export default function SetGoal() {
-  const { dailyGoal, setDailyGoal } = useContext(GlobalContext);
-  const [goal, setGoal] = useState(dailyGoal);
+  const { dailyGoal, setDailyGoal } = useDailyGoalStore();
 
   //useEffect to activly update the daily goal
   useEffect(() => {
-    setDailyGoal(goal);
-  }, [goal]);
+    setDailyGoal(dailyGoal);
+  }, [dailyGoal]);
 
   const handleSaveGoal = () => {
-    setGoal(goal);
+    setDailyGoal(dailyGoal);
     console.log(dailyGoal, "global daily goal");
   };
 
@@ -33,7 +32,7 @@ export default function SetGoal() {
           keyboardType="numeric"
           value={String(dailyGoal.calories)}
           onChangeText={(text) =>
-            setGoal({ ...dailyGoal, calories: Number(text) })
+            setDailyGoal({ ...dailyGoal, calories: Number(text) })
           }
         />
 
@@ -43,7 +42,7 @@ export default function SetGoal() {
           keyboardType="numeric"
           value={String(dailyGoal.protein)}
           onChangeText={(text) =>
-            setGoal({ ...dailyGoal, protein: Number(text) })
+            setDailyGoal({ ...dailyGoal, protein: Number(text) })
           }
         />
 
@@ -53,7 +52,7 @@ export default function SetGoal() {
           keyboardType="numeric"
           value={String(dailyGoal.carbohydrates)}
           onChangeText={(text) =>
-            setGoal({ ...dailyGoal, carbohydrates: Number(text) })
+            setDailyGoal({ ...dailyGoal, carbohydrates: Number(text) })
           }
         />
 
@@ -62,7 +61,9 @@ export default function SetGoal() {
           style={stylesDailyGoal.input}
           keyboardType="numeric"
           value={String(dailyGoal.fat)}
-          onChangeText={(text) => setGoal({ ...dailyGoal, fat: Number(text) })}
+          onChangeText={(text) =>
+            setDailyGoal({ ...dailyGoal, fat: Number(text) })
+          }
         />
 
         <Pressable

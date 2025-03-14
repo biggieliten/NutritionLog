@@ -1,32 +1,33 @@
 import { TextInput, View, Text, Pressable, ScrollView } from "react-native";
-import { GlobalContext } from "../state/GlobalState/GlobalContext";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { macroCalculator } from "../utils/macroCalculator";
 import roundTwoDecimals from "../utils/roundTwoDecimals";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getToday } from "../utils/todaysDate";
 import { stylesAddMeal } from "../styles/styles";
+import { useScannedProductStore } from "../store/useScannedProductsStore";
+import { useCurrentMacroStore } from "../store/useCurrentMacroStore";
+import { useStoreProductsStore } from "../store/useStoredProductsStore";
+import { Product } from "../types/types";
 
 export default function AddMeal() {
-  const {
-    scannedUPC,
-    UPCContent: UPCContent,
-    setCurrentMacros,
-    currentMacros,
-    setMacroLogs,
-    macroLogs,
-    setLastSavedDate,
-    dailyGoal,
-  } = useContext(GlobalContext);
+  const { scannedProduct, setScannedProduct } = useScannedProductStore();
+  const { setCurrentMacros, currentMacros } = useCurrentMacroStore();
+  const { setTostoredProducts } = useStoreProductsStore();
   const [weight, setWeight] = useState<number>(0);
   const [input, setInput] = useState<string>("");
   const [postData, setPostData] = useState<any>({});
 
-  if (!UPCContent || !UPCContent.product || !UPCContent.product.nutriments) {
-    return <Text>No product found for this UPC.</Text>;
-  }
+  //   if (
+  //     !scannedProduct ||
+  //     !scannedProduct.product ||
+  //     !scannedProduct.product.nutriments
+  //   ) {
+  //     return <Text>No product found for this UPC.</Text>;
+  //   }
 
-  const nutriments: { [key: string]: any } = UPCContent.product.nutriments;
+  const nutriments: { [key: string]: any } =
+    scannedProduct?.product?.nutriments || {};
   const macros = macroCalculator(
     weight,
     nutriments["energy-kcal_100g"],
@@ -39,15 +40,17 @@ export default function AddMeal() {
 
   const handleSetWeight = () => {
     setWeight(Number(input));
-    // setCurrentMacros({
-    //   calories: currentMacros.calories,
-    //   protein: currentMacros.protein,
-    //   carbohydrates: currentMacros.carbohydrates,
-    //   fat: currentMacros.fat,
-    //   fiber: currentMacros.fiber,
-    //   sugar: currentMacros.sugar,
-    // });
+    setCurrentMacros({
+      calories: currentMacros.calories,
+      protein: currentMacros.protein,
+      carbohydrates: currentMacros.carbohydrates,
+      fat: currentMacros.fat,
+      fiber: currentMacros.fiber,
+      sugar: currentMacros.sugar,
+    });
+    // setWeight(Number(""));
   };
+
   const clearAsyncStorage = async () => {
     try {
       await AsyncStorage.removeItem("macroLogs");
@@ -56,12 +59,17 @@ export default function AddMeal() {
       console.log("Error clearing AsyncStorage:", error);
     }
   };
+
+  const handleStoreProduct = (product: Product) => {
+    setTostoredProducts(product);
+  };
+
   return (
     <ScrollView contentContainerStyle={stylesAddMeal.container}>
-      {scannedUPC ? (
+      {scannedProduct ? (
         <View style={stylesAddMeal.contentContainer}>
           <Text style={stylesAddMeal.title}>
-            {UPCContent.product.product_name}
+            {scannedProduct.product.product_name}
           </Text>
           {Object.entries(macros).map(([key, value]) => (
             <Text key={key} style={stylesAddMeal.text}>
@@ -75,6 +83,12 @@ export default function AddMeal() {
             style={stylesAddMeal.input}
             placeholder="Enter weight in grams"
           />
+          <Pressable
+            onPress={() => console.log(scannedProduct)}
+            style={stylesAddMeal.button}
+          >
+            <Text>Save Product</Text>
+          </Pressable>
           <Pressable onPress={handleSetWeight} style={stylesAddMeal.button}>
             <Text style={stylesAddMeal.buttonText}>Calculate Macros</Text>
           </Pressable>
@@ -107,7 +121,7 @@ export default function AddMeal() {
           </Pressable>
         </View>
       ) : (
-        <Text>No product found for this UPC.</Text>
+        <Text>No product found for this Barcode.</Text>
       )}
     </ScrollView>
   );

@@ -1,8 +1,8 @@
 export type GlobalContextType = {
   scannedUPC: string;
   setScannedUPC: (upc: string) => void;
-  UPCContent: UPC;
-  setUPCContent: (upc: UPC) => void;
+  UPCContent: ScanResult;
+  setUPCContent: (upc: ScanResult) => void;
   dailyGoal: Macros;
   setDailyGoal: (goal: Macros) => void;
 
@@ -11,17 +11,26 @@ export type GlobalContextType = {
 
   macroLogs: Log[];
   setMacroLogs: (logs: Log[]) => void;
-  setLastSavedDate: (date: string) => void;
+  setLastSaved: (date: string) => void;
 };
 
 export type Macros = {
-  calories: number;
+  calories: any;
   protein: number;
   carbohydrates: number;
   fat: number;
   fiber: number;
   sugar: number;
   date?: string;
+};
+
+export type DailyGoal = {
+  calories: any;
+  protein: number;
+  carbohydrates: number;
+  fat: number;
+  fiber: number;
+  sugar: number;
 };
 
 export type nutriments = {
@@ -82,14 +91,14 @@ export type nutriments = {
   sugars_value: number;
 };
 
-export type product = {
-  nutriments: nutriments;
-  product_name: any;
+export type Product = {
+  nutriments?: Partial<nutriments>;
+  product_name: string;
 };
 
-export type UPC = {
+export type ScanResult = {
   code: string;
-  product: product;
+  product: Product;
   //   product: {
   //     nutriments: any;
   //   };

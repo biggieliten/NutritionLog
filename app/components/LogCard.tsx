@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { View, Text, StyleSheet } from "react-native";
-import { GlobalContext } from "../state/GlobalState/GlobalContext";
-import { GlobalContextType, Log } from "../types/types";
+// import { GlobalContext } from "../state/GlobalState/GlobalContext";
+import { Log } from "../types/types";
 
 export const LogCard = (log: Log) => {
   return (

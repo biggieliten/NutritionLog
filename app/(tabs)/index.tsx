@@ -1,30 +1,37 @@
+import React from "react";
 import { useContext } from "react";
 import { View, Text, StyleSheet, Pressable, ScrollView } from "react-native";
-import { GlobalContext } from "../state/GlobalState/GlobalContext";
 import { LogCard } from "../components/LogCard";
-import { Log } from "../types/types";
+import { Log, Macros } from "../types/types";
 import { stylesIndex } from "../styles/styles";
 import { AnimatedCircularProgress } from "react-native-circular-progress";
 import { divisionToPercentage } from "../utils/divisionToPercentage";
 import { Link } from "expo-router";
+import { useCurrentMacroStore } from "../store/useCurrentMacroStore";
+import { useDailyGoalStore } from "../store/useDailyGoalStore";
+import { useLoggedMacrosStore } from "../store/useLoggedMacrosStore";
+import { getToday } from "../utils/todaysDate";
 
 export default function Index() {
-  const {
-    currentMacros,
-    dailyGoal,
-    macroLogs,
-    setLastSavedDate,
-    setCurrentMacros,
-    setDailyGoal,
-
-    setMacroLogs,
-  } = useContext(GlobalContext);
+  const { currentMacros, resetCurrentMacros } = useCurrentMacroStore();
+  const { dailyGoal, setDailyGoal, resetDailyGoal } = useDailyGoalStore();
+  const { loggedMacros, setMacrosToLog } = useLoggedMacrosStore();
 
   const percentageOfDailyCalories = divisionToPercentage(
     currentMacros.calories,
     dailyGoal.calories
   );
   //   console.log(percentageOfDailyCalories, "divisionToPercentage");
+
+  const todaysDate = getToday();
+
+  // Creating a new variable to convert the currentMacros to a Log object to match Log type.
+  const currentMacrosToLog = (macros: Macros, date: string): Log => {
+    return {
+      ...macros,
+      date: date,
+    };
+  };
 
   return (
     <ScrollView contentContainerStyle={stylesIndex.container}>
@@ -38,22 +45,17 @@ export default function Index() {
           backgroundColor: "#91AC8F",
         }}
         onPress={() => {
-          setLastSavedDate("2024-12-31");
-          setDailyGoal({
-            calories: 0,
-            protein: 0,
-            carbohydrates: 0,
-            fat: 0,
-            fiber: 0,
-            sugar: 0,
-          });
-          //   setMacroLogs([]);
+          //   setLastSavedDate("2024-12-31");
+          resetDailyGoal();
+          const newLog = currentMacrosToLog(currentMacros, todaysDate);
+          setMacrosToLog([...loggedMacros, newLog]);
+          resetCurrentMacros();
         }}
       >
         <Text
           style={{ color: "white", fontWeight: "bold", textAlign: "center" }}
         >
-          Simulate date change
+          Log macros
         </Text>
       </Pressable>
       <View style={stylesIndex.dailyProgressContainer}>
@@ -199,8 +201,8 @@ export default function Index() {
       >
         History
       </Text>
-      {macroLogs && macroLogs.length > 0 ? (
-        macroLogs.map((log: Log, index: number) => (
+      {loggedMacros && loggedMacros.length > 0 ? (
+        loggedMacros.map((log: Log, index: number) => (
           <LogCard key={index} {...log} />
         ))
       ) : (
