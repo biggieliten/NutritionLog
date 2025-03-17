@@ -23,7 +23,6 @@ export default function TabLayout() {
           tabBarLabelStyle: { color: "#4B5945" },
         }}
       />
-      ;
       <Tabs.Screen
         name="Scanner"
         options={{
@@ -34,7 +33,16 @@ export default function TabLayout() {
           tabBarLabelStyle: { color: "#4B5945" },
         }}
       />
-      ;
+      <Tabs.Screen
+        name="test"
+        options={{
+          title: "Test",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="scan-outline" color="#4B5945" size={size} />
+          ),
+          tabBarLabelStyle: { color: "#4B5945" },
+        }}
+      />
       <Tabs.Screen
         name="AddMeal"
         options={{
@@ -45,7 +53,6 @@ export default function TabLayout() {
           tabBarLabelStyle: { color: "#4B5945" },
         }}
       />
-      ;
       <Tabs.Screen
         name="DailyGoal"
         options={{
