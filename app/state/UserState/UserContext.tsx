@@ -7,7 +7,9 @@ import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
 export const UserContext = createContext<any>({} as any);
 
 export const UserProvider = ({ children }: any) => {
-  const [loggedIn, setLoggedIn] = useState<boolean>(false);
+  const [isSignedIn, setIsSignedIn] = useState<boolean>(false);
+  const [signedInUser, setSignedInUser] = useState<any>();
+  console.log(isSignedIn, "isSignedIn");
 
   //   const [scannedUPC, setScannedUPC] = useState<string>("");
   //   const [UPCContent, setUPCContent] = useState<ScanResult>({} as ScanResult);
@@ -158,8 +160,10 @@ export const UserProvider = ({ children }: any) => {
   return (
     <UserContext.Provider
       value={{
-        loggedIn,
-        setLoggedIn,
+        isSignedIn,
+        setIsSignedIn,
+        signedInUser,
+        setSignedInUser,
         // scannedUPC,
         // setScannedUPC,
         // UPCContent,

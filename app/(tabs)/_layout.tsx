@@ -1,7 +1,18 @@
-import { Tabs } from "expo-router";
+import { Tabs, useFocusEffect, useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
+import { useContext, useEffect } from "react";
+import { UserContext } from "@/app/state/UserState/UserContext";
 
-export default function TabLayout() {
+export default function AuthenticatedTabLayout() {
+  const { isSignedIn } = useContext(UserContext);
+  //   const router = useRouter();
+  //   useFocusEffect(() => {
+  //     !isSignedIn && router.replace("/UserAuth");
+  //   });
+  //   : router.push("/");
+  //   if (!isSignedIn) {
+  //     return null;
+  //   }
   return (
     <Tabs
       screenOptions={{
@@ -14,6 +25,21 @@ export default function TabLayout() {
       }}
     >
       <Tabs.Screen
+        name="UserAuth"
+        options={{
+          title: "UserAuth",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons
+              name="person-circle-outline"
+              color="#4B5945"
+              size={size}
+            />
+          ),
+          tabBarLabelStyle: { color: "#4B5945" },
+          href: !isSignedIn ? "/UserAuth" : null,
+        }}
+      />
+      <Tabs.Screen
         name="index"
         options={{
           title: "Log",
@@ -21,6 +47,7 @@ export default function TabLayout() {
             <Ionicons name="list-outline" color="#4B5945" size={size} />
           ),
           tabBarLabelStyle: { color: "#4B5945" },
+          href: isSignedIn ? "/" : null,
         }}
       />
       <Tabs.Screen
@@ -31,16 +58,7 @@ export default function TabLayout() {
             <Ionicons name="scan-outline" color="#4B5945" size={size} />
           ),
           tabBarLabelStyle: { color: "#4B5945" },
-        }}
-      />
-      <Tabs.Screen
-        name="test"
-        options={{
-          title: "Test",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="scan-outline" color="#4B5945" size={size} />
-          ),
-          tabBarLabelStyle: { color: "#4B5945" },
+          href: isSignedIn ? "/Scanner" : null,
         }}
       />
       <Tabs.Screen
@@ -51,6 +69,7 @@ export default function TabLayout() {
             <Ionicons name="add-circle-outline" color="#4B5945" size={size} />
           ),
           tabBarLabelStyle: { color: "#4B5945" },
+          href: isSignedIn ? "/AddMeal" : null,
         }}
       />
       <Tabs.Screen
@@ -61,6 +80,7 @@ export default function TabLayout() {
             <Ionicons name="today-outline" color="#4B5945" size={size} />
           ),
           tabBarLabelStyle: { color: "#4B5945" },
+          href: isSignedIn ? "/DailyGoal" : null,
         }}
       />
     </Tabs>

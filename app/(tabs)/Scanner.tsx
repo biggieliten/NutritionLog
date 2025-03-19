@@ -27,7 +27,7 @@ export default function Scanner() {
   }.json`;
 
   const { data } = useGet<ScanResult>(url);
-  console.log(data);
+  //   console.log(data);
 
   const handleBarcodeScan = (product: BarcodeScanningResult) => {
     if (product != null && upcScanned === false) {
@@ -38,7 +38,7 @@ export default function Scanner() {
 
   // Just logging fetched data
   useEffect(() => {
-    console.log(scannedProduct);
+    // console.log(scannedProduct);
   }, [scannedProduct]);
 
   //Setting the global state for fetched product data on scan
@@ -62,10 +62,10 @@ export default function Scanner() {
       <Pressable
         // style={styles.scanButton}
         onPress={() => {
-          setBarcode("7318690499541"),
-            console.log(
-              `barcode set:${barcode}, scannedPc${scannedProduct.code}`
-            );
+          setBarcode("7318690499541");
+          // ,console.log(
+          //   `barcode set:${barcode}, scannedPc${scannedProduct.code}`
+          // );
         }}
       >
         <Text>Set barcode</Text>

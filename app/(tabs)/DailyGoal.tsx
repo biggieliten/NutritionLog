@@ -13,7 +13,7 @@ export default function SetGoal() {
 
   const handleSaveGoal = () => {
     setDailyGoal(dailyGoal);
-    console.log(dailyGoal, "global daily goal");
+    // console.log(dailyGoal, "global daily goal");
   };
 
   return (
@@ -23,6 +23,17 @@ export default function SetGoal() {
         stylesDailyGoal.containerShadow,
       ]}
     >
+      {/* <View
+        style={{
+          backgroundColor: "red",
+          width: 50,
+          height: 50,
+          borderRadius: 50,
+        }}
+      >
+        <Text>Profile</Text>
+      </View> */}
+
       <Text style={stylesDailyGoal.title}>Set Your Daily Macros</Text>
 
       <View style={stylesDailyGoal.inputContainer}>
