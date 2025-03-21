@@ -5,7 +5,7 @@ import {
   signInWithEmailAndPassword,
   signOut,
 } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 import React, { useContext, useEffect, useState } from "react";
 import {
   Pressable,
@@ -17,9 +17,6 @@ import {
 } from "react-native";
 import { auth, db } from "../firebaseConfig.js";
 import { useAuth } from "./state/AuthState/AuthContext";
-// import { UserContext } from "./state/UserState/UserContext";
-
-// import { navigate } from "expo-router/build/global-state/routing.js";
 
 export default function UserAuth() {
   const [email, setEmail] = useState("");
@@ -43,19 +40,14 @@ export default function UserAuth() {
         email: user.email,
         dailyGoal: {
           calories: 0,
-          carbohydrates: 0,
           protein: 0,
+          carbohydrates: 0,
           fat: 0,
+          fiber: 0,
+          sugar: 0,
         },
         logs: [],
       });
-
-      //   setIsSignedIn(true);
-
-      //   if(user) {
-
-      //   setEmail("");
-      //   setPassword("");
     } catch (error) {
       setError("Invalid email or password");
       console.error("Login Error: ", error);
@@ -67,63 +59,38 @@ export default function UserAuth() {
   const handleLogin = async () => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
+      console.log(auth, "currentuser IS NOT NULL, SIGNED IN");
+
+      const docRef = user && doc(db, "users", user.uid);
+      const docSnap = docRef && (await getDoc(docRef));
+
+      if (docSnap) {
+        console.log(docSnap?.data(), "docSnap data");
+      }
+
       router.replace("/");
-      // Navigate to the authenticated flow
-      //   onAuthStateChanged(auth, (user) => {
-      //     if (user) {
-      //       //   console.log("User logged in:", user);
-      //     }
-      //   });
-      //   console.log(user.email), "user id";
-      //   setIsSignedIn(true);
+
       //   setEmail("");
       //   setPassword("");
-      //   console.log(isSignedIn, "is signed in on LOGIN");
-      //   console.log(auth.currentUser, "currentUser on LOGIN");
-      //   setIsSignedIn(true);
-      //   navigate("index");
-      // navigation.navigate("Home"); // Redirect to another screen after successful login
     } catch (error) {
       setError("Invalid email or password");
       console.error("Login Error: ", error);
     }
   };
 
-  const handleSignOut = () => {
-    signOut(auth)
-      .then(() => {
-        // console.log("Signed out");
-        // console.log(isSignedIn, "is signed in on SIGN OUT");
-        // console.log(auth.currentUser), "currentUser on SIGN OUT";
-        // setIsSignedIn(false);
-      })
-      .catch((error) => {
-        console.error("Sign out error: ", error);
-      });
-  };
-
   useEffect(() => {
     if (!user) {
       //   setUser(null);
-      console.log(auth.currentUser, "currentuser IS NULL, SIGNED OUT");
+      //   console.log(auth.currentUser, "currentuser IS NULL, SIGNED OUT");
+      console.log(auth, "currentuser IS NULL, SIGNED OUT");
     }
     if (user) {
       //   setUser(auth.currentUser);
-      console.log(auth.currentUser, "currentuser IS NOT NULL, SIGNED IN");
-      console.log(user, "user");
+      console.log(auth, "currentuser IS NOT NULL, SIGNED IN");
+      //   console.log(user, "user");
     }
   }, [user]);
-  //   useEffect(() => {
-  //     if (!isSignedIn) {
-  //       console.log(auth.currentUser, "IS NULL, SIGNED OUT");
-  //     }
-  //     if (isSignedIn) {
-  //       console.log(auth.currentUser, "IS NOT NULL, SIGNED IN");
-  //     }
-  //   }, [isSignedIn]);
 
-  //Create error modal if error occures. Use the firebsae errors
-  // if auth.currentUser = null, the user is signed out
   return (
     <ScrollView style={{ backgroundColor: "green" }}>
       <TextInput
@@ -150,9 +117,6 @@ export default function UserAuth() {
           <Text>Login</Text>
         </Pressable>
       )}
-      <Pressable onPress={() => handleSignOut()}>
-        <Text>Sign Out</Text>
-      </Pressable>
       <Pressable onPress={() => console.log(!auth.currentUser, "user id")}>
         <Text>Log user</Text>
       </Pressable>

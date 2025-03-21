@@ -12,26 +12,3 @@ export default function RootLayout() {
     </AuthProvider>
   );
 }
-// <Stack>
-//   <AuthFlowHandler />
-// </Stack>
-
-// function AuthFlowHandler() {
-//   const { isSignedIn } = useContext(UserContext);
-
-//   useEffect(() => {
-//     if (!isSignedIn) {
-//       router.replace("/"); // Redirect to login if not authenticated
-//     }
-//   }, [isSignedIn]);
-
-//   return (
-//     <Stack screenOptions={{ headerShown: false }}>
-//       {isSignedIn ? (
-//         <Stack.Screen name="(app)" options={{ headerShown: false }} />
-//       ) : (
-//         <Stack.Screen name="(public)" options={{ headerShown: false }} />
-//       )}
-//     </Stack>
-//   );
-// }

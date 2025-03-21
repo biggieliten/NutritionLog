@@ -38,7 +38,7 @@ export default function AuthenticatedTabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: "Log",
+          title: "Progress",
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="list-outline" color="#4B5945" size={size} />
           ),
@@ -49,7 +49,7 @@ export default function AuthenticatedTabLayout() {
       <Tabs.Screen
         name="Scanner"
         options={{
-          title: "Scanner",
+          title: "Scan",
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="scan-outline" color="#4B5945" size={size} />
           ),
@@ -73,29 +73,27 @@ export default function AuthenticatedTabLayout() {
         options={{
           title: "Daily Goal",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="today-outline" color="#4B5945" size={size} />
+            <Ionicons name="flag-outline" color="#4B5945" size={size} />
           ),
           tabBarLabelStyle: { color: "#4B5945" },
           href: user ? "/DailyGoal" : null,
         }}
       />
       <Tabs.Screen
-        name="Options"
+        name="Profile"
         options={{
-          title: "Options",
+          title: "Profile",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="today-outline" color="#4B5945" size={size} />
+            <Ionicons
+              name="person-circle-outline"
+              color="#4B5945"
+              size={size}
+            />
           ),
           tabBarLabelStyle: { color: "#4B5945" },
-          href: user ? "/Options" : null,
+          href: user ? "/Profile" : null,
         }}
       />
-      {/* <Stack.Screen name="Options" options={{ presentation: "modal" }} /> */}
     </Tabs>
   );
 }
-
-// <Stack>
-//   <Stack.Screen name="(auth)" />
-//   <Stack.Screen name="UserAuth" options={{ presentation: "modal" }} />
-// </Stack>
