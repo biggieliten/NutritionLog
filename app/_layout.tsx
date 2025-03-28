@@ -1,12 +1,14 @@
-import { Stack } from "expo-router";
-import { GlobalProvider } from "./state/GlobalState/GlobalContext";
+import { Slot, Stack, router } from "expo-router";
+// import { UserContext, UserProvider } from "./state/UserState/UserContext";
+import { useContext, useEffect } from "react";
+import AuthProvider from "./state/AuthState/AuthContext";
+
+// import { StatusBar } from "expo-status-bar";
 
 export default function RootLayout() {
   return (
-    <GlobalProvider>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      </Stack>
-    </GlobalProvider>
+    <AuthProvider>
+      <Slot />
+    </AuthProvider>
   );
 }

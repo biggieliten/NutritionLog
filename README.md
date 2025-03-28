@@ -13,15 +13,18 @@ NutritionLog is a React Native application designed to help users log their dail
 
 Clone the repository:
 
-   ```bash
-   git clone https://github.com/your-username/NutritionLog.git
-   cd NutritionLog
-   npm install
-   npm expo start
-   ```
+```bash
+git clone https://github.com/your-username/NutritionLog.git
+cd NutritionLog
+npm install
+npm expo start
+```
+
 ## Tech Stack
- - React Native, TS
- - Expo router
+
+- React Native, TS
+- Expo router
 
 ## API
-   [Open Food Facts API](https://world.openfoodfacts.org/)
+
+[Open Food Facts API](https://world.openfoodfacts.org/)

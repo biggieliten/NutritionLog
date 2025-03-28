@@ -27,7 +27,7 @@ export const useGet = <T>(
         }
 
         const jsonData = await response.json();
-        console.log("Full Response:", jsonData);
+        // console.log("Full Response:", jsonData);
 
         if (jsonData.product) {
           console.log(
@@ -36,7 +36,7 @@ export const useGet = <T>(
           );
           setData(jsonData as T);
         } else {
-          console.error("No product in response:", jsonData);
+          console.log("No product in response:", jsonData);
           setData(null);
         }
       } catch (error: any) {
