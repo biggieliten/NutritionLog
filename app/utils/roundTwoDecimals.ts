@@ -1,5 +1,5 @@
-const roundTwoDecimals = (num: any) => {
-  return num.toFixed(2);
+const roundOneDecimal = (num: any) => {
+  return num.toFixed(1);
 };
 
-export default roundTwoDecimals;
+export default roundOneDecimal;
