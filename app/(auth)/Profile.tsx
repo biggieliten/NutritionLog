@@ -5,12 +5,13 @@ import { db } from "@/firebaseConfig";
 import { doc, setDoc, getDoc } from "firebase/firestore";
 import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
 import { getUserDoc } from "../hooks/getDoc";
-import { setUserDoc } from "../hooks/setDoc";
+import { setUserDoc } from "../hooks/updateDoc";
 import { addLog } from "../hooks/addLog";
+import { setUserId } from "firebase/analytics";
 
 export default function Pofile() {
   const { user } = useAuth();
-
+  console.log(user?.uid, "user uid");
   if (!user) return;
 
   return (

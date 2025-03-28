@@ -46,6 +46,14 @@ export default function UserAuth() {
           fiber: 0,
           sugar: 0,
         },
+        currentMacros: {
+          calories: 0,
+          protein: 0,
+          carbohydrates: 0,
+          fat: 0,
+          fiber: 0,
+          sugar: 0,
+        },
         logs: [],
       });
     } catch (error) {

@@ -107,17 +107,6 @@ export type ScanResult = {
   //   };
 };
 
-// export type Log = {
-//   id?: string;
-//   calories: number;
-//   protein: number;
-//   carbohydrates: number;
-//   fat: number;
-//   fiber: number | any;
-//   sugar: number | any;
-//   date: any;
-// };
-
 export type Log = {
   //   id: any;
   calories: any;
