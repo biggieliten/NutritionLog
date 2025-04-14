@@ -13,7 +13,14 @@ export type GlobalContextType = {
   setMacroLogs: (logs: Log[]) => void;
   setLastSaved: (date: string) => void;
 };
-
+export type firebaseUser = {
+  email: string;
+  lastUpdated: Date;
+  // uid: string;
+  dailyGoal: DailyGoal;
+  currentMacros: Macros;
+  logs: Log[];
+};
 export type Macros = {
   calories: any;
   protein: number;

@@ -1,4 +1,11 @@
-import { TextInput, View, Text, Pressable, ScrollView } from "react-native";
+import {
+  TextInput,
+  View,
+  Text,
+  Pressable,
+  ScrollView,
+  Modal,
+} from "react-native";
 import { useContext, useEffect, useState } from "react";
 import { macroCalculator } from "../utils/macroCalculator";
 import roundOneDecimal from "../utils/roundTwoDecimals";
@@ -6,17 +13,20 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getToday } from "../utils/todaysDate";
 import { stylesAddMeal } from "../styles/styles";
 import { useScannedProductStore } from "../store/useScannedProductsStore";
-import { useCurrentMacroStore } from "../store/useCurrentMacroStore";
-import { useStoreProductsStore } from "../store/useStoredProductsStore";
 import { Product } from "../types/types";
+import { updateCurrentMacros } from "../hooks/updateCurrentMacros";
+import { useAuth } from "../state/AuthState/AuthContext";
+import { Link, router } from "expo-router";
+import { AddManually } from "./AddManually";
 
 export default function AddMeal() {
-  const { scannedProduct, setScannedProduct } = useScannedProductStore();
-  const { setCurrentMacros, currentMacros } = useCurrentMacroStore();
-  const { setTostoredProducts } = useStoreProductsStore();
+  //   const { scannedProduct, setScannedProduct } = useScannedProductStore();
+  //   const { setCurrentMacros, currentMacros } = useCurrentMacroStore();
   const [weight, setWeight] = useState<number>(0);
   const [input, setInput] = useState<string>("");
   const [postData, setPostData] = useState<any>({});
+  const [modalVisible, setModalVisible] = useState(false);
+  const { user, userData, scannedProduct } = useAuth();
 
   //   if (
   //     !scannedProduct ||
@@ -25,9 +35,12 @@ export default function AddMeal() {
   //   ) {
   //     return <Text>No product found for this UPC.</Text>;
   //   }
+  if (!userData || !user) return;
+  const currentMacros = userData?.currentMacros;
 
   const nutriments: { [key: string]: any } =
     scannedProduct?.product?.nutriments || {};
+
   const macros = macroCalculator(
     weight,
     nutriments["energy-kcal_100g"],
@@ -40,15 +53,20 @@ export default function AddMeal() {
 
   const handleSetWeight = () => {
     setWeight(Number(input));
-    setCurrentMacros({
-      calories: currentMacros.calories,
-      protein: currentMacros.protein,
-      carbohydrates: currentMacros.carbohydrates,
-      fat: currentMacros.fat,
-      fiber: currentMacros.fiber,
-      sugar: currentMacros.sugar,
-    });
-    // setWeight(Number(""));
+
+    // updateCurrentMacros({
+    //   uid: user?.uid,
+    //   newMacros: {
+    //     calories: currentMacros.calories,
+    //     protein: currentMacros.protein,
+    //     carbohydrates: currentMacros.carbohydrates,
+    //     fat: currentMacros.fat,
+    //     fiber: currentMacros.fiber,
+    //     sugar: currentMacros.sugar,
+    //   },
+    // });
+
+    // setWeight(Number(0));
   };
 
   const clearAsyncStorage = async () => {
@@ -60,9 +78,7 @@ export default function AddMeal() {
     }
   };
 
-  const handleStoreProduct = (product: Product) => {
-    setTostoredProducts(product);
-  };
+  const handleStoreProduct = (product: Product) => {};
 
   return (
     <ScrollView contentContainerStyle={stylesAddMeal.container}>
@@ -94,6 +110,7 @@ export default function AddMeal() {
           </Pressable>
           <Pressable
             style={stylesAddMeal.button}
+            disabled={!macros}
             onPress={() => {
               const updatedMacros = {
                 calories: macros.kcal + currentMacros.calories,
@@ -105,7 +122,10 @@ export default function AddMeal() {
                 sugar: macros.sugars + currentMacros.sugar,
               };
               if (updatedMacros) {
-                setCurrentMacros(updatedMacros);
+                updateCurrentMacros({
+                  uid: user?.uid,
+                  newMacros: updatedMacros,
+                });
               }
             }}
           >
@@ -114,9 +134,48 @@ export default function AddMeal() {
           <Pressable style={stylesAddMeal.button} onPress={clearAsyncStorage}>
             <Text style={stylesAddMeal.buttonText}>Clear macroLogs</Text>
           </Pressable>
+          {/* <Link href="/AddManually">Add meal manually</Link> */}
+          <Pressable
+            style={stylesAddMeal.button}
+            onPress={() => setModalVisible(true)}
+          >
+            <Text style={stylesAddMeal.buttonText}>Add manually</Text>
+          </Pressable>
+          <Modal
+            animationType="slide"
+            //   transparent={true}
+            visible={modalVisible}
+            onRequestClose={() => setModalVisible(false)}
+          >
+            <AddManually setShowModal={setModalVisible} />
+          </Modal>{" "}
         </View>
       ) : (
-        <Text>No product found for this Barcode.</Text>
+        <ScrollView>
+          <View>
+            <Pressable
+              style={stylesAddMeal.button}
+              onPress={() => setModalVisible(true)}
+            >
+              <Text style={stylesAddMeal.buttonText}>Add manually</Text>
+            </Pressable>
+            <Modal
+              animationType="slide"
+              //   transparent={true}
+              visible={modalVisible}
+              onRequestClose={() => setModalVisible(false)}
+            >
+              <AddManually setShowModal={setModalVisible} />
+            </Modal>
+          </View>
+          <Text>or</Text>
+          <Pressable
+            style={stylesAddMeal.button}
+            onPress={() => router.replace("/Scanner")}
+          >
+            <Text style={stylesAddMeal.buttonText}>Scan barcode</Text>
+          </Pressable>
+        </ScrollView>
       )}
     </ScrollView>
   );

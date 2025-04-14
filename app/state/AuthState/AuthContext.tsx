@@ -13,13 +13,21 @@ import {
   useState,
   type PropsWithChildren,
 } from "react";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, getDoc, onSnapshot, setDoc } from "firebase/firestore";
+import { get } from "firebase/database";
+import { user } from "@/app/types/firebaseTypes";
+import { ScanResult } from "@/app/types/types";
+import { firebaseUser } from "@/app/types/types";
 
 const AuthContext = createContext<{
   //   signIn: () => void;
   //   signOut: () => void;
   //   register: () => void;
   user: User | null;
+  userData: firebaseUser | null;
+  setUserData: React.Dispatch<React.SetStateAction<firebaseUser | null>>;
+  scannedProduct: ScanResult | null;
+  setScannedProduct: React.Dispatch<React.SetStateAction<ScanResult | null>>;
   //   setIsSignedIn: React.Dispatch<React.SetStateAction<boolean>>;
   //   isSignedIn: boolean;
   // session?: string | null;
@@ -29,6 +37,10 @@ const AuthContext = createContext<{
   //   signOut: () => null,
   //   register: () => null,
   user: null,
+  userData: null,
+  setUserData: () => null,
+  scannedProduct: null,
+  setScannedProduct: () => null,
   //   setIsSignedIn: () => null,
   //   isSignedIn: false,
   // session: null,
@@ -47,6 +59,7 @@ export default function AuthProvider({
   //   const { setIsSignedIn, isSignedIn, setSignedInUser, signedInUser } =
   //     useContext(UserContext);
   const [isSignedIn, setIsSignedIn] = useState<boolean>(false);
+  const [userData, setUserData] = useState<firebaseUser | null>(null);
   const [signedInUser, setSignedInUser] = useState<any>();
   console.log(isSignedIn, "isSignedIn");
   const [email, setEmail] = useState("");
@@ -54,89 +67,79 @@ export default function AuthProvider({
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState<User | null>(null);
+  const [scannedProduct, setScannedProduct] = useState<ScanResult | null>(null);
 
   // const UserAuthState = () => {
 
+  //   const getUserData = async (userId: string) => {
+  //     const docRef = user && doc(db, "users", userId);
+  //     const docSnap = docRef && (await getDoc(docRef));
+
+  //     if (docSnap?.exists()) {
+  //       console.log(docSnap?.data(), "docSnap data");
+  //       return docSnap.data();
+  //     }
+
+  //     return docSnap?.data();
+  //   };
+
+  //   useEffect(() => {
+  //     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+  //       setUser(firebaseUser);
+
+  //       if (!firebaseUser) return;
+
+  //       const data = await getUserData(firebaseUser?.uid);
+  //       setUserData(data as firebaseUser);
+  //     });
+
+  //     return () => unsubscribe();
+  //   }, []);
+
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+    // Auth state listener
+    const authUnsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
       setUser(firebaseUser);
+
+      // If user signed out, clear user data
+      if (!firebaseUser) {
+        setUserData(null);
+        return;
+      }
+
+      // Set up a real-time listener on the user document
+      const userDocRef = doc(db, "users", firebaseUser.uid);
+
+      const userDocUnsubscribe = onSnapshot(
+        userDocRef,
+        (docSnap) => {
+          if (docSnap.exists()) {
+            const data = docSnap.data();
+            console.log("Real-time update from Firestore:", data);
+            setUserData(data as firebaseUser);
+          }
+        },
+        (error) => {
+          console.error("Error listening to user data:", error);
+        }
+      );
+
+      // Return cleanup function for the Firestore listener
+      return () => userDocUnsubscribe();
     });
 
-    return () => unsubscribe();
+    // Return cleanup function for the auth listener
+    return () => authUnsubscribe();
   }, []);
-
-  //   const handleRegister = async () => {
-  //     setLoading(true);
-  //     try {
-  //       const credentials = await createUserWithEmailAndPassword(
-  //         auth,
-  //         email,
-  //         password
-  //       );
-  //       const user = credentials.user;
-  //       setUser(user);
-
-  //       const userDocRef = doc(db, "users", user.uid);
-  //       await setDoc(userDocRef, {
-  //         email: user.email,
-  //         dailyGoal: {
-  //           calories: 0,
-  //           carbohydrates: 0,
-  //           protein: 0,
-  //           fat: 0,
-  //         },
-  //         logs: [],
-  //       });
-
-  //       setIsSignedIn(true);
-
-  //       //   if(user) {
-
-  //       //   setEmail("");
-  //       //   setPassword("");
-  //     } catch (error) {
-  //       setError("Invalid email or password");
-  //       console.error("Login Error: ", error);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-  //   const handleSignIn = async () => {
-  //     try {
-  //       await signInWithEmailAndPassword(auth, email, password);
-
-  //       //   console.log(user.email), "user id";
-  //       setIsSignedIn(true);
-  //       //   setEmail("");
-  //       //   setPassword("");
-  //       //   console.log(isSignedIn, "is signed in on LOGIN");
-  //       //   console.log(auth.currentUser, "currentUser on LOGIN");
-  //       //   setIsSignedIn(true);
-  //       //   navigate("index");
-  //       // navigation.navigate("Home"); // Redirect to another screen after successful login
-  //     } catch (error) {
-  //       setError("Invalid email or password");
-  //       console.error("Login Error: ", error);
-  //     }
-  //   };
-  //   const handleSignOut = () => {
-  //     signOut(auth)
-  //       .then(() => {
-  //         // console.log("Signed out");
-  //         // console.log(isSignedIn, "is signed in on SIGN OUT");
-  //         // console.log(auth.currentUser), "currentUser on SIGN OUT";
-  //         setIsSignedIn(false);
-  //       })
-  //       .catch((error) => {
-  //         console.error("Sign out error: ", error);
-  //       });
-  //   };
-  // };
 
   return (
     <AuthContext.Provider
       value={{
         user,
+        userData,
+        setUserData,
+        scannedProduct,
+        setScannedProduct,
       }}
     >
       {children}

@@ -1,6 +1,6 @@
 import { db } from "@/firebaseConfig";
 import { arrayUnion, doc, updateDoc } from "firebase/firestore";
-import { Log, DailyGoal } from "../types/types";
+import { Log } from "../types/types";
 arrayUnion;
 type addLogType = {
   uid: string;

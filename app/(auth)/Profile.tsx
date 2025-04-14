@@ -1,21 +1,74 @@
-import { ScrollView, Pressable, Text } from "react-native";
+import {
+  ScrollView,
+  Pressable,
+  Text,
+  View,
+  Image,
+  StyleSheet,
+} from "react-native";
 import { useSignOut } from "../hooks/useSignOut";
 import { useAuth } from "../state/AuthState/AuthContext";
-import { db } from "@/firebaseConfig";
-import { doc, setDoc, getDoc } from "firebase/firestore";
-import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
-import { getUserDoc } from "../hooks/getDoc";
-import { setUserDoc } from "../hooks/updateDoc";
-import { addLog } from "../hooks/addLog";
-import { setUserId } from "firebase/analytics";
+import * as ImagePicker from "expo-image-picker";
+import { useEffect, useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { set } from "firebase/database";
 
 export default function Pofile() {
-  const { user } = useAuth();
+  const [image, setImage] = useState<string | null>(null);
+  const { user, userData } = useAuth();
   console.log(user?.uid, "user uid");
   if (!user) return;
 
+  const cachedImageKey = `profile-pic-${user.uid}`;
+
+  useEffect(() => {
+    const loadCachedImage = async () => {
+      try {
+        const cachedImage = await AsyncStorage.getItem(cachedImageKey);
+        if (cachedImage) {
+          setImage(cachedImage);
+        }
+      } catch (error) {
+        console.error("Error loading cached image:", error);
+      }
+    };
+
+    loadCachedImage();
+  }, [user?.uid]);
+
+  const cacheImage = async (imageUri: string) => {
+    try {
+      await AsyncStorage.setItem(cachedImageKey, imageUri);
+      console.log("Profile picture saved to AsyncStorage");
+    } catch (error) {
+      console.error("Error saving profile picture:", error);
+    }
+  };
+
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ["images"],
+      allowsEditing: true,
+      aspect: [10, 10],
+      quality: 1,
+    });
+
+    console.log(result);
+
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+      cacheImage(result.assets[0].uri);
+    }
+  };
+
   return (
-    <ScrollView>
+    <ScrollView contentContainerStyle={styles.container}>
+      <View>
+        {image && <Image source={{ uri: image }} style={styles.image} />}
+      </View>
+      <Pressable onPress={pickImage}>
+        <Text>Pick a profile picture</Text>
+      </Pressable>
       <Pressable
         style={{
           borderRadius: 10,
@@ -29,111 +82,19 @@ export default function Pofile() {
       >
         <Text>Sign Out</Text>
       </Pressable>
-      <Pressable
-        style={{
-          borderRadius: 10,
-          margin: 10,
-          padding: 10,
-          height: "auto",
-          width: "40%",
-          backgroundColor: "#91AC8F",
-        }}
-        onPress={() => getUserDoc(user.uid)}
-      >
-        <Text>Get dock</Text>
-      </Pressable>
-      <Pressable
-        style={{
-          borderRadius: 10,
-          margin: 10,
-          padding: 10,
-          height: "auto",
-          width: "40%",
-          backgroundColor: "#91AC8F",
-        }}
-        onPress={() =>
-          setUserDoc({
-            uid: user.uid,
-            email: user.email,
-            dailyGoal: {
-              calories: 2000,
-              carbohydrates: 120,
-              protein: 130,
-              fat: 20,
-              sugar: 10,
-              fiber: 30,
-            },
-            logs: [],
-          })
-        }
-      >
-        <Text>Set dock</Text>
-      </Pressable>
-      <Pressable
-        style={{
-          borderRadius: 10,
-          margin: 10,
-          padding: 10,
-          height: "auto",
-          width: "40%",
-          backgroundColor: "#91AC8F",
-        }}
-        onPress={() =>
-          addLog({
-            uid: user.uid,
-            newLog: {
-              calories: 2000,
-              protein: 130,
-              carbohydrates: 120,
-              fat: 20,
-              fiber: 30,
-              sugar: 10,
-              date: "2022-02-01",
-            },
-          })
-        }
-      >
-        <Text>Set newLog</Text>
-      </Pressable>
-      <Pressable
-        style={{
-          borderRadius: 10,
-          margin: 10,
-          padding: 10,
-          height: "auto",
-          width: "40%",
-          backgroundColor: "#91AC8F",
-        }}
-        onPress={() => console.log(user?.uid, "user uid")}
-      >
-        <Text>user uid</Text>
-      </Pressable>
-      <Pressable
-        style={{
-          borderRadius: 10,
-          margin: 10,
-          padding: 10,
-          height: "auto",
-          width: "40%",
-          backgroundColor: "#91AC8F",
-        }}
-        onPress={() => console.log(user?.email, "user email")}
-      >
-        <Text>user email</Text>
-      </Pressable>
-      <Pressable
-        style={{
-          borderRadius: 10,
-          margin: 10,
-          padding: 10,
-          height: "auto",
-          width: "40%",
-          backgroundColor: "#91AC8F",
-        }}
-        onPress={() => console.log(user?.emailVerified, "user emailVerified")}
-      >
-        <Text>user verf</Text>
-      </Pressable>
     </ScrollView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  image: {
+    borderRadius: 50,
+    width: 100,
+    height: 100,
+  },
+});

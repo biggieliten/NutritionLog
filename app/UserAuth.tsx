@@ -38,6 +38,7 @@ export default function UserAuth() {
       const userDocRef = doc(db, "users", user.uid);
       await setDoc(userDocRef, {
         email: user.email,
+        lastUpdated: Date(),
         dailyGoal: {
           calories: 0,
           protein: 0,
@@ -69,12 +70,12 @@ export default function UserAuth() {
       await signInWithEmailAndPassword(auth, email, password);
       console.log(auth, "currentuser IS NOT NULL, SIGNED IN");
 
-      const docRef = user && doc(db, "users", user.uid);
-      const docSnap = docRef && (await getDoc(docRef));
+      //   const docRef = user && doc(db, "users", user.uid);
+      //   const docSnap = docRef && (await getDoc(docRef));
 
-      if (docSnap) {
-        console.log(docSnap?.data(), "docSnap data");
-      }
+      //   if (docSnap?.exists()) {
+      //     console.log(docSnap?.data(), "docSnap data");
+      //   }
 
       router.replace("/");
 

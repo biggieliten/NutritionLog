@@ -5,6 +5,7 @@ import { BarcodeScanningResult } from "expo-camera";
 import { ScanResult } from "../types/types";
 import { useGet } from "../hooks/useGet";
 import { useScannedProductStore } from "../store/useScannedProductsStore";
+import { useAuth } from "../state/AuthState/AuthContext";
 
 export default function Scanner() {
   //   const {
@@ -18,28 +19,23 @@ export default function Scanner() {
   //   const UPCURL = `https://world.openfoodfacts.org/api/v0/product/4030300022682.json`;
   //   const UPCURL = `https://world.openfoodfacts.org/api/v0/product/7318690499541.json`;
 
-  const { scannedProduct, setScannedProduct } = useScannedProductStore();
+  //   const { scannedProduct, setScannedProduct } = useScannedProductStore();
   const [flashState, setFlashState] = useState(false);
   const [upcScanned, setUpcScanned] = useState<boolean>(true);
   const [barcode, setBarcode] = useState<string>("");
   const url = `https://world.openfoodfacts.org/api/v0/product/${
     barcode || null
   }.json`;
-
+  const { setScannedProduct } = useAuth();
   const { data } = useGet<ScanResult>(url);
   //   console.log(data);
 
   const handleBarcodeScan = (product: BarcodeScanningResult) => {
     if (product != null && upcScanned === false) {
-      setScannedProduct(url);
+      setScannedProduct(data);
       setUpcScanned(true);
     }
   };
-
-  // Just logging fetched data
-  useEffect(() => {
-    // console.log(scannedProduct);
-  }, [scannedProduct]);
 
   //Setting the global state for fetched product data on scan
   useEffect(() => {
@@ -47,7 +43,7 @@ export default function Scanner() {
       setScannedProduct(data);
       console.log(`data set:${data}`);
     }
-  }, [data, setScannedProduct]);
+  }, [data, setScannedProduct, barcode]);
 
   return (
     <View style={styles.container}>
@@ -63,12 +59,21 @@ export default function Scanner() {
         // style={styles.scanButton}
         onPress={() => {
           setBarcode("7318690499541");
+          console.log("barcode:", barcode);
           // ,console.log(
           //   `barcode set:${barcode}, scannedPc${scannedProduct.code}`
           // );
         }}
       >
         <Text>Set barcode</Text>
+      </Pressable>
+      <Pressable
+        // style={styles.scanButton}
+        onPress={() => {
+          setBarcode("3017620422003");
+        }}
+      >
+        <Text>Set barcode 2</Text>
       </Pressable>
       <Pressable style={styles.scanButton} onPress={() => setUpcScanned(false)}>
         <Text>Scan</Text>
