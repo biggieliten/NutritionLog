@@ -148,7 +148,7 @@ export default function AddMeal() {
             onRequestClose={() => setModalVisible(false)}
           >
             <AddManually setShowModal={setModalVisible} />
-          </Modal>{" "}
+          </Modal>
         </View>
       ) : (
         <ScrollView>

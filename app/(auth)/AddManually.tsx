@@ -3,6 +3,7 @@ import {
   Modal,
   Pressable,
   ScrollView,
+  StyleSheet,
   Text,
   TextInput,
   View,
@@ -39,74 +40,96 @@ export const AddManually = ({ setShowModal }: Props) => {
   };
   return (
     <ScrollView>
-      <Pressable onPress={() => setShowModal(false)}>
-        <Text>Close</Text>
-      </Pressable>
-      <Text>Add macros manually</Text>
+      <View style={styles.container}>
+        <View style={styles.contentContainer}>
+          <Pressable onPress={() => setShowModal(false)}>
+            <Text>Cancel</Text>
+          </Pressable>
+          <Text>Add macros manually</Text>
+          <Text>Calories</Text>
+          <TextInput
+            keyboardType="numeric"
+            value={String(newMacros.calories)}
+            onChangeText={(input) =>
+              setNewMacros({ ...newMacros, calories: Number(input) })
+            }
+          />
 
-      <View>
-        <Text>Calories</Text>
-        <TextInput
-          keyboardType="numeric"
-          value={String(newMacros.calories)}
-          onChangeText={(input) =>
-            setNewMacros({ ...newMacros, calories: Number(input) })
-          }
-        />
+          <Text>Protein (g)</Text>
+          <TextInput
+            keyboardType="numeric"
+            value={String(newMacros.protein)}
+            onChangeText={(input) =>
+              setNewMacros({ ...newMacros, protein: Number(input) })
+            }
+          />
 
-        <Text>Protein (g)</Text>
-        <TextInput
-          keyboardType="numeric"
-          value={String(newMacros.protein)}
-          onChangeText={(input) =>
-            setNewMacros({ ...newMacros, protein: Number(input) })
-          }
-        />
+          <Text>Carbs (g)</Text>
+          <TextInput
+            keyboardType="numeric"
+            value={String(newMacros.carbohydrates)}
+            onChangeText={(input) =>
+              setNewMacros({ ...newMacros, carbohydrates: Number(input) })
+            }
+          />
 
-        <Text>Carbs (g)</Text>
-        <TextInput
-          keyboardType="numeric"
-          value={String(newMacros.carbohydrates)}
-          onChangeText={(input) =>
-            setNewMacros({ ...newMacros, carbohydrates: Number(input) })
-          }
-        />
+          <Text>Fat (g)</Text>
+          <TextInput
+            keyboardType="numeric"
+            value={String(newMacros.fat)}
+            onChangeText={(input) =>
+              setNewMacros({ ...newMacros, fat: Number(input) })
+            }
+          />
+          <Text>Fiber (g)</Text>
+          <TextInput
+            keyboardType="numeric"
+            value={String(newMacros.fiber)}
+            onChangeText={(input) =>
+              setNewMacros({ ...newMacros, fiber: Number(input) })
+            }
+          />
+          <Text>Sugar (g)</Text>
+          <TextInput
+            keyboardType="numeric"
+            value={String(newMacros.sugar)}
+            onChangeText={(input) =>
+              setNewMacros({ ...newMacros, sugar: Number(input) })
+            }
+          />
 
-        <Text>Fat (g)</Text>
-        <TextInput
-          keyboardType="numeric"
-          value={String(newMacros.fat)}
-          onChangeText={(input) =>
-            setNewMacros({ ...newMacros, fat: Number(input) })
-          }
-        />
-        <Text>Fiber (g)</Text>
-        <TextInput
-          keyboardType="numeric"
-          value={String(newMacros.fiber)}
-          onChangeText={(input) =>
-            setNewMacros({ ...newMacros, fiber: Number(input) })
-          }
-        />
-        <Text>Sugar (g)</Text>
-        <TextInput
-          keyboardType="numeric"
-          value={String(newMacros.sugar)}
-          onChangeText={(input) =>
-            setNewMacros({ ...newMacros, sugar: Number(input) })
-          }
-        />
-
-        <Pressable
-          onPress={() => {
-            updateCurrentMacros({ uid: user.uid, newMacros: updatedMacros });
-            setShowModal(false);
-            router.replace("/");
-          }}
-        >
-          <Text>Add macros</Text>
-        </Pressable>
+          <Pressable
+            onPress={() => {
+              updateCurrentMacros({ uid: user.uid, newMacros: updatedMacros });
+              setShowModal(false);
+              router.replace("/");
+            }}
+          >
+            <Text>Add macros</Text>
+          </Pressable>
+        </View>
       </View>
     </ScrollView>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    justifyContent: "center",
+    alignItems: "center",
+    width: "100%",
+    minHeight: "100%",
+    backgroundColor: "transparent",
+    padding: 20,
+  },
+  contentContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    width: "100%",
+    padding: 20,
+    marginTop: 10,
+    backgroundColor: "#91AC8F",
+    borderRadius: 15,
+    marginVertical: 20,
+  },
+});
