@@ -7,7 +7,7 @@ export default function AuthenticatedTabLayout() {
   const { user } = useAuth();
 
   console.log(user, "user");
-  if (!user) return <Redirect href="/UserAuth" />;
+  if (!user) return <Redirect href="/SignInAndRegister" />;
   //   return <Stack />;
   return (
     <Tabs
@@ -21,7 +21,7 @@ export default function AuthenticatedTabLayout() {
       }}
     >
       <Tabs.Screen
-        name="UserAuth"
+        name="SignInAndRegister"
         options={{
           title: "Sign in",
           tabBarIcon: ({ color, size }) => (
@@ -32,7 +32,7 @@ export default function AuthenticatedTabLayout() {
             />
           ),
           tabBarLabelStyle: { color: "#4B5945" },
-          href: !user ? "/UserAuth" : null,
+          href: !user ? "/SignInAndRegister" : null,
         }}
       />
       <Tabs.Screen
