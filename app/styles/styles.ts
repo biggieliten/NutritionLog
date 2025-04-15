@@ -11,7 +11,7 @@ export const styles = StyleSheet.create({
 const containerShadow = StyleSheet.create({
   containerShadow: {
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: { width: 0, height: 20 },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 2,
@@ -25,7 +25,7 @@ export const stylesIndex = StyleSheet.create({
     alignItems: "center",
     width: "100%",
     minHeight: "100%",
-    backgroundColor: "#B2C9AD",
+    backgroundColor: "white",
   },
   containerShadow: {
     ...containerShadow.containerShadow,
@@ -34,17 +34,17 @@ export const stylesIndex = StyleSheet.create({
   dailyProgressContainer: {
     justifyContent: "center",
     alignItems: "center",
-    width: "70%",
+    width: "85%",
 
     padding: 10,
-    marginTop: 10,
+    marginTop: 15,
 
-    backgroundColor: "#91AC8F",
-    borderRadius: 15,
+    backgroundColor: "white",
+    borderRadius: 8,
     marginVertical: 20,
 
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: { width: 0, height: 20 },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
