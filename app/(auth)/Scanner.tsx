@@ -1,10 +1,10 @@
 import { View, Text, StyleSheet, Pressable } from "react-native";
-import { CameraView } from "expo-camera";
+import { Camera, CameraView } from "expo-camera";
 import { useContext, useEffect, useState } from "react";
 import { BarcodeScanningResult } from "expo-camera";
 import { ScanResult } from "../types/types";
 import { useGet } from "../hooks/useGet";
-import { useScannedProductStore } from "../store/useScannedProductsStore";
+// import { useScannedProductStore } from "../store/useScannedProductsStore";
 import { useAuth } from "../state/AuthState/AuthContext";
 
 export default function Scanner() {
@@ -23,12 +23,21 @@ export default function Scanner() {
   const [flashState, setFlashState] = useState(false);
   const [upcScanned, setUpcScanned] = useState<boolean>(true);
   const [barcode, setBarcode] = useState<string>("");
+  const [cameraPermission, setCameraPermission] = useState<boolean | null>(
+    null
+  );
   const url = `https://world.openfoodfacts.org/api/v0/product/${
     barcode || null
   }.json`;
   const { setScannedProduct } = useAuth();
   const { data } = useGet<ScanResult>(url);
-  //   console.log(data);
+
+  useEffect(() => {
+    (async () => {
+      const { status } = await Camera.requestCameraPermissionsAsync();
+      setCameraPermission(status === "granted");
+    })();
+  }, []);
 
   const handleBarcodeScan = (product: BarcodeScanningResult) => {
     if (product != null && upcScanned === false) {
@@ -44,6 +53,14 @@ export default function Scanner() {
       console.log(`data set:${data}`);
     }
   }, [data, setScannedProduct, barcode]);
+
+  if (cameraPermission === null) {
+    return <Text>Requesting for camera permission</Text>;
+  }
+
+  if (cameraPermission === false) {
+    return <Text>No access to camera</Text>;
+  }
 
   return (
     <View style={styles.container}>

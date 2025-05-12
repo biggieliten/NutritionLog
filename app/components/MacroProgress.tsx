@@ -2,11 +2,11 @@ import { View, StyleSheet, Text } from "react-native";
 import * as Progress from "react-native-progress";
 import { divisionToPercentage } from "../utils/divisionToPercentage";
 
-export const MacroProgress = ({
+const MacroProgress = ({
   label,
   current,
   goal,
-  width = 150,
+  //   width = ,
   progressColor,
   unfilledColor,
 }: any) => {
@@ -14,47 +14,56 @@ export const MacroProgress = ({
 
   return (
     <View style={styles.macroRow}>
-      <Text style={styles.macroText}>{label}</Text>
+      <View style={styles.labelContainer}>
+        <Text style={styles.label}>{label}</Text>
+        <View style={{ flexDirection: "column", alignItems: "flex-end" }}>
+          <Text style={{ fontWeight: "bold" }}>{current}g </Text>
+          <Text style={{}}> of {goal}g</Text>
+        </View>
+      </View>
       <View style={styles.progressContiner}>
         <Progress.Bar
           progress={progress}
           color={progressColor}
           unfilledColor={unfilledColor}
-          width={width}
-          height={20}
+          width={300}
+          height={10}
           borderRadius={60}
+          borderColor="transparent"
         />
-        <Text style={styles.progressText}>
-          {" "}
-          {current} / {goal}
-        </Text>
       </View>
     </View>
   );
 };
+
+export default MacroProgress;
+
 const styles = StyleSheet.create({
   macroRow: {
     marginVertical: 8,
     alignItems: "center",
   },
   progressContiner: {
-    position: "relative",
+    // position: "relative",
     alignItems: "center",
     height: 20,
     width: "auto",
+    display: "flex",
+    justifyContent: "space-evenly",
   },
-  progressText: {
-    position: "absolute",
-    fontSize: 15,
-    textAlign: "center",
-    color: "white",
+
+  labelContainer: {
+    display: "flex",
+    width: "90%",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-end",
   },
-  macroText: {
-    color: "grey",
+  label: {
+    color: "#8FA3A6",
     marginBottom: 5,
     fontSize: 15,
     fontWeight: "bold",
     textAlign: "left",
-    // alignSelf: "flex-start",
   },
 });

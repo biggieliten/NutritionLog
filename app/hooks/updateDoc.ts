@@ -4,43 +4,31 @@ import { DailyGoal, Log } from "../types/types";
 
 type userDocType = {
   uid: string;
-  email: string | null;
-  dailyGoal: DailyGoal;
-  //   currentMacros: DailyGoal;
-  logs: Log[];
+  email?: string | null;
+  username?: string;
+  lastActive?: string;
 };
 
-export const setUserDoc = async ({
+export const setUserInfo = async ({
   uid,
   email,
-  dailyGoal: { calories, carbohydrates, protein, fat, sugar, fiber },
-  //   currentMacros: { calories, carbohydrates, protein, fat, sugar, fiber },
-  logs,
+  username,
+  lastActive,
 }: userDocType) => {
   const userDocRef = doc(db, "users", uid);
+
+  const updateFields: Record<string, any> = {};
+
+  if (email !== undefined) updateFields.email = email;
+  if (username !== undefined) updateFields.username = username;
+  if (lastActive !== undefined) updateFields.lastActive = lastActive;
+
   try {
-    await updateDoc(userDocRef, {
-      email: email,
-      dailyGoal: {
-        calories: calories,
-        carbohydrates: carbohydrates,
-        protein: protein,
-        fat: fat,
-        sugar: sugar,
-        fiber: fiber,
-      },
-      //   currentMacros: {
-      //     calories: 10,
-      //     protein: 110,
-      //     carbohydrates: 1110,
-      //     fat: 1110,
-      //     fiber: 110,
-      //     sugar: 110,
-      //   },
-    });
+    await updateDoc(userDocRef, updateFields);
 
     console.log("Document successfully written!");
   } catch (e) {
     console.error("Error setting document:", e);
   }
 };
+// export default setUserInfo;

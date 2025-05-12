@@ -1,37 +1,46 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { View, Text, StyleSheet, Pressable, ScrollView } from "react-native";
-import { LogCard } from "../components/LogCard";
+import LogCard from "../components/LogCard";
 import { Log, Macros, DailyGoal } from "../types/types";
 import { stylesIndex } from "../styles/styles";
 import { AnimatedCircularProgress } from "react-native-circular-progress";
 import * as Progress from "react-native-progress";
 import { divisionToPercentage } from "../utils/divisionToPercentage";
 import { Link, router } from "expo-router";
-import { getToday, formatDate } from "../utils/todaysDate";
+import {
+  getFixedDate,
+  formatDate,
+  getDate,
+  getWeekday,
+} from "../utils/todaysDate";
 import { useAuth } from "../state/AuthState/AuthContext";
 import { addLog } from "../hooks/addLog";
 import { updateDailyGoal } from "../hooks/updateDailyGoal";
 import { updateCurrentMacros } from "../hooks/updateCurrentMacros";
-import { MacroProgress } from "../components/MacroProgress";
+import MacroProgress from "../components/MacroProgress";
 import Apple from "@/assets/images/apple";
+import { resetOnNewDate } from "../helpers/resetOnNewDate";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Index() {
   const { user, userData } = useAuth();
 
   if (!user || !userData) return;
 
-  const currentMacros = userData?.currentMacros;
-  const dailyGoal = userData?.dailyGoal;
-  const logs = userData?.logs;
-
+  const currentMacros = userData?.currentMacros || {};
+  const dailyGoal = userData?.dailyGoal || {};
+  const logs = userData?.logs || [];
+  const reverseLogs = [...logs].reverse() || [];
+  const remainingCalories = dailyGoal.calories - currentMacros.calories;
   const percentageOfDailyCalories = divisionToPercentage(
     currentMacros.calories,
     dailyGoal.calories
   );
+  //   getToday();
+  //   const todaysDate = getToday();
+  //   console.log(userData.lastActive, "userData lastActive");
 
-  const todaysDate = getToday();
-
-  const defaultDailyGoal: DailyGoal = {
+  const defaultValues: DailyGoal | Macros = {
     calories: 0,
     protein: 0,
     carbohydrates: 0,
@@ -39,92 +48,70 @@ export default function Index() {
     fiber: 0,
     sugar: 0,
   };
-  const defaultMacros: Macros = {
-    calories: 0,
-    protein: 0,
-    carbohydrates: 0,
-    fat: 0,
-    fiber: 0,
-    sugar: 0,
+  //   const defaultMacros: Macros = {
+  //     calories: 0,
+  //     protein: 0,
+  //     carbohydrates: 0,
+  //     fat: 0,
+  //     fiber: 0,
+  //     sugar: 0,
+  //   };
+
+  const lastActiv = async () => {
+    // const a = await AsyncStorage.getItem("nutrilog-lastActive");
+
+    // console.log(userData.lastActive, "lastActive");
+    console.log(getWeekday(), "getToday();");
   };
-  // Creating a new variable to convert the currentMacros to a Log object to match Log type.
-  const currentMacrosToLog = (macros: Macros, date: string): Log => {
-    return {
-      ...macros,
-      date: date,
-    };
-  };
+  useEffect(() => {
+    if (user && userData) {
+      let todaysDate = getFixedDate();
+      //   todaysDate = "2025-05-11";
+
+      resetOnNewDate(
+        todaysDate,
+        userData.lastActive || "",
+        currentMacros,
+        // dailyGoal,
+        defaultValues,
+        defaultValues,
+        user.uid
+        // userData.email
+      );
+      //   resetOnNewDate(
+      //     todaysDate,
+      //     userData.date || "",
+      //     userData.currentMacros || defaultMacros,
+      //     defaultDailyGoal,
+      //     defaultMacros,
+      //     user.uid
+      //   );
+    }
+  }, [user, userData, userData.lastActive]);
+
+  const logChunk = () => {};
+
   return (
     <ScrollView contentContainerStyle={stylesIndex.container}>
-      <View
-        style={{
-          width: "90%",
-          alignItems: "center",
-          borderBottomColor: "#f3f3f3",
-          borderBottomWidth: 1,
-          flexDirection: "row",
-          justifyContent: "space-between",
-          paddingBottom: 15,
-          paddingTop: 5,
-          //   marginBottom: 20,
-          //   backgroundColor: "#4B5945",
-          //   borderRadius: 10,
-        }}
-      >
-        <Text
-          style={{
-            // width: "95%",
-            height: 40,
-            paddingTop: 15,
-            justifyContent: "center",
-          }}
-        >
-          Today, {formatDate(getToday())}
-        </Text>
-        <View style={{}}>
-          <Apple width={40} height={40} />
-        </View>
-        {/* <Ionicons name="add-circle" color="#4B5945" size={40} /> */}
+      {/* Header */}
+      <View style={stylesIndex.header}>
+        <Text style={stylesIndex.headerWeekday}>{getWeekday()}</Text>
+        {/* <View style={stylesIndex.headerDateContainer}> */}
+        <Text style={stylesIndex.headerDate}>{formatDate(getFixedDate())}</Text>
+        {/* <Apple width={40} height={40} /> */}
+        {/* </View> */}
       </View>
-      {/* <Pressable onPress={() => console.log(currentMacros)}>
-        <Text>cm</Text>
-      </Pressable> */}
-      {/* <Pressable
-        style={{
-          borderRadius: 10,
-          margin: 10,
-          padding: 10,
-          height: "auto",
-          width: "40%",
-          backgroundColor: "#91AC8F",
-        }}
-        onPress={() => {
-          //   setLastSavedDate("2024-12-31");
-          const newLog = currentMacrosToLog(currentMacros, todaysDate);
-          addLog({ uid: user.uid, newLog: newLog });
-          updateDailyGoal({ uid: user.uid, newGoal: defaultDailyGoal });
-          updateCurrentMacros({
-            uid: user.uid,
-            newMacros: defaultMacros,
-          });
-          user ? console.log(dailyGoal, "load daily goal") : console.log("");
-        }}
-      >
-        <Text
-          style={{ color: "white", fontWeight: "bold", textAlign: "center" }}
-        >
-          Log macros
-        </Text>
-      </Pressable> */}
-      <View style={stylesIndex.dailyProgressContainer}>
+
+      <Pressable onPress={lastActiv}>{/* <Text>Press</Text> */}</Pressable>
+
+      <>
         {dailyGoal.calories <= 0 ? (
           <View
             style={{
               width: "70%",
               margin: 10,
               padding: 8,
-
-              backgroundColor: "white",
+              backgroundColor: "#5D7073 ",
               borderRadius: 10,
               justifyContent: "center",
               alignItems: "center",
@@ -134,62 +121,52 @@ export default function Index() {
               <Text
                 style={{
                   textAlign: "center",
-                  color: "#91AC8F",
-                  fontSize: 20,
+                  color: "#D4AA7D",
+                  fontSize: 18,
                   fontWeight: "bold",
                 }}
               >
-                Set goal
+                Set Your Daily Macro Goals
               </Text>
             </Link>
           </View>
         ) : (
           <>
-            <Text
-              style={{
-                color: "white",
-                fontSize: 20,
-                fontWeight: "bold",
-                marginBottom: 10,
-              }}
-            >
-              Daily Progress
-            </Text>
-            <View>
+            {/* <Text style={stylesIndex.sectionTitle}>Today's Progress</Text> */}
+            <View style={stylesIndex.calorieProgressContainer}>
               <AnimatedCircularProgress
-                size={200}
-                width={10}
+                size={150}
+                width={8}
                 fill={Number(percentageOfDailyCalories)}
-                tintColor="#e52328"
-                rotation={70}
-                backgroundColor="#ea4e5aa3"
+                tintColor="#668a8c"
+                rotation={0}
+                backgroundColor="#C9D1D2"
                 lineCap="round"
               >
                 {() => (
                   <View
                     style={{
-                      backgroundColor: "white",
+                      backgroundColor: "#fff",
                       height: 180,
                       width: 180,
                       borderRadius: 100,
                       alignItems: "center",
                       justifyContent: "center",
-                      boxShadow: "0px 0px 10px #000000",
                     }}
                   >
-                    <Text
+                    {/* <Text
                       style={{
-                        color: "black",
+                        color: "#D4AA7D",
                         fontSize: 20,
                         fontWeight: "bold",
                         marginBottom: 10,
                       }}
                     >
                       Calories
-                    </Text>
-                    <Text
+                    </Text> */}
+                    {/* <Text
                       style={{
-                        color: "black",
+                        color: "#D4AA7D",
                         fontSize: 20,
                         fontWeight: "bold",
                       }}
@@ -197,80 +174,103 @@ export default function Index() {
                       {dailyGoal.calories <= 0
                         ? `0%`
                         : `${percentageOfDailyCalories}%`}
-                    </Text>
-                    <Text
-                      style={{
-                        color: "black",
-                        fontSize: 20,
-                        fontWeight: "bold",
-                      }}
-                    >
-                      {currentMacros.calories} / {userData?.dailyGoal.calories}
-                    </Text>
+                    </Text> */}
+                    {/* <Text
+							style={{
+							  color: "#D4AA7D",
+							  fontSize: 20,
+							  fontWeight: "bold",
+							}}
+						  >
+							{currentMacros.calories} / {userData?.dailyGoal.calories}
+						  </Text> */}
+                    <View style={stylesIndex.calorieStatusContainer}>
+                      <Text
+                        style={{
+                          color: "#D4AA7D",
+                          fontSize: 20,
+                          fontWeight: "bold",
+                        }}
+                      >
+                        {currentMacros.calories}
+                      </Text>
+                      <Text
+                        style={{
+                          color: "#5d7073",
+                        }}
+                      >
+                        of {userData?.dailyGoal.calories} kcal
+                      </Text>
+                    </View>
                   </View>
                 )}
               </AnimatedCircularProgress>
+              <Text
+                style={{
+                  color: "#3e4e50",
+                  marginTop: 10,
+                  fontSize: 16,
+                }}
+              >
+                {remainingCalories} calories remaining
+              </Text>
             </View>
-            <MacroProgress
-              label="Protein"
-              progressColor="#ffaa00"
-              unfilledColor="#feeeb4"
-              current={currentMacros.protein}
-              goal={dailyGoal.protein}
-            />
 
-            <MacroProgress
-              label="Carbs"
-              progressColor="#02a7b1"
-              unfilledColor="#bfeaed"
-              current={currentMacros.carbohydrates}
-              goal={dailyGoal.carbohydrates}
-            />
-
-            <MacroProgress
-              label="Fat"
-              progressColor="#fa5a4c"
-              unfilledColor="#f0d2d1"
-              current={currentMacros.fat}
-              goal={dailyGoal.fat}
-            />
-
-            {dailyGoal.fiber > 0 && (
+            <View style={stylesIndex.dailyProgressContainer}>
               <MacroProgress
-                label="Fiber"
-                progressColor="#7dbe80"
-                unfilledColor="#d5e9d6"
-                current={currentMacros.fiber}
-                goal={dailyGoal.fiber}
+                label="Protein"
+                progressColor="#D4AA7D"
+                unfilledColor="#E9D5BC"
+                current={currentMacros.protein}
+                goal={dailyGoal.protein}
               />
-            )}
-
-            {dailyGoal.sugar > 0 && (
               <MacroProgress
-                label="Sugar"
-                progressColor="#ec7ba5"
-                unfilledColor="#f7d6e2"
-                current={currentMacros.sugar}
-                goal={dailyGoal.sugar}
+                label="Carbs"
+                progressColor="#8FA3A6"
+                unfilledColor="#C9D1D2"
+                current={currentMacros.carbohydrates}
+                goal={dailyGoal.carbohydrates}
               />
-            )}
+              <MacroProgress
+                label="Fat"
+                progressColor="#D97862"
+                unfilledColor="#EACDC7"
+                current={currentMacros.fat}
+                goal={dailyGoal.fat}
+              />
+              {dailyGoal.fiber > 0 && !isNaN(dailyGoal.fiber) && (
+                <MacroProgress
+                  label="Fiber"
+                  progressColor="#6A9395"
+                  unfilledColor="#C0D6CD"
+                  current={currentMacros.fiber}
+                  goal={dailyGoal.fiber}
+                />
+              )}
+              {dailyGoal.sugar > 0 && (
+                <MacroProgress
+                  label="Sugar"
+                  progressColor="#C2855A"
+                  unfilledColor="#E7CDB6"
+                  current={currentMacros.sugar}
+                  goal={dailyGoal.sugar}
+                />
+              )}
+            </View>
           </>
         )}
+      </>
+
+      <Text style={stylesIndex.sectionTitle}>History</Text>
+      <View style={stylesIndex.historyContainer}>
+        {reverseLogs && reverseLogs.length > 0 ? (
+          reverseLogs.map((log: Log, index: number) => (
+            <LogCard key={index} {...log} />
+          ))
+        ) : (
+          <Text style={stylesIndex.emptyHistoryText}>No logs available</Text>
+        )}
       </View>
-      <Text
-        style={{
-          color: "grey",
-          fontSize: 20,
-          fontWeight: "bold",
-        }}
-      >
-        History
-      </Text>
-      {logs && logs.length > 0 ? (
-        logs.map((log: Log, index: number) => <LogCard key={index} {...log} />)
-      ) : (
-        <Text style={{ color: "white" }}>No logs available</Text>
-      )}
     </ScrollView>
   );
 }

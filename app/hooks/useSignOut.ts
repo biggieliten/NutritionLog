@@ -13,3 +13,5 @@ export const useSignOut = () => {
       console.error("Sign out error: ", error);
     });
 };
+
+// export default useSignOut;

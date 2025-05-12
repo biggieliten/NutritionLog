@@ -15,7 +15,9 @@ export type GlobalContextType = {
 };
 export type firebaseUser = {
   email: string;
-  lastUpdated: Date;
+  username: string;
+  profilePicUrl: string;
+  lastActive: string | null;
   // uid: string;
   dailyGoal: DailyGoal;
   currentMacros: Macros;
@@ -101,6 +103,7 @@ export type nutriments = {
 export type Product = {
   nutriments?: Partial<nutriments>;
   product_name: string;
+  brands: string;
 };
 
 export type ScanResult = {

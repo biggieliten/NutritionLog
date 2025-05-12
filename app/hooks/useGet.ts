@@ -51,3 +51,5 @@ export const useGet = <T>(
 
   return { data, loading, error };
 };
+
+// export default useGet;

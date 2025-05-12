@@ -18,6 +18,7 @@ import { get } from "firebase/database";
 import { user } from "@/app/types/firebaseTypes";
 import { ScanResult } from "@/app/types/types";
 import { firebaseUser } from "@/app/types/types";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const AuthContext = createContext<{
   //   signIn: () => void;
@@ -97,26 +98,27 @@ export default function AuthProvider({
   //   }, []);
 
   useEffect(() => {
-    // Auth state listener
     const authUnsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
       setUser(firebaseUser);
 
-      // If user signed out, clear user data
       if (!firebaseUser) {
         setUserData(null);
         return;
       }
 
-      // Set up a real-time listener on the user document
       const userDocRef = doc(db, "users", firebaseUser.uid);
 
       const userDocUnsubscribe = onSnapshot(
         userDocRef,
-        (docSnap) => {
+        async (docSnap) => {
           if (docSnap.exists()) {
             const data = docSnap.data();
-            console.log("Real-time update from Firestore:", data);
-            setUserData(data as firebaseUser);
+
+            const lastActive = await AsyncStorage.getItem(
+              "nutrilog-lastActive"
+            );
+            if (!lastActive) return;
+            setUserData({ ...(data as firebaseUser), lastActive });
           }
         },
         (error) => {
@@ -124,11 +126,9 @@ export default function AuthProvider({
         }
       );
 
-      // Return cleanup function for the Firestore listener
       return () => userDocUnsubscribe();
     });
 
-    // Return cleanup function for the auth listener
     return () => authUnsubscribe();
   }, []);
 

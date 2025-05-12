@@ -23,3 +23,4 @@ export const loadFromAsyncStorage = async (key: string) => {
     return null;
   }
 };
+// export default { saveToAsyncStorage, loadFromAsyncStorage };

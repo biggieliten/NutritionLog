@@ -1,5 +1,5 @@
-const roundOneDecimal = (num: any) => {
+export const roundOneDecimal = (num: any) => {
   return num.toFixed(1);
 };
 
-export default roundOneDecimal;
+// export default roundOneDecimal;

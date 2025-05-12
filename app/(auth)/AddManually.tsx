@@ -12,6 +12,7 @@ import { useAuth } from "../state/AuthState/AuthContext";
 import { updateCurrentMacros } from "../hooks/updateCurrentMacros";
 import { set } from "firebase/database";
 import { router } from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
 
 type Props = {
   setShowModal: (bool: boolean) => void;
@@ -42,61 +43,95 @@ export const AddManually = ({ setShowModal }: Props) => {
     <ScrollView>
       <View style={styles.container}>
         <View style={styles.contentContainer}>
-          <Pressable onPress={() => setShowModal(false)}>
-            <Text>Cancel</Text>
+          <Pressable
+            style={styles.cancleButton}
+            onPress={() => setShowModal(false)}
+          >
+            <Ionicons
+              name="arrow-back-circle-outline"
+              size={40}
+              color={"#D4AA7D"}
+            />
           </Pressable>
-          <Text>Add macros manually</Text>
-          <Text>Calories</Text>
-          <TextInput
-            keyboardType="numeric"
-            value={String(newMacros.calories)}
-            onChangeText={(input) =>
-              setNewMacros({ ...newMacros, calories: Number(input) })
-            }
-          />
-
-          <Text>Protein (g)</Text>
-          <TextInput
-            keyboardType="numeric"
-            value={String(newMacros.protein)}
-            onChangeText={(input) =>
-              setNewMacros({ ...newMacros, protein: Number(input) })
-            }
-          />
-
-          <Text>Carbs (g)</Text>
-          <TextInput
-            keyboardType="numeric"
-            value={String(newMacros.carbohydrates)}
-            onChangeText={(input) =>
-              setNewMacros({ ...newMacros, carbohydrates: Number(input) })
-            }
-          />
-
-          <Text>Fat (g)</Text>
-          <TextInput
-            keyboardType="numeric"
-            value={String(newMacros.fat)}
-            onChangeText={(input) =>
-              setNewMacros({ ...newMacros, fat: Number(input) })
-            }
-          />
-          <Text>Fiber (g)</Text>
-          <TextInput
-            keyboardType="numeric"
-            value={String(newMacros.fiber)}
-            onChangeText={(input) =>
-              setNewMacros({ ...newMacros, fiber: Number(input) })
-            }
-          />
-          <Text>Sugar (g)</Text>
-          <TextInput
-            keyboardType="numeric"
-            value={String(newMacros.sugar)}
-            onChangeText={(input) =>
-              setNewMacros({ ...newMacros, sugar: Number(input) })
-            }
-          />
+          <Text style={styles.header}>Add Macronutrients</Text>
+          <View style={styles.inputContainer}>
+            <Text style={styles.inputTitle}>Enter Calories</Text>
+            <TextInput
+              style={styles.input}
+              keyboardType="numeric"
+              placeholder="Number"
+              placeholderTextColor={"#fff"}
+              // value={String(newMacros.calories)}
+              onChangeText={(input) =>
+                setNewMacros({ ...newMacros, calories: Number(input) })
+              }
+            />
+          </View>
+          <View style={styles.inputContainer}>
+            <Text style={styles.inputTitle}>Enter Protein (g)</Text>
+            <TextInput
+              style={styles.input}
+              keyboardType="numeric"
+              placeholder="Number"
+              placeholderTextColor={"#fff"}
+              // value={String(newMacros.protein)}
+              onChangeText={(input) =>
+                setNewMacros({ ...newMacros, protein: Number(input) })
+              }
+            />
+          </View>
+          <View style={styles.inputContainer}>
+            <Text style={styles.inputTitle}>Enter Carbs (g)</Text>
+            <TextInput
+              style={styles.input}
+              keyboardType="numeric"
+              placeholder="Number"
+              placeholderTextColor={"#fff"}
+              // value={String(newMacros.carbohydrates)}
+              onChangeText={(input) =>
+                setNewMacros({ ...newMacros, carbohydrates: Number(input) })
+              }
+            />
+          </View>
+          <View style={styles.inputContainer}>
+            <Text style={styles.inputTitle}>Enter Fat (g)</Text>
+            <TextInput
+              style={styles.input}
+              keyboardType="numeric"
+              // value={String(newMacros.fat)}
+              placeholder="Number"
+              placeholderTextColor={"#fff"}
+              onChangeText={(input) =>
+                setNewMacros({ ...newMacros, fat: Number(input) })
+              }
+            />
+          </View>
+          <View style={styles.inputContainer}>
+            <Text style={styles.inputTitle}>Enter Fiber (g)</Text>
+            <TextInput
+              style={styles.input}
+              keyboardType="numeric"
+              placeholder="Number"
+              placeholderTextColor={"#fff"}
+              // value={String(newMacros.fiber)}
+              onChangeText={(input) =>
+                setNewMacros({ ...newMacros, fiber: Number(input) })
+              }
+            />
+          </View>
+          <View style={styles.inputContainer}>
+            <Text style={styles.inputTitle}>Enter Sugar (g)</Text>
+            <TextInput
+              style={styles.input}
+              keyboardType="numeric"
+              placeholder="Number"
+              placeholderTextColor={"#fff"}
+              // value={String(newMacros.sugar)}
+              onChangeText={(input) =>
+                setNewMacros({ ...newMacros, sugar: Number(input) })
+              }
+            />
+          </View>
 
           <Pressable
             onPress={() => {
@@ -105,7 +140,12 @@ export const AddManually = ({ setShowModal }: Props) => {
               router.replace("/");
             }}
           >
-            <Text>Add macros</Text>
+            <Ionicons
+              style={styles.addButton}
+              name="add-circle-outline"
+              size={40}
+              color={"#D4AA7D"}
+            />
           </Pressable>
         </View>
       </View>
@@ -119,17 +159,53 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "100%",
     minHeight: "100%",
-    backgroundColor: "transparent",
-    padding: 20,
+    // backgroundColor: "#fff",
+    // padding: 20,
   },
   contentContainer: {
-    justifyContent: "center",
+    justifyContent: "space-evenly",
     alignItems: "center",
     width: "100%",
-    padding: 20,
-    marginTop: 10,
-    backgroundColor: "#91AC8F",
+    height: "100%",
+    // padding: 20,
+    // marginTop: 10,
+    backgroundColor: "#2D3E40",
     borderRadius: 15,
     marginVertical: 20,
+  },
+  header: {
+    marginTop: 40,
+    color: "#D4AA7D",
+    fontSize: 20,
+    fontWeight: "bold",
+  },
+  input: {
+    backgroundColor: "#5D7073",
+    // borderWidth: 1,
+    borderColor: "#8FA3A6",
+    borderTopLeftRadius: 5,
+    borderTopRightRadius: 5,
+    alignSelf: "flex-start",
+    width: "100%",
+  },
+  inputTitle: {
+    alignSelf: "flex-start",
+    color: "#D4AA7D",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  inputContainer: {
+    width: "70%",
+    marginBottom: 20,
+    borderBottomWidth: 1,
+    borderColor: "#ccc",
+  },
+  cancleButton: {
+    position: "absolute",
+    top: 15,
+    left: 15,
+  },
+  addButton: {
+    marginBottom: 30,
   },
 });

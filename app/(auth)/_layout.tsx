@@ -17,32 +17,19 @@ export default function AuthenticatedTabLayout() {
         headerStyle: { backgroundColor: "#25292e" },
         headerShadowVisible: false,
         headerTintColor: "#fff",
-        tabBarStyle: { backgroundColor: "white" },
+        tabBarStyle: {
+          backgroundColor: "#D4AA7D",
+        },
       }}
     >
-      <Tabs.Screen
-        name="SignInAndRegister"
-        options={{
-          title: "Sign in",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons
-              name="person-circle-outline"
-              color="#4B5945"
-              size={size}
-            />
-          ),
-          tabBarLabelStyle: { color: "#4B5945" },
-          href: !user ? "/SignInAndRegister" : null,
-        }}
-      />
       <Tabs.Screen
         name="index"
         options={{
           title: "Progress",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="list-outline" color="#4B5945" size={size} />
+            <Ionicons name="list-outline" color="#fff" size={size} />
           ),
-          tabBarLabelStyle: { color: "#4B5945" },
+          tabBarLabelStyle: { color: "#fff" },
           href: user ? "/" : null,
         }}
       />
@@ -51,9 +38,9 @@ export default function AuthenticatedTabLayout() {
         options={{
           title: "Scan",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="scan-outline" color="#4B5945" size={size} />
+            <Ionicons name="scan-outline" color="#fff" size={size} />
           ),
-          tabBarLabelStyle: { color: "#4B5945" },
+          tabBarLabelStyle: { color: "#fff" },
           href: user ? "/Scanner" : null,
         }}
       />
@@ -62,9 +49,9 @@ export default function AuthenticatedTabLayout() {
         options={{
           title: "Add Meal",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="add-circle-outline" color="#4B5945" size={size} />
+            <Ionicons name="add-circle-outline" color="#fff" size={size} />
           ),
-          tabBarLabelStyle: { color: "#4B5945" },
+          tabBarLabelStyle: { color: "#fff" },
           href: user ? "/AddMeal" : null,
         }}
       />
@@ -73,9 +60,9 @@ export default function AuthenticatedTabLayout() {
         options={{
           title: "Daily Goal",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="flag-outline" color="#4B5945" size={size} />
+            <Ionicons name="flag-outline" color="#fff" size={size} />
           ),
-          tabBarLabelStyle: { color: "#4B5945" },
+          tabBarLabelStyle: { color: "#fff" },
           href: user ? "/DailyGoal" : null,
         }}
       />
@@ -84,13 +71,9 @@ export default function AuthenticatedTabLayout() {
         options={{
           title: "Profile",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons
-              name="person-circle-outline"
-              color="#4B5945"
-              size={size}
-            />
+            <Ionicons name="person-circle-outline" color="#fff" size={size} />
           ),
-          tabBarLabelStyle: { color: "#4B5945" },
+          tabBarLabelStyle: { color: "#fff" },
           href: user ? "/Profile" : null,
         }}
       />
