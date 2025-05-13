@@ -1,10 +1,18 @@
-import { Redirect, Stack, Tabs } from "expo-router";
+import { Redirect, Tabs } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import { useContext, useEffect } from "react";
-import AuthProvider, { useAuth } from "../state/AuthState/AuthContext";
+import { useAuth } from "../state/AuthState/AuthContext";
+import { StyleSheet, View, Text } from "react-native";
 
 export default function AuthenticatedTabLayout() {
-  const { user } = useAuth();
+  const { user, isLoading } = useAuth();
+
+  if (isLoading) {
+    return (
+      <View style={styles.isLoadingView}>
+        <Text>Loading....</Text>
+      </View>
+    );
+  }
 
   console.log(user, "user");
   if (!user) return <Redirect href="/SignInAndRegister" />;
@@ -80,3 +88,14 @@ export default function AuthenticatedTabLayout() {
     </Tabs>
   );
 }
+
+const styles = StyleSheet.create({
+  isLoadingView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#25292e",
+    width: "100%",
+    height: "100%",
+  },
+});
