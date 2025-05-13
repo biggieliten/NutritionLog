@@ -170,7 +170,6 @@ const styles = StyleSheet.create({
     // padding: 20,
     // marginTop: 10,
     backgroundColor: "#2D3E40",
-    borderRadius: 15,
     marginVertical: 20,
   },
   header: {

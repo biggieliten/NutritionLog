@@ -68,8 +68,6 @@ export default function Index() {
     }
   }, [user, userData, userData.lastActive]);
 
-  const logChunk = () => {};
-
   return (
     <ScrollView contentContainerStyle={stylesIndex.container}>
       {/* Header */}

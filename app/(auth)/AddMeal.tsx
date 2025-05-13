@@ -120,7 +120,7 @@ export default function AddMeal() {
               name="arrow-back-circle-outline"
               size={40}
               color={"#D4AA7D"}
-            />{" "}
+            />
           </Pressable>
           <View style={styles.macroContainer}>
             <Text style={styles.productName}>{productName}</Text>
@@ -199,12 +199,12 @@ export default function AddMeal() {
             </Pressable> */}
             {/* <Link href="/AddManually">Add meal manually</Link> */}
             <Pressable
-              style={styles.optionButton}
+              style={[styles.optionButton, { paddingLeft: 13 }]}
               onPress={() => setModalVisible(true)}
             >
               <Ionicons name="create-outline" size={20} color="#fff" />
 
-              <Text style={styles.buttonText}>Add manually</Text>
+              <Text style={styles.buttonText}>Custom Entry</Text>
             </Pressable>
           </View>
           <Modal
@@ -284,35 +284,27 @@ const styles = StyleSheet.create({
   buttonContainer: {
     width: "80%",
     alignItems: "center",
-    // backgroundColor: "white",
     marginTop: 10,
   },
   productName: {
     fontSize: 20,
     fontWeight: "bold",
     color: "white",
-    // marginBottom: 20,
   },
   brandName: {
     fontSize: 14,
-    // fontWeight: "bold",
     color: "white",
     marginBottom: 10,
   },
   text: {
     fontSize: 16,
-    // fontWeight: "bold",
     color: "white",
     marginBottom: 10,
-    // width: "90%",
-    // borderBottomWidth: 1,
-    borderBottomColor: "#ccc",
   },
   input: {
     ...containerShadow.containerShadow,
     width: "80%",
-    // padding: 10,
-    // marginBottom: 15,
+
     backgroundColor: "#fff",
     borderRadius: 10,
     borderWidth: 1,
@@ -323,13 +315,11 @@ const styles = StyleSheet.create({
     width: 200,
     height: 60,
     flexDirection: "row",
-    // padding: 15,
     backgroundColor: "#D4AA7D",
     borderRadius: 10,
     alignItems: "center",
     paddingLeft: 10,
     marginVertical: 10,
-    // justifyContent: "space-evenly",
   },
   optionButton: {
     ...containerShadow.containerShadow,
@@ -347,7 +337,8 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 16,
     fontWeight: "bold",
-    marginLeft: 10,
+    width: "80%",
+    textAlign: "center",
   },
   cancleButton: {
     position: "absolute",
@@ -357,7 +348,6 @@ const styles = StyleSheet.create({
   splitter: {
     width: "80%",
     height: 0,
-    // backgroundColor: "#fff",
     borderBottomWidth: 1,
     borderBottomColor: "#fff",
     marginVertical: "50%",
