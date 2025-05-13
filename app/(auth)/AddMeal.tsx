@@ -6,17 +6,14 @@ import {
   ScrollView,
   Modal,
 } from "react-native";
-import { useContext, useEffect, useState } from "react";
+import { useState } from "react";
 import { macroCalculator } from "../utils/macroCalculator";
-import { roundOneDecimal } from "../utils/roundTwoDecimals";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getFixedDate } from "../utils/todaysDate";
 import { containerShadow } from "../styles/styles";
-// import { useScannedProductStore } from "../store/useScannedProductsStore";
-import { Product } from "../types/types";
 import { updateCurrentMacros } from "../hooks/updateCurrentMacros";
 import { useAuth } from "../state/AuthState/AuthContext";
-import { Link, router } from "expo-router";
+import { router } from "expo-router";
 import { AddManually } from "./AddManually";
 import { StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
@@ -31,13 +28,6 @@ export default function AddMeal() {
   const [modalVisible, setModalVisible] = useState(false);
   const { user, userData, scannedProduct, setScannedProduct } = useAuth();
 
-  //   if (
-  //     !scannedProduct ||
-  //     !scannedProduct.product ||
-  //     !scannedProduct.product.nutriments
-  //   ) {
-  //     return <Text>No product found for this UPC.</Text>;
-  //   }
   if (!userData || !user) return;
   const currentMacros = userData?.currentMacros;
   const productName =
