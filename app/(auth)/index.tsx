@@ -1,26 +1,16 @@
-import React, { useEffect } from "react";
-import { View, Text, StyleSheet, Pressable, ScrollView } from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, Text, Pressable, ScrollView } from "react-native";
 import LogCard from "../components/LogCard";
 import { Log, Macros, DailyGoal } from "../types/types";
 import { stylesIndex } from "../styles/styles";
 import { AnimatedCircularProgress } from "react-native-circular-progress";
-import * as Progress from "react-native-progress";
 import { divisionToPercentage } from "../utils/divisionToPercentage";
-import { Link, router } from "expo-router";
-import {
-  getFixedDate,
-  formatDate,
-  getDate,
-  getWeekday,
-} from "../utils/todaysDate";
+import { Link } from "expo-router";
+import { getFixedDate, formatDate, getWeekday } from "../utils/todaysDate";
 import { useAuth } from "../state/AuthState/AuthContext";
-import { addLog } from "../hooks/addLog";
-import { updateDailyGoal } from "../hooks/updateDailyGoal";
-import { updateCurrentMacros } from "../hooks/updateCurrentMacros";
 import MacroProgress from "../components/MacroProgress";
-import Apple from "@/assets/images/apple";
 import { resetOnNewDate } from "../helpers/resetOnNewDate";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Ionicons } from "@expo/vector-icons";
 
 export default function Index() {
   const { user, userData } = useAuth();
@@ -31,14 +21,13 @@ export default function Index() {
   const dailyGoal = userData?.dailyGoal || {};
   const logs = userData?.logs || [];
   const reverseLogs = [...logs].reverse() || [];
+  const [renderedLogs, setRenderedLogs] = useState(5);
+  const allLogsRendered = renderedLogs >= reverseLogs.length;
   const remainingCalories = dailyGoal.calories - currentMacros.calories;
   const percentageOfDailyCalories = divisionToPercentage(
     currentMacros.calories,
     dailyGoal.calories
   );
-  //   getToday();
-  //   const todaysDate = getToday();
-  //   console.log(userData.lastActive, "userData lastActive");
 
   const defaultValues: DailyGoal | Macros = {
     calories: 0,
@@ -48,21 +37,11 @@ export default function Index() {
     fiber: 0,
     sugar: 0,
   };
-  //   const defaultMacros: Macros = {
-  //     calories: 0,
-  //     protein: 0,
-  //     carbohydrates: 0,
-  //     fat: 0,
-  //     fiber: 0,
-  //     sugar: 0,
-  //   };
 
-  const lastActiv = async () => {
-    // const a = await AsyncStorage.getItem("nutrilog-lastActive");
-
-    // console.log(userData.lastActive, "lastActive");
-    console.log(getWeekday(), "getToday();");
+  const loadMoreLogs = () => {
+    setRenderedLogs((prev) => prev + 5);
   };
+
   useEffect(() => {
     if (user && userData) {
       let todaysDate = getFixedDate();
@@ -102,34 +81,45 @@ export default function Index() {
         {/* </View> */}
       </View>
 
-      <Pressable onPress={lastActiv}>{/* <Text>Press</Text> */}</Pressable>
+      {/* <Pressable onPress={lastActiv}><Text>Press</Text></Pressable> */}
 
       <>
         {dailyGoal.calories <= 0 ? (
-          <View
-            style={{
-              width: "70%",
-              margin: 10,
-              padding: 8,
-              backgroundColor: "#5D7073 ",
-              borderRadius: 10,
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <Link href="/DailyGoal">
+          <Link href="/DailyGoal" style={{ width: "65%", marginTop: 10 }}>
+            <View
+              style={{
+                width: "100%",
+                padding: 8,
+                backgroundColor: "#D4AA7D",
+                borderRadius: 10,
+                flexDirection: "row",
+                alignItems: "center",
+                position: "relative",
+                // justifyContent: "space-evenly",
+              }}
+            >
               <Text
                 style={{
                   textAlign: "center",
-                  color: "#D4AA7D",
+                  color: "#fff",
+                  width: "auto",
+                  marginLeft: 30,
+                  //   flex: 1,
                   fontSize: 18,
                   fontWeight: "bold",
+                  //   backgroundColor: "#ccc",
                 }}
               >
-                Set Your Daily Macro Goals
+                Define Todays Goal
               </Text>
-            </Link>
-          </View>
+              <Ionicons
+                name="arrow-forward-outline"
+                size={24}
+                color={"#fff"}
+                style={{ position: "absolute", right: 30 }}
+              />
+            </View>
+          </Link>
         ) : (
           <>
             {/* <Text style={stylesIndex.sectionTitle}>Today's Progress</Text> */}
@@ -154,36 +144,6 @@ export default function Index() {
                       justifyContent: "center",
                     }}
                   >
-                    {/* <Text
-                      style={{
-                        color: "#D4AA7D",
-                        fontSize: 20,
-                        fontWeight: "bold",
-                        marginBottom: 10,
-                      }}
-                    >
-                      Calories
-                    </Text> */}
-                    {/* <Text
-                      style={{
-                        color: "#D4AA7D",
-                        fontSize: 20,
-                        fontWeight: "bold",
-                      }}
-                    >
-                      {dailyGoal.calories <= 0
-                        ? `0%`
-                        : `${percentageOfDailyCalories}%`}
-                    </Text> */}
-                    {/* <Text
-							style={{
-							  color: "#D4AA7D",
-							  fontSize: 20,
-							  fontWeight: "bold",
-							}}
-						  >
-							{currentMacros.calories} / {userData?.dailyGoal.calories}
-						  </Text> */}
                     <View style={stylesIndex.calorieStatusContainer}>
                       <Text
                         style={{
@@ -261,12 +221,24 @@ export default function Index() {
         )}
       </>
 
-      <Text style={stylesIndex.sectionTitle}>History</Text>
+      <Text style={stylesIndex.sectionTitle}>Previous Acivity</Text>
       <View style={stylesIndex.historyContainer}>
         {reverseLogs && reverseLogs.length > 0 ? (
-          reverseLogs.map((log: Log, index: number) => (
-            <LogCard key={index} {...log} />
-          ))
+          <>
+            {reverseLogs
+              .slice(0, renderedLogs)
+              .map((log: Log, index: number) => (
+                <LogCard key={index} {...log} />
+              ))}
+            {!allLogsRendered && (
+              <Pressable
+                style={stylesIndex.loadMoreButton}
+                onPress={loadMoreLogs}
+              >
+                <Text style={stylesIndex.loadMoreButtonText}>Load more</Text>
+              </Pressable>
+            )}
+          </>
         ) : (
           <Text style={stylesIndex.emptyHistoryText}>No logs available</Text>
         )}
