@@ -92,7 +92,7 @@ export const stylesIndex = StyleSheet.create({
     borderRadius: 16,
     padding: 16,
     // marginTop: 10,
-    marginBottom: 30,
+    // marginBottom: 30,
     // ...containerShadow.containerShadow,
   },
   emptyHistoryText: {
@@ -100,6 +100,18 @@ export const stylesIndex = StyleSheet.create({
     textAlign: "center",
     fontSize: 16,
     paddingVertical: 20,
+  },
+  loadMoreButton: {
+    marginHorizontal: "auto",
+    backgroundColor: "#D4AA7D",
+    borderRadius: 8,
+    marginTop: 10,
+    padding: 10,
+  },
+  loadMoreButtonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "bold",
   },
 });
 
