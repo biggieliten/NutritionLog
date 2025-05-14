@@ -76,21 +76,22 @@ export const stylesIndex = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  sectionTitle: {
+  historySectionTitle: {
     color: "#D4AA7D",
     fontSize: 20,
     fontWeight: "bold",
     // marginBottom: 10,
     marginTop: 10,
+    marginLeft: 20,
     alignSelf: "flex-start",
-    marginLeft: "auto",
-    marginRight: "auto",
+    // marginLeft: "auto",
+    // marginRight: "auto",
   },
   historyContainer: {
-    width: "90%",
+    width: "100%",
     // backgroundColor: "#3e4e50",
     borderRadius: 16,
-    padding: 16,
+    // padding: 16,
     // marginTop: 10,
     // marginBottom: 30,
     // ...containerShadow.containerShadow,
@@ -112,6 +113,20 @@ export const stylesIndex = StyleSheet.create({
     color: "#fff",
     fontSize: 16,
     fontWeight: "bold",
+  },
+  splitterBox: {
+    width: "90%",
+    alignItems: "center",
+    justifyContent: "space-between",
+    flexDirection: "row",
+  },
+
+  splitter: {
+    width: "40%",
+    height: 1,
+    backgroundColor: "#ccc",
+    opacity: 0.5,
+    marginVertical: 30,
   },
 });
 

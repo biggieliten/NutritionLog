@@ -11,23 +11,26 @@ import { useAuth } from "../state/AuthState/AuthContext";
 import MacroProgress from "../components/MacroProgress";
 import { resetOnNewDate } from "../helpers/resetOnNewDate";
 import { Ionicons } from "@expo/vector-icons";
+import { Loading } from "../components/Loading";
 
 export default function Index() {
-  const { user, userData } = useAuth();
+  const { user, userData, isLoading } = useAuth();
 
-  if (!user || !userData) return;
+  if (!user || !userData) {
+    return <Loading />;
+  }
 
+  const [renderedLogs, setRenderedLogs] = useState(5);
   const currentMacros = userData?.currentMacros || {};
   const dailyGoal = userData?.dailyGoal || {};
   const logs = userData?.logs || [];
-  const reverseLogs = [...logs].reverse() || [];
-  const [renderedLogs, setRenderedLogs] = useState(5);
-  const allLogsRendered = renderedLogs >= reverseLogs.length;
   const remainingCalories = dailyGoal.calories - currentMacros.calories;
   const percentageOfDailyCalories = divisionToPercentage(
     currentMacros.calories,
     dailyGoal.calories
   );
+  const reverseLogs = [...logs].reverse() || [];
+  const allLogsRendered = renderedLogs >= reverseLogs.length;
 
   const defaultValues: DailyGoal | Macros = {
     calories: 0,
@@ -43,40 +46,37 @@ export default function Index() {
   };
 
   useEffect(() => {
-    if (user && userData) {
-      let todaysDate = getFixedDate();
-      //   todaysDate = "2025-05-11";
+    // if (!user || !userData) return;
+    let todaysDate = getFixedDate();
+    //   todaysDate = "2025-05-11";
 
-      resetOnNewDate(
-        todaysDate,
-        userData.lastActive || "",
-        currentMacros,
-        // dailyGoal,
-        defaultValues,
-        defaultValues,
-        user.uid
-        // userData.email
-      );
-      //   resetOnNewDate(
-      //     todaysDate,
-      //     userData.date || "",
-      //     userData.currentMacros || defaultMacros,
-      //     defaultDailyGoal,
-      //     defaultMacros,
-      //     user.uid
-      //   );
-    }
+    resetOnNewDate(
+      todaysDate,
+      userData.lastActive || "",
+      currentMacros,
+      // dailyGoal,
+      defaultValues,
+      defaultValues,
+      user.uid
+      // userData.email
+    );
+    //   resetOnNewDate(
+    //     todaysDate,
+    //     userData.date || "",
+    //     userData.currentMacros || defaultMacros,
+    //     defaultDailyGoal,
+    //     defaultMacros,
+    //     user.uid
+    //   );
   }, [user, userData, userData.lastActive]);
 
   return (
     <ScrollView contentContainerStyle={stylesIndex.container}>
-      {/* Header */}
       <View style={stylesIndex.header}>
         <Text style={stylesIndex.headerWeekday}>{getWeekday()}</Text>
         {/* <View style={stylesIndex.headerDateContainer}> */}
         <Text style={stylesIndex.headerDate}>{formatDate(getFixedDate())}</Text>
         {/* <Apple width={40} height={40} /> */}
-        {/* </View> */}
       </View>
 
       {/* <Pressable onPress={lastActiv}><Text>Press</Text></Pressable> */}
@@ -219,7 +219,13 @@ export default function Index() {
         )}
       </>
 
-      <Text style={stylesIndex.sectionTitle}>Previous Acivity</Text>
+      <View style={stylesIndex.splitterBox}>
+        <View style={stylesIndex.splitter}></View>
+        <Ionicons name="time-outline" color="#D4AA7D" size={28} />
+        <View style={stylesIndex.splitter}></View>
+      </View>
+
+      {/* <Text style={stylesIndex.historySectionTitle}>Previous Acivity</Text> */}
       <View style={stylesIndex.historyContainer}>
         {reverseLogs && reverseLogs.length > 0 ? (
           <>
@@ -238,7 +244,9 @@ export default function Index() {
             )}
           </>
         ) : (
-          <Text style={stylesIndex.emptyHistoryText}>No logs available</Text>
+          <Text style={stylesIndex.emptyHistoryText}>
+            Your macros called — they’d like to be logged.
+          </Text>
         )}
       </View>
     </ScrollView>

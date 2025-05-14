@@ -14,6 +14,7 @@ const AuthContext = createContext<{
   scannedProduct: ScanResult | null;
   setScannedProduct: React.Dispatch<React.SetStateAction<ScanResult | null>>;
   isLoading: boolean;
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }>({
   user: null,
   userData: null,
@@ -21,6 +22,7 @@ const AuthContext = createContext<{
   scannedProduct: null,
   setScannedProduct: () => null,
   isLoading: false,
+  setIsLoading: () => null,
 });
 
 export const useAuth = () => {
@@ -102,6 +104,7 @@ export default function AuthProvider({
         scannedProduct,
         setScannedProduct,
         isLoading,
+        setIsLoading,
       }}
     >
       {children}

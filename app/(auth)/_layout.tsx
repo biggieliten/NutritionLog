@@ -1,17 +1,13 @@
 import { Redirect, Tabs } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { useAuth } from "../state/AuthState/AuthContext";
-import { StyleSheet, View, Text } from "react-native";
+import { Loading } from "../components/Loading";
 
 export default function AuthenticatedTabLayout() {
   const { user, isLoading } = useAuth();
 
   if (isLoading) {
-    return (
-      <View style={styles.isLoadingView}>
-        <Text>Loading....</Text>
-      </View>
-    );
+    return <Loading />;
   }
 
   console.log(user, "user");
@@ -88,14 +84,3 @@ export default function AuthenticatedTabLayout() {
     </Tabs>
   );
 }
-
-const styles = StyleSheet.create({
-  isLoadingView: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#25292e",
-    width: "100%",
-    height: "100%",
-  },
-});

@@ -1,8 +1,12 @@
-import { useContext } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { useRef, useState } from "react";
+import { View, Text, StyleSheet, Pressable, Animated } from "react-native";
 import { Log } from "../types/types";
+import { Ionicons } from "@expo/vector-icons";
 
 const LogCard = (log: Log) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const rotateAnim = useRef(new Animated.Value(0)).current;
+
   const orderedKeys: (keyof Log)[] = [
     "calories",
     "protein",
@@ -12,70 +16,56 @@ const LogCard = (log: Log) => {
     "fiber",
   ];
 
-  //   return (
-  //     <View style={styles.container}>
-  //       <Text style={styles.text}>{log.date}</Text>
-  //       {orderedKeys.map((key) => {
-  //         if (key in log) {
-  //           return (
-  //             <View key={key}>
-  //               <Text style={styles.text}>
-  //                 {key.charAt(0).toUpperCase() + key.slice(1)}:{" "}
-  //                 {Math.round(log[key] as number)}
-  //               </Text>
-  //             </View>
-  //           );
-  //         }
-  //         return null;
-  //       })}
-  //     </View>
-  //   );
-  // };
-  // const styles = StyleSheet.create({
-  //   container: {
-  //     padding: 20,
-  //     margin: 10,
+  const expandLog = () => {
+    setIsExpanded(!isExpanded);
+    Animated.timing(rotateAnim, {
+      toValue: isExpanded ? 0 : 1,
+      duration: 250,
+      useNativeDriver: true,
+    }).start();
+  };
 
-  //     height: "auto",
-  //     width: "85%",
-  //     borderBottomColor: "grey",
-  //     borderTopColor: "grey",
-  //     borderTopWidth: 0.5,
-  //     borderBottomWidth: 0.5,
-  //     // backgroundColor: "#91AC8F",
-  //     // borderRadius: 15,
-
-  //     shadowColor: "#000",
-  //     shadowOffset: { width: 0, height: 2 },
-  //     // shadowOpacity: 0.5,
-  //     // shadowRadius: 3.84,
-  //     // elevation: 2,
-  //   },
-  //   text: {
-  //     fontSize: 20,
-  //     fontWeight: "bold",
-  //     color: "grey",
-  //   },
-  // });
+  const rotate = rotateAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: ["0deg", "180deg"],
+  });
 
   return (
     <View style={styles.container}>
       <View style={styles.accentBar} />
       <Text style={styles.date}>{log.date}</Text>
-      <View style={styles.macrosRow}>
-        {orderedKeys.map((key) =>
-          key in log ? (
-            <View style={styles.macroBox} key={key}>
-              <Text style={styles.macroLabel}>
-                {key.charAt(0).toUpperCase() + key.slice(1)}
-              </Text>
-              <Text style={styles.macroValue}>
-                {Math.round(log[key] as number)}
-              </Text>
-            </View>
-          ) : null
-        )}
-      </View>
+      <Animated.View
+        style={{
+          position: "absolute",
+          right: 10,
+          top: 10,
+          zIndex: 1,
+          transform: [{ rotate }],
+        }}
+      >
+        <Ionicons
+          name={"chevron-down"}
+          size={24}
+          color="#D4AA7D"
+          onPress={expandLog}
+        />
+      </Animated.View>
+      {isExpanded && (
+        <View style={styles.macrosRow}>
+          {orderedKeys.map((key) =>
+            key in log ? (
+              <View style={styles.macroBox} key={key}>
+                <Text style={styles.macroLabel}>
+                  {key.charAt(0).toUpperCase() + key.slice(1)}
+                </Text>
+                <Text style={styles.macroValue}>
+                  {Math.round(log[key] as number)}
+                </Text>
+              </View>
+            ) : null
+          )}
+        </View>
+      )}
     </View>
   );
 };
@@ -91,14 +81,10 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 14,
     borderBottomLeftRadius: 14,
     marginVertical: 10,
-    marginHorizontal: 0,
+    marginHorizontal: "auto",
     // padding: 15,
-    width: "100%",
-    shadowColor: "#91AC8F",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.15,
-    shadowRadius: 8,
-    elevation: 4,
+    width: "90%",
+    elevation: 3,
     position: "relative",
   },
   accentBar: {
@@ -106,18 +92,19 @@ const styles = StyleSheet.create({
     left: 0,
     top: 0,
     height: "100%",
-    width: 10,
+    width: 12,
     backgroundColor: "#D4AA7D",
     borderTopLeftRadius: 16,
     borderBottomLeftRadius: 16,
+    zIndex: 2,
   },
   date: {
     fontSize: 16,
     fontWeight: "bold",
     color: "#D4AA7D",
-    marginBottom: 5,
-    marginLeft: 10,
+    marginVertical: 10,
   },
+
   macrosRow: {
     flexDirection: "row",
     flexWrap: "wrap",
@@ -126,10 +113,10 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   macroBox: {
-    width: "47%",
+    width: "50%",
     marginBottom: 8,
     backgroundColor: "#5D7073",
-    borderRadius: 8,
+    // borderRadius: 16,
     padding: 8,
     alignItems: "center",
   },

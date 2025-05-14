@@ -27,6 +27,7 @@ export default function AddMeal() {
   const [postData, setPostData] = useState<any>({});
   const [modalVisible, setModalVisible] = useState(false);
   const { user, userData, scannedProduct, setScannedProduct } = useAuth();
+  const [buttonSwitch, setButtonSwitch] = useState(false);
 
   if (!userData || !user) return;
   const currentMacros = userData?.currentMacros;
@@ -66,11 +67,18 @@ export default function AddMeal() {
         newMacros: updatedMacros,
       });
     }
+    if (macros.kcal > 0) {
+      setButtonSwitch(!buttonSwitch);
+      setWeight(0);
+
+      setScannedProduct(null);
+    }
   };
 
   const handleSetWeight = () => {
     setWeight(Number(input));
-
+    setButtonSwitch(!buttonSwitch);
+    // setInput(String(0));
     // updateCurrentMacros({
     //   uid: user?.uid,
     //   newMacros: {
@@ -103,6 +111,7 @@ export default function AddMeal() {
             style={styles.cancleButton}
             onPress={() => {
               setScannedProduct(null);
+              //   setButtonSwitch(false);
               //   router.replace("/Scanner");
             }}
           >
@@ -157,6 +166,7 @@ export default function AddMeal() {
           </View>
           <TextInput
             keyboardType="numeric"
+            value={input}
             onChangeText={(input) => setInput(input)}
             style={styles.input}
             placeholder="Enter weight in grams"
@@ -168,20 +178,35 @@ export default function AddMeal() {
             >
               <Text>Save Product</Text>
             </Pressable> */}
-            <Pressable onPress={handleSetWeight} style={styles.optionButton}>
-              <Ionicons name="calculator" size={20} color="#fff" />
-              <Text style={styles.buttonText}>Calculate Macros</Text>
-            </Pressable>
+            {!buttonSwitch ? (
+              <Pressable onPress={handleSetWeight} style={styles.optionButton}>
+                <Ionicons name="calculator" size={20} color="#fff" />
+                <Text style={styles.buttonText}>Calculate Macros</Text>
+              </Pressable>
+            ) : (
+              <Pressable
+                style={styles.optionButton}
+                disabled={weight <= 0}
+                onPress={() => {
+                  handleUpdateMacros();
+                  router.replace("/");
+                }}
+              >
+                <Ionicons name="add" size={24} color="#fff" />
+                <Text style={styles.buttonText}>Set daily progress</Text>
+              </Pressable>
+            )}
             <Pressable
               style={styles.optionButton}
-              disabled={!macros}
+              disabled={weight <= 0}
               onPress={() => {
-                handleUpdateMacros();
-                router.replace("/");
+                setWeight(0);
+                setInput("");
+                setButtonSwitch(false);
               }}
             >
-              <Ionicons name="add" size={24} color="#fff" />
-              <Text style={styles.buttonText}>Set daily progress</Text>
+              <Ionicons name="refresh-outline" size={24} color="#fff" />
+              <Text style={styles.buttonText}>Reset Input</Text>
             </Pressable>
 
             {/* <Pressable style={styles.button} onPress={clearAsyncStorage}>
@@ -193,7 +218,6 @@ export default function AddMeal() {
               onPress={() => setModalVisible(true)}
             >
               <Ionicons name="create-outline" size={20} color="#fff" />
-
               <Text style={styles.buttonText}>Custom Entry</Text>
             </Pressable>
           </View>
@@ -263,18 +287,18 @@ const styles = StyleSheet.create({
   macroContainer: {
     justifyContent: "center",
     alignItems: "center",
-    width: "80%",
+    width: "90%",
     height: "auto",
     padding: 20,
-    marginTop: 10,
+    marginTop: 40,
     backgroundColor: "#5D7073",
     borderRadius: 15,
-    marginVertical: 20,
+    // marginVertical: 20,
   },
   buttonContainer: {
     width: "80%",
     alignItems: "center",
-    marginTop: 10,
+    marginTop: 20,
   },
   productName: {
     fontSize: 20,
@@ -293,8 +317,8 @@ const styles = StyleSheet.create({
   },
   input: {
     ...containerShadow.containerShadow,
-    width: "80%",
-
+    width: "90%",
+    marginTop: 30,
     backgroundColor: "#fff",
     borderRadius: 10,
     borderWidth: 1,
@@ -313,7 +337,7 @@ const styles = StyleSheet.create({
   },
   optionButton: {
     ...containerShadow.containerShadow,
-    width: "80%",
+    width: "85%",
     height: 60,
     flexDirection: "row",
     // padding: 15,
