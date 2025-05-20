@@ -23,6 +23,7 @@ import {
 } from "firebase/auth";
 import { setUserInfo } from "../hooks/updateDoc";
 import UpdateModal from "../components/UpdateModal";
+import { updatePersonalInfo } from "../hooks/updateBodyMetrics";
 
 export default function Pofile() {
   const { user, userData } = useAuth();
@@ -30,11 +31,16 @@ export default function Pofile() {
   const [newEmail, setNewEmail] = useState<string | null>(null);
   const [newUsername, setNewUsername] = useState<string>("");
   const [newPassword, setNewPassword] = useState<string | null>(null);
+  const [newWeight, setNewWeight] = useState<string>("");
+  const [newHeight, setNewHeight] = useState<string>("");
+  const [newAge, setNewAge] = useState<string>("");
   const [modalVisible, setModalVisible] = useState(false);
   const [fieldType, setFieldType] = useState<string | null>(null);
   console.log(user?.uid, "user uid");
 
-  if (!user) return;
+  if (!user || !userData) return;
+
+  //   const correctFieldType = (type: string) => {};
 
   useEffect(() => {
     if (userData?.profilePicUrl) {
@@ -89,6 +95,7 @@ export default function Pofile() {
 
   const updatePass = async (newPassword: string) => {
     await updatePassword(user, newPassword);
+    sendEmailVerification(user);
   };
 
   const handleSave = async () => {
@@ -99,8 +106,24 @@ export default function Pofile() {
       await updateEmailAddress(newEmail!);
     } else if (fieldType === "password") {
       await updatePass(newPassword!);
-    }
+    } else if (
+      fieldType === "weight" ||
+      fieldType === "height" ||
+      fieldType === "age"
+    ) {
+      const value =
+        fieldType === "weight"
+          ? newWeight
+          : fieldType === "height"
+          ? newHeight
+          : newAge;
 
+      await updatePersonalInfo({
+        uid: user.uid,
+        key: fieldType,
+        value: Number(value),
+      });
+    }
     setModalVisible(false);
   };
 
@@ -122,12 +145,94 @@ export default function Pofile() {
           <Ionicons name="camera-reverse" color={"blue"} size={15} />
         </Pressable>
       </View>
+      <View style={styles.bodyMetricsContainer}>
+        {userData.bodyMetrics?.weight ? (
+          <View style={styles.weightContainer}>
+            <Text style={styles.bodyMetricValues}>
+              {userData.bodyMetrics.weight}
+              <Text style={styles.unit}> kg</Text>
+            </Text>
+            <Text style={{ fontWeight: "bold", color: "#fff" }}>Weight</Text>
+          </View>
+        ) : (
+          <Pressable
+            style={styles.setBodyMetricsButton}
+            onPress={() => {
+              setFieldType("weight");
+              setModalVisible(!modalVisible);
+            }}
+          >
+            <Ionicons name="add-circle-outline" color="#fff" size={24} />
+            <Text style={{ color: "#fff" }}>Set Weight</Text>
+          </Pressable>
+        )}
+        {userData.bodyMetrics?.height ? (
+          <View style={styles.heightContainer}>
+            <Text style={styles.bodyMetricValues}>
+              {userData.bodyMetrics.height}
+              <Text style={styles.unit}>cm</Text>
+            </Text>
+            <Text style={{ fontWeight: "bold", color: "#fff" }}>Height</Text>
+          </View>
+        ) : (
+          <Pressable
+            style={styles.setBodyMetricsButton}
+            onPress={() => {
+              setFieldType("height");
+              setModalVisible(!modalVisible);
+            }}
+          >
+            <Ionicons name="add-circle-outline" color="#fff" size={24} />
+            <Text style={{ color: "#fff" }}>Set Height</Text>
+          </Pressable>
+        )}
+        {userData.bodyMetrics?.age ? (
+          <View style={styles.ageContainer}>
+            <Text style={styles.bodyMetricValues}>
+              {userData.bodyMetrics.age}
+              <Text style={styles.unit}> y.o</Text>
+            </Text>
+            <Text style={{ fontWeight: "bold", color: "#fff" }}>Age</Text>
+          </View>
+        ) : (
+          <Pressable
+            style={styles.setBodyMetricsButton}
+            onPress={() => {
+              setFieldType("age");
+              setModalVisible(!modalVisible);
+            }}
+          >
+            <Ionicons name="add-circle-outline" color="#fff" size={24} />
+            <Text style={{ color: "#fff" }}>Set Age</Text>
+          </Pressable>
+        )}
+      </View>
       <View style={styles.splitter} />
-      <View style={styles.infoContainer}>
-        <Text style={styles.infoText}>Username: {userData?.username}</Text>
-        <Text style={styles.infoText}>Email: {userData?.email}</Text>
+      <View style={styles.userInfoContianer}>
+        <View style={styles.textContainer}>
+          <Text style={[styles.infoText, { fontWeight: "bold" }]}>
+            Username
+          </Text>
+          <Text style={styles.infoText}> {userData?.username}</Text>
+        </View>
+        <View style={styles.textContainer}>
+          <Text style={[styles.infoText, { fontWeight: "bold" }]}>Email</Text>
+          <Text style={styles.infoText}>{userData?.email}</Text>
+        </View>
       </View>
       <View style={styles.updateContainer}>
+        <Text
+          style={{
+            textAlign: "left",
+            width: "100%",
+            color: "#5D7073",
+            fontWeight: "bold",
+            marginBottom: 7,
+            paddingLeft: 7,
+          }}
+        >
+          Account
+        </Text>
         <Pressable
           onPress={() => {
             setFieldType("username"), setModalVisible(!modalVisible);
@@ -135,7 +240,7 @@ export default function Pofile() {
           style={styles.updateButton}
         >
           <Text style={styles.infoText}>Change username</Text>
-          <Ionicons name="arrow-forward" />
+          <Ionicons name="arrow-forward" color="#5D7073" size={16} />
         </Pressable>
         <Pressable
           onPress={() => {
@@ -144,7 +249,7 @@ export default function Pofile() {
           style={styles.updateButton}
         >
           <Text style={styles.infoText}>Change email</Text>
-          <Ionicons name="arrow-forward" />
+          <Ionicons name="arrow-forward" color="#5D7073" size={16} />
         </Pressable>
         <Pressable
           onPress={() => {
@@ -153,7 +258,47 @@ export default function Pofile() {
           style={styles.updateButton}
         >
           <Text style={styles.infoText}>Change password</Text>
-          <Ionicons name="arrow-forward" />
+          <Ionicons name="arrow-forward" color="#5D7073" size={16} />
+        </Pressable>
+        <Text
+          style={{
+            textAlign: "left",
+            width: "100%",
+            color: "#5D7073",
+            fontWeight: "bold",
+            marginTop: 10,
+            marginVertical: 7,
+            paddingLeft: 7,
+          }}
+        >
+          Body metrics
+        </Text>
+        <Pressable
+          onPress={() => {
+            setFieldType("weight"), setModalVisible(!modalVisible);
+          }}
+          style={styles.updateButton}
+        >
+          <Text style={styles.infoText}>Change Weight</Text>
+          <Ionicons name="arrow-forward" color="#5D7073" size={16} />
+        </Pressable>
+        <Pressable
+          onPress={() => {
+            setFieldType("height"), setModalVisible(!modalVisible);
+          }}
+          style={styles.updateButton}
+        >
+          <Text style={styles.infoText}>Change Height</Text>
+          <Ionicons name="arrow-forward" color="#5D7073" size={16} />
+        </Pressable>
+        <Pressable
+          onPress={() => {
+            setFieldType("age"), setModalVisible(!modalVisible);
+          }}
+          style={styles.updateButton}
+        >
+          <Text style={styles.infoText}>Change Age</Text>
+          <Ionicons name="arrow-forward" color="#5D7073" size={16} />
         </Pressable>
       </View>
       <UpdateModal
@@ -165,7 +310,13 @@ export default function Pofile() {
             ? "Enter new username"
             : fieldType === "email"
             ? "Enter new email"
-            : "Enter new password"
+            : fieldType === "password"
+            ? "Enter new password"
+            : fieldType === "weight"
+            ? "Enter new weight"
+            : fieldType === "height"
+            ? "Enter new height"
+            : "Enter new age"
         }
         secureText={fieldType === "password"}
         setValue={
@@ -173,14 +324,26 @@ export default function Pofile() {
             ? setNewUsername
             : fieldType === "email"
             ? setNewEmail
-            : setNewPassword
+            : fieldType === "password"
+            ? setNewPassword
+            : fieldType === "weight"
+            ? setNewWeight
+            : fieldType === "height"
+            ? setNewHeight
+            : setNewAge
         }
         value={
           fieldType === "username"
             ? newUsername || ""
             : fieldType === "email"
             ? newEmail || ""
-            : newPassword || ""
+            : fieldType === "password"
+            ? newPassword || ""
+            : fieldType === "weight"
+            ? newWeight
+            : fieldType === "height"
+            ? newHeight
+            : newAge
         }
       />
     </ScrollView>
@@ -219,22 +382,69 @@ const styles = StyleSheet.create({
     bottom: 13,
     right: 3,
   },
-  infoContainer: {
-    width: "70%",
+  bodyMetricsContainer: {
+    width: "80%",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+
+    marginTop: 20,
+  },
+  setBodyMetricsButton: {
+    width: "33%",
+    alignItems: "center",
+    justifyContent: "center",
     backgroundColor: "#5D7073",
+    padding: 10,
+    borderRadius: 10,
+  },
+  bodyMetricValues: {
+    fontSize: 20,
+    color: "#fff",
+  },
+  weightContainer: {
+    alignItems: "center",
+    width: "33%",
+
+    borderRightWidth: 1,
+    borderColor: "#fff",
+  },
+  heightContainer: {
+    alignItems: "center",
+    width: "33%",
+  },
+  ageContainer: {
+    alignItems: "center",
+    width: "33%",
+
+    borderLeftWidth: 1,
+    borderColor: "#fff",
+  },
+  unit: {
+    fontSize: 12,
+  },
+  userInfoContianer: {
+    width: "80%",
+    backgroundColor: "#fff",
     padding: 10,
     marginBottom: 40,
     borderRadius: 10,
   },
+  textContainer: {
+    display: "flex",
+    justifyContent: "space-between",
+    flexDirection: "row",
+    width: "100%",
+  },
   infoText: {
-    color: "#C9D1D2",
-    marginVertical: 5,
+    color: "#5D7073",
+    marginVertical: 7,
   },
   updateContainer: {
-    width: "70%",
+    width: "80%",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#5D7073",
+    backgroundColor: "#fff",
     padding: 10,
     // marginTop: 20,
     borderRadius: 10,

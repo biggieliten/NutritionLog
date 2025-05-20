@@ -10,7 +10,7 @@ export default function AuthenticatedTabLayout() {
     return <Loading />;
   }
 
-  console.log(user, "user");
+  //   console.log(user, "user");
   if (!user) return <Redirect href="/SignInAndRegister" />;
   //   return <Stack />;
   return (

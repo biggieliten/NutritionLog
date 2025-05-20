@@ -22,9 +22,18 @@ export type firebaseUser = {
   dailyGoal: DailyGoal;
   currentMacros: Macros;
   logs: Log[];
+  bodyMetrics: {
+    weight: number;
+    height: number;
+    age: number;
+  };
+  totalEatenCalories: number;
+  totalEatenProtein: number;
+  burnedCalories: number;
+  consumption: Consumption;
 };
 export type Macros = {
-  calories: any;
+  calories: number;
   protein: number;
   carbohydrates: number;
   fat: number;
@@ -40,6 +49,15 @@ export type DailyGoal = {
   fat: number;
   fiber: number;
   sugar: number;
+};
+
+export type Consumption = {
+  consumedCalories: number;
+  consumedProtein: number;
+  consumedCarbohydrates: number;
+  consumedFat: number;
+  consumedFiber: number;
+  consumedSugar: number;
 };
 
 export type nutriments = {
@@ -124,5 +142,6 @@ export type Log = {
   fat: number;
   fiber: number;
   sugar: number;
+  burnedCalories: number;
   date: string;
 };

@@ -67,6 +67,7 @@ export const stylesIndex = StyleSheet.create({
     width: "90%",
     height: "auto",
     backgroundColor: "#fff",
+    flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 16,

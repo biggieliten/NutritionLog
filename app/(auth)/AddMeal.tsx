@@ -6,7 +6,7 @@ import {
   ScrollView,
   Modal,
 } from "react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { macroCalculator } from "../utils/macroCalculator";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getFixedDate } from "../utils/todaysDate";
@@ -17,17 +17,25 @@ import { router } from "expo-router";
 import { AddManually } from "./AddManually";
 import { StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { getSafeValue } from "../hooks/getSafeValue";
+import { calculateSafeSum, getSafeValue } from "../hooks/getSafeValue";
+import UpdateModal from "../components/UpdateModal";
+import { trackCalorieBurn } from "../utils/trackBurnedCalories";
+import { trackConsumption as trackTotalConsumption } from "../utils/trackConsumption";
+import { Consumption, Macros } from "../types/types";
 
 export default function AddMeal() {
   //   const { scannedProduct, setScannedProduct } = useScannedProductStore();
   //   const { setCurrentMacros, currentMacros } = useCurrentMacroStore();
   const [weight, setWeight] = useState<number>(0);
   const [input, setInput] = useState<string>("");
+  const [burnedCalories, setBurnedCalories] = useState<string>("");
   const [postData, setPostData] = useState<any>({});
   const [modalVisible, setModalVisible] = useState(false);
+  const [updateModalVisible, setUpdateModalVisible] = useState(false);
+
   const { user, userData, scannedProduct, setScannedProduct } = useAuth();
   const [buttonSwitch, setButtonSwitch] = useState(false);
+  const totalConsumption = userData?.consumption!;
 
   if (!userData || !user) return;
   const currentMacros = userData?.currentMacros;
@@ -48,19 +56,34 @@ export default function AddMeal() {
     nutriments.fiber_100g,
     nutriments.sugars_100g
   );
+  //   console.log("🪵 | AddMeal | macros:", macros);
 
+  const consumedMacros: Macros = {
+    calories: getSafeValue(macros.kcal),
+    protein: getSafeValue(macros.proteins),
+    carbohydrates: getSafeValue(macros.carbohydrates),
+    fat: getSafeValue(macros.fat),
+    fiber: getSafeValue(macros.fiber),
+    sugar: getSafeValue(macros.sugars),
+  };
+  console.log("🪵 | AddMeal | consumedMacros:", consumedMacros);
+
+  //   console.log(macros.kcal, macros.fiber);
   const handleUpdateMacros = () => {
     const updatedMacros = {
-      calories: getSafeValue(macros.kcal, currentMacros.calories),
-      protein: getSafeValue(macros.proteins, currentMacros.protein),
-      carbohydrates: getSafeValue(
+      calories: calculateSafeSum(macros.kcal, currentMacros.calories),
+      protein: calculateSafeSum(macros.proteins, currentMacros.protein),
+      carbohydrates: calculateSafeSum(
         macros.carbohydrates,
         currentMacros.carbohydrates
       ),
-      fat: getSafeValue(macros.fat, currentMacros.fat),
-      fiber: getSafeValue(macros.fiber, currentMacros.fiber),
-      sugar: getSafeValue(macros.sugars, currentMacros.sugar),
+      fat: calculateSafeSum(macros.fat, currentMacros.fat),
+      fiber: calculateSafeSum(macros.fiber, currentMacros.fiber),
+      sugar: calculateSafeSum(macros.sugars, currentMacros.sugar),
     };
+
+    trackTotalConsumption(user.uid, totalConsumption, consumedMacros);
+
     if (updatedMacros) {
       updateCurrentMacros({
         uid: user?.uid,
@@ -93,6 +116,19 @@ export default function AddMeal() {
 
     // setWeight(Number(0));
   };
+
+  const handleBurnedCalories = () => {
+    trackCalorieBurn(
+      user.uid,
+      userData.currentMacros,
+      Number(burnedCalories),
+      Number(currentMacros.calories)
+    );
+  };
+
+  //   useEffect(() => {
+  //     // trackTotalConsumption(user.uid, userData.consumption, currentMacros);
+  //   }, [userData.currentMacros]);
 
   const clearAsyncStorage = async () => {
     try {
@@ -249,13 +285,28 @@ export default function AddMeal() {
             </Modal>
           </View>
           {/* <Text>or</Text> */}
-          <View style={styles.splitter}></View>
+          <View style={styles.splitter} />
           <Pressable
             style={styles.button}
             onPress={() => router.replace("/Scanner")}
           >
             <Text style={styles.buttonText}>Scan barcode</Text>
           </Pressable>
+          <View style={styles.splitter} />
+          <Pressable
+            style={styles.button}
+            onPress={() => setUpdateModalVisible(!updateModalVisible)}
+          >
+            <Text style={styles.buttonText}>Burned calories</Text>
+          </Pressable>
+          <UpdateModal
+            label="Enter Burned calories"
+            visible={updateModalVisible}
+            onClose={() => setUpdateModalVisible(!updateModalVisible)}
+            setValue={setBurnedCalories}
+            value={String(burnedCalories)}
+            onSave={handleBurnedCalories}
+          />
         </>
       )}
     </ScrollView>

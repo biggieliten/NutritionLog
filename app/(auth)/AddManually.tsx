@@ -13,6 +13,7 @@ import { updateCurrentMacros } from "../hooks/updateCurrentMacros";
 import { set } from "firebase/database";
 import { router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
+import { trackConsumption } from "../utils/trackConsumption";
 
 type Props = {
   setShowModal: (bool: boolean) => void;
@@ -39,6 +40,7 @@ export const AddManually = ({ setShowModal }: Props) => {
     fiber: currentMacros.fiber + newMacros.fiber,
     sugar: currentMacros.sugar + newMacros.sugar,
   };
+
   return (
     <ScrollView>
       <View style={styles.container}>
@@ -136,6 +138,7 @@ export const AddManually = ({ setShowModal }: Props) => {
           <Pressable
             onPress={() => {
               updateCurrentMacros({ uid: user.uid, newMacros: updatedMacros });
+              trackConsumption(user.uid, userData.consumption, newMacros);
               setShowModal(false);
               router.replace("/");
             }}

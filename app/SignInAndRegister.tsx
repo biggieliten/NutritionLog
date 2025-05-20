@@ -70,6 +70,25 @@ export default function SignInAndRegister() {
           sugar: 0,
         },
         logs: [],
+        totalEatenCalories: 0,
+        totalEatenProtein: 0,
+        consumption: {
+          consumedCalories: 0,
+          consumedProtein: 0,
+          consumedCarbohydrates: 0,
+          consumedFat: 0,
+          consumedFiber: 0,
+          consumedSugar: 0,
+        },
+        burnedCalories: 0,
+      });
+      await AsyncStorage.setItem("nutrilog-lastActive", today);
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          console.log(user, "user");
+        } else {
+          console.log("No user is signed in");
+        }
       });
       await AsyncStorage.setItem("nutrilog-lastActive", today);
     } catch (error) {

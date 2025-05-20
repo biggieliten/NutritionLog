@@ -9,22 +9,38 @@ import { Link } from "expo-router";
 import { getFixedDate, formatDate, getWeekday } from "../utils/todaysDate";
 import { useAuth } from "../state/AuthState/AuthContext";
 import MacroProgress from "../components/MacroProgress";
-import { resetOnNewDate } from "../helpers/resetOnNewDate";
+import { onNewDate } from "../helpers/resetOnNewDate";
 import { Ionicons } from "@expo/vector-icons";
 import { Loading } from "../components/Loading";
+import { trackCalorieBurn } from "../utils/trackBurnedCalories";
+import { CalorieStatus } from "../components/CalorieStatus";
+import { trackConsumption } from "../utils/trackConsumption";
 
 export default function Index() {
-  const { user, userData, isLoading } = useAuth();
+  // const [renderedLogs, setRenderedLogs] = useState(5);
+  const { user, userData } = useAuth();
 
   if (!user || !userData) {
     return <Loading />;
   }
 
+  //   if (!userData) return;
+
   const [renderedLogs, setRenderedLogs] = useState(5);
   const currentMacros = userData?.currentMacros || {};
+  const totalConsumption = userData?.consumption || {};
+  console.log("🪵 | Index | consumption:", totalConsumption);
   const dailyGoal = userData?.dailyGoal || {};
   const logs = userData?.logs || [];
   const remainingCalories = dailyGoal.calories - currentMacros.calories;
+  //   const totalConsumption = {
+  //     calories: currentMacros.calories,
+  //     protein: currentMacros.protein,
+  //     carbohydrates: currentMacros.carbohydrates,
+  //     fat: currentMacros.fat,
+  //     fiber: currentMacros.fiber,
+  //     sugar: currentMacros.sugar,
+  //   };
   const percentageOfDailyCalories = divisionToPercentage(
     currentMacros.calories,
     dailyGoal.calories
@@ -46,28 +62,19 @@ export default function Index() {
   };
 
   useEffect(() => {
-    // if (!user || !userData) return;
+    if (!user || !userData) return;
     let todaysDate = getFixedDate();
-    //   todaysDate = "2025-05-11";
+    // todaysDate = "2025-05-22";
 
-    resetOnNewDate(
+    onNewDate(
       todaysDate,
       userData.lastActive || "",
       currentMacros,
-      // dailyGoal,
+      //   totalConsumption,
       defaultValues,
       defaultValues,
       user.uid
-      // userData.email
     );
-    //   resetOnNewDate(
-    //     todaysDate,
-    //     userData.date || "",
-    //     userData.currentMacros || defaultMacros,
-    //     defaultDailyGoal,
-    //     defaultMacros,
-    //     user.uid
-    //   );
   }, [user, userData, userData.lastActive]);
 
   return (
@@ -120,8 +127,26 @@ export default function Index() {
           </Link>
         ) : (
           <>
+            <CalorieStatus
+              remainingCalories={remainingCalories}
+              burnedCalories={userData.burnedCalories}
+              percentageOfDailyCalories={percentageOfDailyCalories}
+              currentMacros={currentMacros}
+            />
             {/* <Text style={stylesIndex.sectionTitle}>Today's Progress</Text> */}
-            <View style={stylesIndex.calorieProgressContainer}>
+            {/* <View style={stylesIndex.calorieProgressContainer}>
+              <View style={{ flexDirection: "column", alignItems: "center" }}>
+                <Text
+                  style={{
+                    color: "#3e4e50",
+                    marginTop: 10,
+                    fontSize: 16,
+                  }}
+                >
+                  {remainingCalories} left
+                </Text>
+                <Ionicons name="add-circle-outline" />
+              </View>
               <AnimatedCircularProgress
                 size={150}
                 width={8}
@@ -163,16 +188,19 @@ export default function Index() {
                   </View>
                 )}
               </AnimatedCircularProgress>
-              <Text
-                style={{
-                  color: "#3e4e50",
-                  marginTop: 10,
-                  fontSize: 16,
-                }}
-              >
-                {remainingCalories} calories remaining
-              </Text>
-            </View>
+              <View style={{ flexDirection: "column", alignItems: "center" }}>
+                <Text
+                  style={{
+                    color: "#3e4e50",
+                    marginTop: 10,
+                    fontSize: 16,
+                  }}
+                >
+                  {remainingCalories} burned
+                </Text>
+                <Ionicons name="remove-circle-outline" />
+              </View>
+            </View> */}
 
             <View style={stylesIndex.dailyProgressContainer}>
               <MacroProgress
