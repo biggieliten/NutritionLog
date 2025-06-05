@@ -273,38 +273,6 @@ export default function Menu() {
           >
             Menu
           </Text>
-          <View style={styles.buttonContainer}>
-            {/* <Text>or</Text> */}
-            {/* <View style={styles.splitter} /> */}
-            <Pressable
-              style={styles.button}
-              onPress={() => router.push("/(auth)/CreateMeal")}
-            >
-              <Text style={styles.buttonText}>Create a Meal</Text>
-            </Pressable>
-            <Pressable
-              style={styles.button}
-              onPress={() => router.replace("/FoodsAndMeals")}
-            >
-              <Text style={styles.buttonText}>Meals & Foods</Text>
-            </Pressable>
-            {/* <View style={styles.splitter} /> */}
-            <Pressable
-              style={styles.button}
-              onPress={() => setUpdateModalVisible(!updateModalVisible)}
-            >
-              <Text style={styles.buttonText}>Burned Calories</Text>
-            </Pressable>
-            {/* <View style={styles.splitter} /> */}
-            <View>
-              <Pressable
-                style={styles.button}
-                onPress={() => setModalVisible(true)}
-              >
-                <Text style={styles.buttonText}>Manual Entry</Text>
-              </Pressable>
-            </View>
-          </View>
 
           <View style={styles.totalConsumtionContainer}>
             <Text style={styles.totalConsumptonTitle}>Total consumption</Text>
@@ -344,6 +312,36 @@ export default function Menu() {
                 {totalConsumption.consumedSugar}
               </Text>
             </View>
+          </View>
+          <View style={styles.buttonContainer}>
+            {/* <Text>or</Text> */}
+            {/* <View style={styles.splitter} /> */}
+            <Pressable
+              style={styles.button}
+              onPress={() => router.push("/(auth)/CreateMeal")}
+            >
+              <Text style={styles.buttonText}>Create a Meal</Text>
+            </Pressable>
+            <Pressable
+              style={styles.button}
+              onPress={() => router.replace("/FoodsAndMeals")}
+            >
+              <Text style={styles.buttonText}>Meals & Foods</Text>
+            </Pressable>
+            {/* <View style={styles.splitter} /> */}
+            <Pressable
+              style={styles.button}
+              onPress={() => setUpdateModalVisible(!updateModalVisible)}
+            >
+              <Text style={styles.buttonText}>Burned Calories</Text>
+            </Pressable>
+            {/* <View style={styles.splitter} /> */}
+            <Pressable
+              style={styles.button}
+              onPress={() => setModalVisible(true)}
+            >
+              <Text style={styles.buttonText}>Manual Entry</Text>
+            </Pressable>
           </View>
         </View>
       )}
@@ -484,13 +482,13 @@ const styles = StyleSheet.create({
   button: {
     ...containerShadow.containerShadow,
     backgroundColor: "#D4AA7D",
-    width: 150,
+    width: "80%",
     height: 60,
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "row",
     borderRadius: 10,
-    margin: 10,
+    marginVertical: 10,
 
     // paddingLeft: 10,
     // marginVertical: 10,

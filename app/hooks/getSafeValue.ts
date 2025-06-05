@@ -1,5 +1,7 @@
-export const getSafeValue = (a: number) => {
+export const getSafeValue = (a: number | undefined | null) => {
+  if (!a || a === undefined) return 0;
   if (isNaN(a)) return 0;
+
   return a;
 };
 

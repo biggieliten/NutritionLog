@@ -5,6 +5,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Pressable,
+  Alert,
 } from "react-native";
 import { Macros, MealEntry } from "../types/types";
 import { useRef, useState } from "react";
@@ -61,33 +62,32 @@ export const MealCard = ({ meals, remove, edit, eat }: Props) => {
     <View style={styles.card}>
       <View style={styles.iconContainer}>
         <Pressable
-          style={{ width: 30, height: 30, borderRadius: 15 }}
+          style={styles.iconButton}
           onPress={() => {
-            remove(meals.id);
+            Alert.alert(
+              "Delete Meal",
+              `Are you sure you want to delete "${meals.name}"?`,
+              [
+                {
+                  text: "Cancel",
+                  style: "cancel",
+                },
+                {
+                  text: "Delete",
+                  onPress: () => remove(meals.id),
+                  style: "destructive",
+                },
+              ]
+            );
           }}
         >
-          <Ionicons
-            // onPress={() => remove(meals.id)}
-            size={20}
-            color="#D4AA7D"
-            name="trash-bin-outline"
-          />
+          <Ionicons size={24} color="#D4AA7D" name="trash-outline" />
         </Pressable>
-        <Pressable>
-          <Ionicons
-            onPress={() => edit(meals)}
-            size={20}
-            color="#D4AA7D"
-            name="pencil-outline"
-          />
+        <Pressable onPress={() => edit(meals)} style={styles.iconButton}>
+          <Ionicons size={24} color="#D4AA7D" name="pencil-outline" />
         </Pressable>
-        <Pressable>
-          <Ionicons
-            onPress={() => eat(meals)}
-            size={20}
-            color="#D4AA7D"
-            name="fast-food"
-          />
+        <Pressable style={styles.iconButton} onPress={() => eat(meals)}>
+          <Ionicons size={24} color="#D4AA7D" name="fast-food" />
         </Pressable>
       </View>
       <View style={{ position: "absolute", top: 10, right: 10 }}></View>
@@ -192,9 +192,16 @@ const styles = StyleSheet.create({
   iconContainer: {
     display: "flex",
     flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    alignSelf: "flex-end",
+    // justifyContent: "space-between",
+    // alignItems: "center",
     marginBottom: 10,
+  },
+  iconButton: {
+    backgroundColor: "#5D7073",
+    marginHorizontal: 7,
+    padding: 10,
+    borderRadius: 10,
   },
   mealName: {
     color: "#fff",

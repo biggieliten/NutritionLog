@@ -116,10 +116,7 @@ export default function CreateMeal() {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Pressable
-        style={styles.backButton}
-        onPress={() => router.replace("/Menu")}
-      >
+      <Pressable style={styles.backButton} onPress={() => router.back()}>
         <Ionicons name="arrow-back-circle" size={30} color="#D4AA7D" />
       </Pressable>
 
@@ -306,11 +303,6 @@ export default function CreateMeal() {
           )}
         </TouchableOpacity>
       </View>
-
-      <Link href={"/FoodsAndMeals"}>
-        <Text>Your foods and meals</Text>
-      </Link>
-
       <Modal visible={scannerVisible} animationType="slide">
         <Scanner
           setShowScanner={setScannerVisible}

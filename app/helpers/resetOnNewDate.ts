@@ -14,6 +14,7 @@ const currentMacrosToLog = (macros: Macros, date: string): Log => {
     ...macros,
     date: date,
     burnedCalories: 0,
+    meals: [],
   };
 };
 

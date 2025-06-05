@@ -159,6 +159,7 @@ export type nutriments = {
 };
 
 export type Product = {
+  _id?: string;
   nutriments?: Partial<nutriments>;
   product_name: string;
   brands: string;
