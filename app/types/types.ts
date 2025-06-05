@@ -21,17 +21,33 @@ export type firebaseUser = {
   // uid: string;
   dailyGoal: DailyGoal;
   currentMacros: Macros;
+  todaysMeals: [];
+  foodItems: FoodItems[];
   logs: Log[];
   bodyMetrics: {
     weight: number;
     height: number;
     age: number;
   };
-  totalEatenCalories: number;
-  totalEatenProtein: number;
+  savedMeals: MealEntry[];
+  //   totalEatenCalories: number;
+  //   totalEatenProtein: number;
   burnedCalories: number;
   consumption: Consumption;
 };
+
+export type Log = {
+  calories: any;
+  protein: number;
+  carbohydrates: number;
+  fat: number;
+  fiber: number;
+  sugar: number;
+  burnedCalories: number;
+  date: string;
+  meals: MealEntry[];
+};
+
 export type Macros = {
   calories: number;
   protein: number;
@@ -58,6 +74,30 @@ export type Consumption = {
   consumedFat: number;
   consumedFiber: number;
   consumedSugar: number;
+};
+
+export type MealEntry = {
+  id: string;
+  label: "Breakfast" | "Lunch" | "Dinner" | "Dessert" | "Snack" | "Other";
+  name: string;
+  foods: FoodItems[];
+  macros: Macros;
+  scanned: boolean;
+};
+
+export type FoodItems = {
+  id: string;
+  name: string;
+  brand: string;
+  amount?: number;
+  per100g: {
+    calories: number;
+    protein: number;
+    carbohydrates: number;
+    fat: number;
+    fiber: number;
+    sugar: number;
+  };
 };
 
 export type nutriments = {
@@ -133,15 +173,4 @@ export type ScanResult = {
   //   product: {
   //     nutriments: nutriments;
   //   };
-};
-
-export type Log = {
-  calories: any;
-  protein: number;
-  carbohydrates: number;
-  fat: number;
-  fiber: number;
-  sugar: number;
-  burnedCalories: number;
-  date: string;
 };

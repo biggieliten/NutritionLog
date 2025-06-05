@@ -55,9 +55,9 @@ export const AddManually = ({ setShowModal }: Props) => {
               color={"#D4AA7D"}
             />
           </Pressable>
-          <Text style={styles.header}>Add Macronutrients</Text>
+          <Text style={styles.header}>Enter Macronutrients</Text>
           <View style={styles.inputContainer}>
-            <Text style={styles.inputTitle}>Enter Calories</Text>
+            <Text style={styles.inputTitle}>Calories</Text>
             <TextInput
               style={styles.input}
               keyboardType="numeric"
@@ -70,7 +70,7 @@ export const AddManually = ({ setShowModal }: Props) => {
             />
           </View>
           <View style={styles.inputContainer}>
-            <Text style={styles.inputTitle}>Enter Protein (g)</Text>
+            <Text style={styles.inputTitle}>Protein (g)</Text>
             <TextInput
               style={styles.input}
               keyboardType="numeric"
@@ -83,7 +83,7 @@ export const AddManually = ({ setShowModal }: Props) => {
             />
           </View>
           <View style={styles.inputContainer}>
-            <Text style={styles.inputTitle}>Enter Carbs (g)</Text>
+            <Text style={styles.inputTitle}>Carbs (g)</Text>
             <TextInput
               style={styles.input}
               keyboardType="numeric"
@@ -96,7 +96,7 @@ export const AddManually = ({ setShowModal }: Props) => {
             />
           </View>
           <View style={styles.inputContainer}>
-            <Text style={styles.inputTitle}>Enter Fat (g)</Text>
+            <Text style={styles.inputTitle}>Fat (g)</Text>
             <TextInput
               style={styles.input}
               keyboardType="numeric"
@@ -109,7 +109,7 @@ export const AddManually = ({ setShowModal }: Props) => {
             />
           </View>
           <View style={styles.inputContainer}>
-            <Text style={styles.inputTitle}>Enter Fiber (g)</Text>
+            <Text style={styles.inputTitle}>Fiber (g)</Text>
             <TextInput
               style={styles.input}
               keyboardType="numeric"
@@ -122,7 +122,7 @@ export const AddManually = ({ setShowModal }: Props) => {
             />
           </View>
           <View style={styles.inputContainer}>
-            <Text style={styles.inputTitle}>Enter Sugar (g)</Text>
+            <Text style={styles.inputTitle}>Sugar (g)</Text>
             <TextInput
               style={styles.input}
               keyboardType="numeric"
@@ -183,6 +183,7 @@ const styles = StyleSheet.create({
   },
   input: {
     backgroundColor: "#5D7073",
+    color: "#fff",
     // borderWidth: 1,
     borderColor: "#8FA3A6",
     borderTopLeftRadius: 5,

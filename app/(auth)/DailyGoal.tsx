@@ -1,6 +1,13 @@
 import { useState, useEffect } from "react";
-import { View, Text, TextInput, Pressable, ScrollView } from "react-native";
-import { stylesDailyGoal } from "../styles/styles";
+import {
+  View,
+  Text,
+  TextInput,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+} from "react-native";
+import { containerShadow } from "../styles/styleUtils";
 import { useAuth } from "../state/AuthState/AuthContext";
 import { updateDailyGoal } from "../hooks/updateDailyGoal";
 import { router } from "expo-router";
@@ -27,17 +34,17 @@ export default function SetGoal() {
   return (
     <View
       style={[
-        stylesDailyGoal.container,
+        styles.container,
         // stylesDailyGoal.containerShadow,
       ]}
     >
-      <Text style={stylesDailyGoal.title}>Set daily goal</Text>
-      <View style={stylesDailyGoal.inputContainer}>
-        <Text style={stylesDailyGoal.label}>
+      <Text style={styles.title}>Set daily goal</Text>
+      <View style={styles.inputContainer}>
+        <Text style={styles.label}>
           Calories <Text style={{ fontWeight: 100 }}>(kcal) </Text>
         </Text>
         <TextInput
-          style={stylesDailyGoal.input}
+          style={styles.input}
           placeholder="Enter your daily calories"
           //   placeholderTextColor={}
           keyboardType="numeric"
@@ -47,23 +54,23 @@ export default function SetGoal() {
           }
         />
 
-        <Text style={stylesDailyGoal.label}>
+        <Text style={styles.label}>
           Protein
           <Text style={{ fontWeight: 100 }}> (g)</Text>
         </Text>
         <TextInput
-          style={stylesDailyGoal.input}
+          style={styles.input}
           placeholder="Enter your daily protein"
           keyboardType="numeric"
           //   value={String(goal.protein)}
           onChangeText={(input) => setGoal({ ...goal, protein: Number(input) })}
         />
 
-        <Text style={stylesDailyGoal.label}>
+        <Text style={styles.label}>
           Carbs<Text style={{ fontWeight: 100 }}> (g)</Text>
         </Text>
         <TextInput
-          style={stylesDailyGoal.input}
+          style={styles.input}
           placeholder="Enter your daily carbs"
           keyboardType="numeric"
           //   value={String(goal.carbohydrates)}
@@ -72,32 +79,32 @@ export default function SetGoal() {
           }
         />
 
-        <Text style={stylesDailyGoal.label}>
+        <Text style={styles.label}>
           Fat
           <Text style={{ fontWeight: 100 }}> (g)</Text>
         </Text>
         <TextInput
-          style={stylesDailyGoal.input}
+          style={styles.input}
           placeholder="Enter your daily fat"
           keyboardType="numeric"
           //   value={String(goal.fat)}
           onChangeText={(input) => setGoal({ ...goal, fat: Number(input) })}
         />
-        <Text style={stylesDailyGoal.label}>
+        <Text style={styles.label}>
           Fiber<Text style={{ fontWeight: 100 }}> (g)</Text>
         </Text>
         <TextInput
-          style={stylesDailyGoal.input}
+          style={styles.input}
           placeholder="Enter your daily fiber"
           keyboardType="numeric"
           //   value={String(goal.fiber)}
           onChangeText={(input) => setGoal({ ...goal, fiber: Number(input) })}
         />
-        <Text style={stylesDailyGoal.label}>
+        <Text style={styles.label}>
           Sugar<Text style={{ fontWeight: 100 }}> (g)</Text>
         </Text>
         <TextInput
-          style={stylesDailyGoal.input}
+          style={styles.input}
           placeholder="Enter your daily sugar"
           keyboardType="numeric"
           //   value={String(goal.sugar)}
@@ -106,14 +113,85 @@ export default function SetGoal() {
 
         <Pressable
           style={[
-            stylesDailyGoal.button,
+            styles.button,
             // stylesDailyGoal.containerShadow
           ]}
           onPress={handleSaveGoal}
         >
-          <Text style={stylesDailyGoal.buttonText}>Save Goal</Text>
+          <Text style={styles.buttonText}>Save Goal</Text>
         </Pressable>
       </View>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    // alignItems: "center",
+    width: "100%",
+    minHeight: "100%",
+    backgroundColor: "#2D3E40",
+    paddingTop: 45,
+    paddingBottom: 20,
+  },
+  inputContainer: {
+    width: "90%",
+    marginHorizontal: "auto",
+    // backgroundColor: "#5D7073",
+    borderRadius: 7,
+    padding: 20,
+    marginTop: 10,
+    // ...containerShadow.containerShadow,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "white",
+    // backgroundColor: "#D4AA7D",
+    width: "90%",
+    // textAlign: "center",
+    // paddingVertical: 15,
+    marginLeft: 20,
+    borderRadius: 7,
+    // marginBottom: 10,
+    overflow: "hidden",
+    // ...containerShadow.containerShadow,
+  },
+  label: {
+    fontSize: 16,
+    marginBottom: 5,
+    fontWeight: "bold",
+    color: "#D4AA7D",
+    marginTop: 10,
+    maxWidth: "100%",
+  },
+  input: {
+    width: "100%",
+    padding: 12,
+    marginBottom: 10,
+    // backgroundColor: "#8FA3A6",
+    backgroundColor: "#fff",
+    borderTopRightRadius: 5,
+    borderTopLeftRadius: 5,
+    borderBottomWidth: 1,
+    borderColor: "#D4AA7D",
+    fontSize: 16,
+    color: "#2D3E40",
+    ...containerShadow.containerShadow,
+  },
+  button: {
+    width: "100%",
+    padding: 15,
+    backgroundColor: "#fff",
+    // backgroundColor: "#D4AA7D",
+    borderRadius: 5,
+    alignItems: "center",
+    marginTop: 20,
+    ...containerShadow.containerShadow,
+  },
+  buttonText: {
+    color: "#D4AA7D",
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+});

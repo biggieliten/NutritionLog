@@ -152,15 +152,14 @@ class SVGatorPlayer {
   }
 }
 
-const SVGatorComponent = React.forwardRef((props, ref, width, height) => {
+const SVGatorComponent = React.forwardRef((props, ref) => {
+  const { width, height } = props;
   const html = getHtml();
   const { newProps, styles } = SVGatorPlayer.getWebViewProps(props, html);
   return (
     <WebView
       width={width}
       height={height}
-      //   svgWidth={newProps.width}
-      //   svgHeight={newProps.height}
       ref={ref}
       {...newProps}
       source={{ html }}

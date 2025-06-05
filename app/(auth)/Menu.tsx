@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import { macroCalculator } from "../utils/macroCalculator";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getFixedDate } from "../utils/todaysDate";
-import { containerShadow } from "../styles/styles";
+import { containerShadow } from "../styles/styleUtils";
 import { updateCurrentMacros } from "../hooks/updateCurrentMacros";
 import { useAuth } from "../state/AuthState/AuthContext";
 import { router } from "expo-router";
@@ -23,7 +23,7 @@ import { trackCalorieBurn } from "../utils/trackBurnedCalories";
 import { trackConsumption as trackTotalConsumption } from "../utils/trackConsumption";
 import { Consumption, Macros } from "../types/types";
 
-export default function AddMeal() {
+export default function Menu() {
   //   const { scannedProduct, setScannedProduct } = useScannedProductStore();
   //   const { setCurrentMacros, currentMacros } = useCurrentMacroStore();
   const [weight, setWeight] = useState<number>(0);
@@ -38,6 +38,7 @@ export default function AddMeal() {
   const totalConsumption = userData?.consumption!;
 
   if (!userData || !user) return;
+
   const currentMacros = userData?.currentMacros;
   const productName =
     scannedProduct?.product?.product_name || "Unknown Product";
@@ -56,7 +57,7 @@ export default function AddMeal() {
     nutriments.fiber_100g,
     nutriments.sugars_100g
   );
-  //   console.log("🪵 | AddMeal | macros:", macros);
+  //   console.log("🪵 | Menu | macros:", macros);
 
   const consumedMacros: Macros = {
     calories: getSafeValue(macros.kcal),
@@ -66,7 +67,7 @@ export default function AddMeal() {
     fiber: getSafeValue(macros.fiber),
     sugar: getSafeValue(macros.sugars),
   };
-  console.log("🪵 | AddMeal | consumedMacros:", consumedMacros);
+  console.log("🪵 | Menu | consumedMacros:", consumedMacros);
 
   //   console.log(macros.kcal, macros.fiber);
   const handleUpdateMacros = () => {
@@ -178,7 +179,7 @@ export default function AddMeal() {
               ([key, value]) =>
                 !isNaN(value) && (
                   <View
-                    // key={key}
+                    key={key}
                     style={{
                       borderBottomWidth: 1,
                       borderBottomColor: "#ccc",
@@ -242,7 +243,7 @@ export default function AddMeal() {
               }}
             >
               <Ionicons name="refresh-outline" size={24} color="#fff" />
-              <Text style={styles.buttonText}>Reset Input</Text>
+              <Text style={styles.buttonText}>Reset Calculation</Text>
             </Pressable>
 
             {/* <Pressable style={styles.button} onPress={clearAsyncStorage}>
@@ -257,65 +258,126 @@ export default function AddMeal() {
               <Text style={styles.buttonText}>Custom Entry</Text>
             </Pressable>
           </View>
-          <Modal
-            animationType="slide"
-            //   transparent={true}
-            visible={modalVisible}
-            onRequestClose={() => setModalVisible(false)}
-          >
-            <AddManually setShowModal={setModalVisible} />
-          </Modal>
         </View>
       ) : (
-        <>
-          <View>
+        <View style={styles.menuContainer}>
+          <Text
+            style={{
+              color: "#fff",
+              fontWeight: "bold",
+              fontSize: 30,
+              width: "90%",
+              marginVertical: 20,
+              textAlign: "left",
+            }}
+          >
+            Menu
+          </Text>
+          <View style={styles.buttonContainer}>
+            {/* <Text>or</Text> */}
+            {/* <View style={styles.splitter} /> */}
             <Pressable
               style={styles.button}
-              onPress={() => setModalVisible(true)}
+              onPress={() => router.push("/(auth)/CreateMeal")}
             >
-              <Text style={styles.buttonText}>Add manually</Text>
+              <Text style={styles.buttonText}>Create a Meal</Text>
             </Pressable>
-            <Modal
-              animationType="slide"
-              //   transparent={true}
-              visible={modalVisible}
-              onRequestClose={() => setModalVisible(false)}
+            <Pressable
+              style={styles.button}
+              onPress={() => router.replace("/FoodsAndMeals")}
             >
-              <AddManually setShowModal={setModalVisible} />
-            </Modal>
+              <Text style={styles.buttonText}>Meals & Foods</Text>
+            </Pressable>
+            {/* <View style={styles.splitter} /> */}
+            <Pressable
+              style={styles.button}
+              onPress={() => setUpdateModalVisible(!updateModalVisible)}
+            >
+              <Text style={styles.buttonText}>Burned Calories</Text>
+            </Pressable>
+            {/* <View style={styles.splitter} /> */}
+            <View>
+              <Pressable
+                style={styles.button}
+                onPress={() => setModalVisible(true)}
+              >
+                <Text style={styles.buttonText}>Manual Entry</Text>
+              </Pressable>
+            </View>
           </View>
-          {/* <Text>or</Text> */}
-          <View style={styles.splitter} />
-          <Pressable
-            style={styles.button}
-            onPress={() => router.replace("/Scanner")}
-          >
-            <Text style={styles.buttonText}>Scan barcode</Text>
-          </Pressable>
-          <View style={styles.splitter} />
-          <Pressable
-            style={styles.button}
-            onPress={() => setUpdateModalVisible(!updateModalVisible)}
-          >
-            <Text style={styles.buttonText}>Burned calories</Text>
-          </Pressable>
-          <UpdateModal
-            label="Enter Burned calories"
-            visible={updateModalVisible}
-            onClose={() => setUpdateModalVisible(!updateModalVisible)}
-            setValue={setBurnedCalories}
-            value={String(burnedCalories)}
-            onSave={handleBurnedCalories}
-          />
-        </>
+
+          <View style={styles.totalConsumtionContainer}>
+            <Text style={styles.totalConsumptonTitle}>Total consumption</Text>
+            <View style={styles.consumptionRow}>
+              <Text style={styles.nutritionLabel}>Calories</Text>
+              <Text style={styles.totalConsumptionValue}>
+                {totalConsumption.consumedCalories}
+              </Text>
+            </View>
+            <View style={styles.consumptionRow}>
+              <Text style={styles.nutritionLabel}>Protein</Text>
+              <Text style={styles.totalConsumptionValue}>
+                {totalConsumption.consumedProtein}
+              </Text>
+            </View>
+            <View style={styles.consumptionRow}>
+              <Text style={styles.nutritionLabel}>Carbs</Text>
+              <Text style={styles.totalConsumptionValue}>
+                {totalConsumption.consumedCarbohydrates}
+              </Text>
+            </View>
+            <View style={styles.consumptionRow}>
+              <Text style={styles.nutritionLabel}>Fat</Text>
+              <Text style={styles.totalConsumptionValue}>
+                {totalConsumption.consumedFat}
+              </Text>
+            </View>
+            <View style={styles.consumptionRow}>
+              <Text style={styles.nutritionLabel}>Fiber</Text>
+              <Text style={styles.totalConsumptionValue}>
+                {totalConsumption.consumedFiber}
+              </Text>
+            </View>
+            <View style={styles.consumptionRow}>
+              <Text style={styles.nutritionLabel}>Sugar</Text>
+              <Text style={styles.totalConsumptionValue}>
+                {totalConsumption.consumedSugar}
+              </Text>
+            </View>
+          </View>
+        </View>
       )}
+      <Modal
+        animationType="slide"
+        //   transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <AddManually setShowModal={setModalVisible} />
+      </Modal>
+      <Modal
+        animationType="slide"
+        //   transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <AddManually setShowModal={setModalVisible} />
+      </Modal>
+      <UpdateModal
+        label="Enter Burned calories"
+        visible={updateModalVisible}
+        onClose={() => setUpdateModalVisible(!updateModalVisible)}
+        setValue={setBurnedCalories}
+        value={String(burnedCalories)}
+        onSave={handleBurnedCalories}
+      />
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent: "center",
+    // justifyContent: "center",
     alignItems: "center",
     // width: "100%",
     minHeight: "100%",
@@ -335,6 +397,12 @@ const styles = StyleSheet.create({
     // borderRadius: 15,
     marginVertical: 20,
   },
+  menuContainer: {
+    alignItems: "center",
+    width: "100%",
+    // justifyContent: "center",
+    // backgroundColor: "#ccc",
+  },
   macroContainer: {
     justifyContent: "center",
     alignItems: "center",
@@ -346,10 +414,48 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     // marginVertical: 20,
   },
-  buttonContainer: {
-    width: "80%",
+  totalConsumtionContainer: {
+    justifyContent: "center",
     alignItems: "center",
-    marginTop: 20,
+    width: "80%",
+    height: "auto",
+    padding: 25,
+    marginTop: 40,
+    backgroundColor: "#5D7073",
+    borderRadius: 15,
+  },
+  totalConsumptonTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "white",
+    marginBottom: 10,
+  },
+  consumptionRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "90%",
+    marginVertical: 5,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ccc",
+    paddingVertical: 5,
+    alignItems: "center",
+  },
+  nutritionLabel: {
+    fontSize: 16,
+    color: "white",
+    fontWeight: "bold",
+  },
+  totalConsumptionValue: {
+    color: "white",
+  },
+  buttonContainer: {
+    // backgroundColor: "#5D7073",
+    width: "90%",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    alignItems: "center",
+    justifyContent: "center",
+    marginVertical: 50,
   },
   productName: {
     fontSize: 20,
@@ -377,14 +483,17 @@ const styles = StyleSheet.create({
   },
   button: {
     ...containerShadow.containerShadow,
-    width: 200,
-    height: 60,
-    flexDirection: "row",
     backgroundColor: "#D4AA7D",
-    borderRadius: 10,
+    width: 150,
+    height: 60,
     alignItems: "center",
-    paddingLeft: 10,
-    marginVertical: 10,
+    justifyContent: "center",
+    flexDirection: "row",
+    borderRadius: 10,
+    margin: 10,
+
+    // paddingLeft: 10,
+    // marginVertical: 10,
   },
   optionButton: {
     ...containerShadow.containerShadow,
@@ -415,6 +524,6 @@ const styles = StyleSheet.create({
     height: 0,
     borderBottomWidth: 1,
     borderBottomColor: "#fff",
-    marginVertical: "50%",
+    // marginVertical: "50%",
   },
 });

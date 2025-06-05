@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, Pressable, ScrollView } from "react-native";
+import { View, Text, Pressable, ScrollView, StyleSheet } from "react-native";
 import LogCard from "../components/LogCard";
 import { Log, Macros, DailyGoal } from "../types/types";
-import { stylesIndex } from "../styles/styles";
+import { containerShadow } from "../styles/styleUtils";
 import { AnimatedCircularProgress } from "react-native-circular-progress";
 import { divisionToPercentage } from "../utils/divisionToPercentage";
 import { Link } from "expo-router";
@@ -78,11 +78,11 @@ export default function Index() {
   }, [user, userData, userData.lastActive]);
 
   return (
-    <ScrollView contentContainerStyle={stylesIndex.container}>
-      <View style={stylesIndex.header}>
-        <Text style={stylesIndex.headerWeekday}>{getWeekday()}</Text>
+    <ScrollView contentContainerStyle={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.headerWeekday}>{getWeekday()}</Text>
         {/* <View style={stylesIndex.headerDateContainer}> */}
-        <Text style={stylesIndex.headerDate}>{formatDate(getFixedDate())}</Text>
+        <Text style={styles.headerDate}>{formatDate(getFixedDate())}</Text>
         {/* <Apple width={40} height={40} /> */}
       </View>
 
@@ -133,76 +133,7 @@ export default function Index() {
               percentageOfDailyCalories={percentageOfDailyCalories}
               currentMacros={currentMacros}
             />
-            {/* <Text style={stylesIndex.sectionTitle}>Today's Progress</Text> */}
-            {/* <View style={stylesIndex.calorieProgressContainer}>
-              <View style={{ flexDirection: "column", alignItems: "center" }}>
-                <Text
-                  style={{
-                    color: "#3e4e50",
-                    marginTop: 10,
-                    fontSize: 16,
-                  }}
-                >
-                  {remainingCalories} left
-                </Text>
-                <Ionicons name="add-circle-outline" />
-              </View>
-              <AnimatedCircularProgress
-                size={150}
-                width={8}
-                fill={Number(percentageOfDailyCalories)}
-                tintColor="#668a8c"
-                rotation={0}
-                backgroundColor="#C9D1D2"
-                lineCap="round"
-              >
-                {() => (
-                  <View
-                    style={{
-                      backgroundColor: "#fff",
-                      height: 180,
-                      width: 180,
-                      borderRadius: 100,
-                      alignItems: "center",
-                      justifyContent: "center",
-                    }}
-                  >
-                    <View style={stylesIndex.calorieStatusContainer}>
-                      <Text
-                        style={{
-                          color: "#D4AA7D",
-                          fontSize: 20,
-                          fontWeight: "bold",
-                        }}
-                      >
-                        {currentMacros.calories}
-                      </Text>
-                      <Text
-                        style={{
-                          color: "#5d7073",
-                        }}
-                      >
-                        of {userData?.dailyGoal.calories} kcal
-                      </Text>
-                    </View>
-                  </View>
-                )}
-              </AnimatedCircularProgress>
-              <View style={{ flexDirection: "column", alignItems: "center" }}>
-                <Text
-                  style={{
-                    color: "#3e4e50",
-                    marginTop: 10,
-                    fontSize: 16,
-                  }}
-                >
-                  {remainingCalories} burned
-                </Text>
-                <Ionicons name="remove-circle-outline" />
-              </View>
-            </View> */}
-
-            <View style={stylesIndex.dailyProgressContainer}>
+            <View style={styles.dailyProgressContainer}>
               <MacroProgress
                 label="Protein"
                 progressColor="#D4AA7D"
@@ -247,14 +178,14 @@ export default function Index() {
         )}
       </>
 
-      <View style={stylesIndex.splitterBox}>
-        <View style={stylesIndex.splitter}></View>
+      <View style={styles.splitterBox}>
+        <View style={styles.splitter}></View>
         <Ionicons name="time-outline" color="#D4AA7D" size={28} />
-        <View style={stylesIndex.splitter}></View>
+        <View style={styles.splitter}></View>
       </View>
 
       {/* <Text style={stylesIndex.historySectionTitle}>Previous Acivity</Text> */}
-      <View style={stylesIndex.historyContainer}>
+      <View style={styles.historyContainer}>
         {reverseLogs && reverseLogs.length > 0 ? (
           <>
             {reverseLogs
@@ -263,16 +194,13 @@ export default function Index() {
                 <LogCard key={index} {...log} />
               ))}
             {!allLogsRendered && (
-              <Pressable
-                style={stylesIndex.loadMoreButton}
-                onPress={loadMoreLogs}
-              >
-                <Text style={stylesIndex.loadMoreButtonText}>Load more</Text>
+              <Pressable style={styles.loadMoreButton} onPress={loadMoreLogs}>
+                <Text style={styles.loadMoreButtonText}>Load more</Text>
               </Pressable>
             )}
           </>
         ) : (
-          <Text style={stylesIndex.emptyHistoryText}>
+          <Text style={styles.emptyHistoryText}>
             Your macros called — they’d like to be logged.
           </Text>
         )}
@@ -280,3 +208,111 @@ export default function Index() {
     </ScrollView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    alignItems: "center",
+    width: "100%",
+    minHeight: "100%",
+    backgroundColor: "#2D3E40",
+    paddingBottom: 30,
+    paddingTop: 10,
+  },
+  header: {
+    width: "100%",
+
+    // borderRadius: 16,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    // paddingVertical: 18,
+    paddingHorizontal: 20,
+    marginTop: 10,
+    marginBottom: 20,
+    // ...containerShadow.containerShadow,
+  },
+  headerWeekday: {
+    color: "#FFFF",
+    fontSize: 22,
+    fontWeight: "bold",
+  },
+  headerDate: {
+    color: "#FFFF",
+    fontWeight: "normal",
+    fontSize: 18,
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "row",
+  },
+  dailyProgressContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    width: "90%",
+    padding: 18,
+    backgroundColor: "#fff",
+    borderRadius: 16,
+    marginVertical: 20,
+    ...containerShadow.containerShadow,
+  },
+  calorieProgressContainer: {
+    width: "90%",
+    height: "auto",
+    backgroundColor: "#fff",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 16,
+    paddingVertical: 20,
+  },
+  calorieStatusContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  historySectionTitle: {
+    color: "#D4AA7D",
+    fontSize: 20,
+    fontWeight: "bold",
+    // marginBottom: 10,
+    marginTop: 10,
+    marginLeft: 20,
+    alignSelf: "flex-start",
+    // marginLeft: "auto",
+    // marginRight: "auto",
+  },
+  historyContainer: {
+    width: "100%",
+    borderRadius: 16,
+  },
+  emptyHistoryText: {
+    color: "#b0b0b0",
+    textAlign: "center",
+    fontSize: 16,
+    paddingVertical: 20,
+  },
+  loadMoreButton: {
+    marginHorizontal: "auto",
+    backgroundColor: "#D4AA7D",
+    borderRadius: 8,
+    marginTop: 10,
+    padding: 10,
+  },
+  loadMoreButtonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  splitterBox: {
+    width: "90%",
+    alignItems: "center",
+    justifyContent: "space-between",
+    flexDirection: "row",
+  },
+
+  splitter: {
+    width: "40%",
+    height: 1,
+    backgroundColor: "#ccc",
+    opacity: 0.5,
+    marginVertical: 30,
+  },
+});

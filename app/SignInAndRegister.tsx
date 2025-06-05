@@ -69,9 +69,10 @@ export default function SignInAndRegister() {
           fiber: 0,
           sugar: 0,
         },
+        savedMeals: [],
         logs: [],
-        totalEatenCalories: 0,
-        totalEatenProtein: 0,
+        // totalEatenCalories: 0,
+        // totalEatenProtein: 0,
         consumption: {
           consumedCalories: 0,
           consumedProtein: 0,
@@ -146,7 +147,7 @@ export default function SignInAndRegister() {
   return (
     <View style={styles.container}>
       <View style={styles.logoContainer}>
-        <NutriLog width={200} height={200} />
+        <NutriLog {...({ width: 200, height: 100 } as any)} />
       </View>
       <TextInput
         placeholder="Enter email"
@@ -176,46 +177,69 @@ export default function SignInAndRegister() {
           <Text style={styles.buttonText}>Create account</Text>
         </Pressable>
       </View>
-      <Modal visible={modalVisible} animationType="slide">
-        <Pressable onPress={() => setModalVisible(false)}>
-          <Ionicons
-            name="arrow-back-circle-outline"
-            size={40}
-            color={"#4B5945"}
+      <Modal
+        visible={modalVisible}
+        animationType="slide"
+        // animationType="fade"
+        transparent
+      >
+        <View style={styles.overlay}>
+          <Pressable
+            onPress={() => setModalVisible(false)}
+            style={{ position: "absolute", top: 40, left: 20 }}
+          >
+            <Ionicons
+              name="arrow-back-circle-outline"
+              size={40}
+              color={"#D4AA7D"}
+            />
+          </Pressable>
+          <Text
+            style={{
+              color: "#fff",
+              fontSize: 30,
+              fontWeight: "bold",
+              //   marginTop: 200,
+            }}
+          >
+            Create An Account
+          </Text>
+          {/* <View style={styles.inputContainer}></View> */}
+          <TextInput
+            placeholder="Enter Username"
+            placeholderTextColor={"#fff"}
+            value={username}
+            onChange={(t) => setUsername(t.nativeEvent.text.trim())}
+            style={[styles.input, { marginTop: 50 }]}
           />
-        </Pressable>
-        <TextInput
-          placeholder="Enter username"
-          placeholderTextColor={"#5D7073"}
-          value={username}
-          onChange={(t) => setUsername(t.nativeEvent.text.trim())}
-          style={styles.input}
-        />
-        <TextInput
-          placeholder="Enter email"
-          placeholderTextColor={"#5D7073"}
-          value={email}
-          onChange={(t) => setEmail(t.nativeEvent.text.trim())}
-          style={styles.input}
-        />
-        <TextInput
-          placeholder="Enter password"
-          placeholderTextColor={"#5D7073"}
-          secureTextEntry={true}
-          value={password}
-          onChange={(t) => setPassword(t.nativeEvent.text.trim())}
-          style={styles.input}
-        />
-        <Pressable onPress={handleRegister}>
-          <Text>Register</Text>
-        </Pressable>
+          <TextInput
+            placeholder="Enter Email"
+            placeholderTextColor={"#fff"}
+            value={email}
+            onChange={(t) => setEmail(t.nativeEvent.text.trim())}
+            style={styles.input}
+          />
+          <TextInput
+            placeholder="Enter Password"
+            placeholderTextColor={"#fff"}
+            secureTextEntry={true}
+            value={password}
+            onChange={(t) => setPassword(t.nativeEvent.text.trim())}
+            style={styles.input}
+          />
+          <Pressable style={styles.registerButton} onPress={handleRegister}>
+            <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 16 }}>
+              Register
+            </Text>
+          </Pressable>
+        </View>
       </Modal>
       {/* <Pressable onPress={() => console.log(!auth.currentUser, "user id")}>
         <Text>Log user</Text>
-      </Pressable>
-      <Pressable onPress={() => router.replace("/DailyGoal")}>
+		</Pressable>
+		<Pressable onPress={() => router.replace("/DailyGoal")}>
         <Text>Route</Text>
-      </Pressable> */}
+		</Pressable> */}
     </View>
   );
 }
@@ -230,7 +254,7 @@ const styles = StyleSheet.create({
     height: 40,
     maxWidth: 250,
     backgroundColor: "#5D7073",
-    color: "#F2F2F2",
+    color: "#fff",
     borderColor: "#5D7073",
     borderWidth: 1,
     borderRadius: 60,
@@ -239,11 +263,13 @@ const styles = StyleSheet.create({
     width: "80%",
   },
   logoContainer: {
-    // marginBottom: 20,
-    // alignItems: "center",
+    marginBottom: 20,
+    alignItems: "center",
     // backgroundColor: "#B2C9AD",
-    // height: "auto",
-    // width: "auto",
+    height: "auto",
+    width: "auto",
+    // position: "absolute",
+    // top: 260,
   },
   button: {
     width: "auto",
@@ -255,5 +281,17 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: "white",
+  },
+  overlay: {
+    flex: 1,
+    backgroundColor: "#2D3E40",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  registerButton: {
+    backgroundColor: "#D4AA7D",
+    marginTop: 20,
+    padding: 10,
+    borderRadius: 10,
   },
 });

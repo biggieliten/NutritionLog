@@ -17,7 +17,7 @@ const MacroProgress = ({
       <View style={styles.labelContainer}>
         <Text style={styles.label}>{label}</Text>
         <View style={{ flexDirection: "column", alignItems: "flex-end" }}>
-          <Text style={{ fontWeight: "bold" }}>{current}g </Text>
+          <Text style={{ fontWeight: "bold" }}>{Math.round(current)}g </Text>
           <Text style={{}}> of {goal}g</Text>
         </View>
       </View>
