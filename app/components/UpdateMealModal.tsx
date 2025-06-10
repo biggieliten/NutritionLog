@@ -70,7 +70,6 @@ export const UpdateMealModal = ({
 
       const userRef = doc(db, "users", user!.uid);
 
-      // Create a new array with the updated meal
       const updatedMeals = userData.savedMeals.map((existingMeal: MealEntry) =>
         existingMeal.id === meal.id ? updatedMeal : existingMeal
       );
@@ -79,7 +78,6 @@ export const UpdateMealModal = ({
         savedMeals: updatedMeals,
       });
 
-      // Notify success
       alert("Meal updated successfully");
       setVisible();
     } catch (error) {
@@ -137,13 +135,11 @@ export const UpdateMealModal = ({
     const foodToAdd = food.find((item) => item.id === selectedFoodId);
     if (!foodToAdd) return;
 
-    // Check if food already exists in the meal
     const existingFoodIndex = selectedFood.findIndex(
       (f) => f.id === selectedFoodId
     );
 
     if (existingFoodIndex >= 0) {
-      // Update existing food amount
       const updatedFoods = [...selectedFood];
       updatedFoods[existingFoodIndex] = {
         ...updatedFoods[existingFoodIndex],
@@ -151,11 +147,9 @@ export const UpdateMealModal = ({
       };
       setSelectedFood(updatedFoods);
     } else {
-      // Add new food
       setSelectedFood([...selectedFood, { ...foodToAdd, amount: foodAmount }]);
     }
 
-    // Reset inputs
     setSelectedFoodId(null);
     setFoodAmount(0);
   };

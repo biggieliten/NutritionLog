@@ -100,7 +100,7 @@ export type FoodItems = {
   };
 };
 
-export type nutriments = {
+export type Nutriments = {
   carbohydrates: number;
   carbohydrates_100g: number;
   carbohydrates_unit: string;
@@ -160,7 +160,7 @@ export type nutriments = {
 
 export type Product = {
   _id?: string;
-  nutriments?: Partial<nutriments>;
+  nutriments?: Partial<Nutriments>;
   product_name: string;
   brands: string;
 };

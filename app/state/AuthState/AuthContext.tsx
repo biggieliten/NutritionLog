@@ -34,17 +34,10 @@ export default function AuthProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const [isSignedIn, setIsSignedIn] = useState<boolean>(false);
-  const [userData, setUserData] = useState<firebaseUser | null>(null);
-  const [signedInUser, setSignedInUser] = useState<any>();
-  console.log(isSignedIn, "isSignedIn");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
   const [user, setUser] = useState<User | null>(null);
-
+  const [userData, setUserData] = useState<firebaseUser | null>(null);
   const [scannedProduct, setScannedProduct] = useState<ScanResult | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     setIsLoading(true);

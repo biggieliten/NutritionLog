@@ -1,4 +1,4 @@
-import { Redirect, Stack, Tabs } from "expo-router";
+import { Redirect, Tabs } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { useAuth } from "../state/AuthState/AuthContext";
 import { Loading } from "../components/Loading";
@@ -11,9 +11,8 @@ export default function AuthenticatedTabLayout() {
     return <Loading />;
   }
 
-  //   console.log(user, "user");
   if (!user) return <Redirect href="/SignInAndRegister" />;
-  //   return <Stack />;
+
   return (
     <>
       <StatusBar
@@ -89,6 +88,7 @@ export default function AuthenticatedTabLayout() {
             href: user ? "/Profile" : null,
           }}
         />
+        {/* <Tabs.Screen name="AddManually" options={{ href: null }} /> */}
         <Tabs.Screen name="CreateMeal" options={{ href: null }} />
         <Tabs.Screen name="FoodsAndMeals" options={{ href: null }} />
       </Tabs>

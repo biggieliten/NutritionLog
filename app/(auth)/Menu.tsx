@@ -57,7 +57,6 @@ export default function Menu() {
     nutriments.fiber_100g,
     nutriments.sugars_100g
   );
-  //   console.log("🪵 | Menu | macros:", macros);
 
   const consumedMacros: Macros = {
     calories: getSafeValue(macros.kcal),
@@ -67,9 +66,7 @@ export default function Menu() {
     fiber: getSafeValue(macros.fiber),
     sugar: getSafeValue(macros.sugars),
   };
-  console.log("🪵 | Menu | consumedMacros:", consumedMacros);
 
-  //   console.log(macros.kcal, macros.fiber);
   const handleUpdateMacros = () => {
     const updatedMacros = {
       calories: calculateSafeSum(macros.kcal, currentMacros.calories),

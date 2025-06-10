@@ -39,18 +39,14 @@ export default function FoodsAndMeals() {
   const handleAddScannedFood = async (foodData: any) => {
     try {
       if (!user || !userData) {
-        alert("User not authenticated. Please log in again.");
         return;
       }
 
       if (foodData?.product) {
         const productId = foodData.product._id || null;
 
-        const foodId = "food-" + Math.random().toString(16).slice(2);
-
         const currentFoodItems = userData.foodItems || [];
 
-        // Check if a food with this ID already exists
         if (
           productId &&
           currentFoodItems.some((food) => food.id === productId)
@@ -133,12 +129,10 @@ export default function FoodsAndMeals() {
         return;
       }
 
-      // Filter out the food item to be removed
       const updatedFoodItems = userData.foodItems.filter(
         (foodItem) => foodItem.id !== id
       );
 
-      // Update Firestore
       const userRef = doc(db, "users", user.uid);
       await updateDoc(userRef, {
         foodItems: updatedFoodItems,

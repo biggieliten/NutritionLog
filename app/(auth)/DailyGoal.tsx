@@ -11,6 +11,8 @@ import { containerShadow } from "../styles/styleUtils";
 import { useAuth } from "../state/AuthState/AuthContext";
 import { updateDailyGoal } from "../hooks/updateDailyGoal";
 import { router } from "expo-router";
+import { get } from "firebase/database";
+import { formatDate, getFixedDate, getWeekday } from "../utils/todaysDate";
 
 export default function SetGoal() {
   const { user, userData } = useAuth();
@@ -38,7 +40,9 @@ export default function SetGoal() {
         // stylesDailyGoal.containerShadow,
       ]}
     >
-      <Text style={styles.title}>Set daily goal</Text>
+      <Text style={styles.title}>Define Intake Goal</Text>
+      {/* <Text style={styles.date}>{getWeekday()}</Text>
+      <Text style={styles.date}>{formatDate(getFixedDate())}</Text>{" "} */}
       <View style={styles.inputContainer}>
         <Text style={styles.label}>
           Calories <Text style={{ fontWeight: 100 }}>(kcal) </Text>
@@ -131,8 +135,8 @@ const styles = StyleSheet.create({
     width: "100%",
     minHeight: "100%",
     backgroundColor: "#2D3E40",
-    paddingTop: 45,
-    paddingBottom: 20,
+    // paddingTop: 45,
+    // paddingBottom: 20,
   },
   inputContainer: {
     width: "90%",
@@ -144,18 +148,18 @@ const styles = StyleSheet.create({
     // ...containerShadow.containerShadow,
   },
   title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: "white",
-    // backgroundColor: "#D4AA7D",
-    width: "90%",
-    // textAlign: "center",
-    // paddingVertical: 15,
-    marginLeft: 20,
     borderRadius: 7,
-    // marginBottom: 10,
-    overflow: "hidden",
-    // ...containerShadow.containerShadow,
+    // overflow: "hidden",
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 30,
+    width: "100%",
+    marginVertical: 20,
+    marginTop: 100,
+    textAlign: "center",
+  },
+  date: {
+    color: "#D4AA7D",
   },
   label: {
     fontSize: 16,

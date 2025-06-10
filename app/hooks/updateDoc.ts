@@ -31,4 +31,3 @@ export const setUserInfo = async ({
     console.error("Error setting document:", e);
   }
 };
-// export default setUserInfo;

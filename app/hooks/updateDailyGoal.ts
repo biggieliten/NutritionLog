@@ -23,5 +23,3 @@ export const updateDailyGoal = async ({ uid, newGoal }: Props) => {
     console.error("Error adding log:", e);
   }
 };
-
-// export default updateDailyGoal;

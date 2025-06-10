@@ -30,8 +30,6 @@ export function BarcodeScanner({ onScan, onClose }: BarcodeScannerProps) {
         enableTorch={flashState}
         onBarcodeScanned={upcScanned ? undefined : handleBarcodeScan}
       />
-
-      {/* Scanning overlay */}
       <View style={styles.overlay}>
         <View style={styles.scanArea}>
           <Text style={styles.scanAreaText}>Scan barcode here</Text>

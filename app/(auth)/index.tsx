@@ -17,14 +17,11 @@ import { CalorieStatus } from "../components/CalorieStatus";
 import { trackConsumption } from "../utils/trackConsumption";
 
 export default function Index() {
-  // const [renderedLogs, setRenderedLogs] = useState(5);
   const { user, userData } = useAuth();
 
   if (!user || !userData) {
     return <Loading />;
   }
-
-  //   if (!userData) return;
 
   const [renderedLogs, setRenderedLogs] = useState(5);
   const currentMacros = userData?.currentMacros || {};
@@ -33,14 +30,6 @@ export default function Index() {
   const dailyGoal = userData?.dailyGoal || {};
   const logs = userData?.logs || [];
   const remainingCalories = dailyGoal.calories - currentMacros.calories;
-  //   const totalConsumption = {
-  //     calories: currentMacros.calories,
-  //     protein: currentMacros.protein,
-  //     carbohydrates: currentMacros.carbohydrates,
-  //     fat: currentMacros.fat,
-  //     fiber: currentMacros.fiber,
-  //     sugar: currentMacros.sugar,
-  //   };
   const percentageOfDailyCalories = divisionToPercentage(
     currentMacros.calories,
     dailyGoal.calories
@@ -64,13 +53,11 @@ export default function Index() {
   useEffect(() => {
     if (!user || !userData) return;
     let todaysDate = getFixedDate();
-    // todaysDate = "2025-05-22";
 
     onNewDate(
       todaysDate,
       userData.lastActive || "",
       currentMacros,
-      //   totalConsumption,
       defaultValues,
       defaultValues,
       user.uid
@@ -81,12 +68,8 @@ export default function Index() {
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerWeekday}>{getWeekday()}</Text>
-        {/* <View style={stylesIndex.headerDateContainer}> */}
         <Text style={styles.headerDate}>{formatDate(getFixedDate())}</Text>
-        {/* <Apple width={40} height={40} /> */}
       </View>
-
-      {/* <Pressable onPress={lastActiv}><Text>Press</Text></Pressable> */}
 
       <>
         {dailyGoal.calories <= 0 ? (
@@ -184,7 +167,6 @@ export default function Index() {
         <View style={styles.splitter}></View>
       </View>
 
-      {/* <Text style={stylesIndex.historySectionTitle}>Previous Acivity</Text> */}
       <View style={styles.historyContainer}>
         {reverseLogs && reverseLogs.length > 0 ? (
           <>

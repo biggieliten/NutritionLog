@@ -35,6 +35,7 @@ export default function SignInAndRegister() {
 
   const handleRegister = async () => {
     const todaysDate = getFixedDate();
+
     setLoading(true);
     if (!email.length || !password.length) {
       alert("Please enter valid credentials");
@@ -52,7 +53,6 @@ export default function SignInAndRegister() {
         email: user.email,
         username: username,
         profilePicUrl: "",
-        // lastActive: todaysDate,
         dailyGoal: {
           calories: 0,
           protein: 0,
@@ -71,8 +71,7 @@ export default function SignInAndRegister() {
         },
         savedMeals: [],
         logs: [],
-        // totalEatenCalories: 0,
-        // totalEatenProtein: 0,
+
         consumption: {
           consumedCalories: 0,
           consumedProtein: 0,
@@ -83,6 +82,7 @@ export default function SignInAndRegister() {
         },
         burnedCalories: 0,
       });
+
       await AsyncStorage.setItem("nutrilog-lastActive", today);
       onAuthStateChanged(auth, (user) => {
         if (user) {
@@ -91,6 +91,7 @@ export default function SignInAndRegister() {
           console.log("No user is signed in");
         }
       });
+
       await AsyncStorage.setItem("nutrilog-lastActive", today);
     } catch (error) {
       setError("Invalid email or password");
@@ -109,22 +110,7 @@ export default function SignInAndRegister() {
       await signInWithEmailAndPassword(auth, email, password);
       console.log(auth, "currentuser IS NOT NULL, SIGNED IN");
 
-      //   const docRef = user && doc(db, "users", user.uid);
-      //   const docSnap = docRef && (await getDoc(docRef));
-
-      //   if (docSnap?.exists()) {
-      //     console.log(docSnap?.data(), "docSnap data");
-      //   }
-
-      //   const lastActiveDate = await AsyncStorage.getItem("nutrilog-lastActive");
-      //   if (!lastActiveDate) {
-      //     await AsyncStorage.setItem("nutrilog-lastActive", getToday());
-      //   }
-
       router.replace("/");
-
-      //   setEmail("");
-      //   setPassword("");
     } catch (error) {
       setError("Invalid email or password");
       console.error("Login Error: ", error);
@@ -133,14 +119,10 @@ export default function SignInAndRegister() {
 
   useEffect(() => {
     if (!user) {
-      //   setUser(null);
-      //   console.log(auth.currentUser, "currentuser IS NULL, SIGNED OUT");
       console.log(auth, "currentuser IS NULL, SIGNED OUT");
     }
     if (user) {
-      //   setUser(auth.currentUser);
       console.log(auth, "currentuser IS NOT NULL, SIGNED IN");
-      //   console.log(user, "user");
     }
   }, [user]);
 

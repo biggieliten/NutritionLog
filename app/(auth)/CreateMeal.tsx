@@ -93,11 +93,6 @@ export default function CreateMeal() {
         savedMeals: arrayUnion(newMeal),
       });
 
-      // Refresh user data to get the updated meals
-      //   if (refreshUserData) {
-      //     await refreshUserData();
-      //   }
-
       alert("Meal saved successfully!");
       router.replace("/FoodsAndMeals");
     } catch (error) {
@@ -117,7 +112,11 @@ export default function CreateMeal() {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Pressable style={styles.backButton} onPress={() => router.back()}>
-        <Ionicons name="arrow-back-circle" size={30} color="#D4AA7D" />
+        <Ionicons
+          name="arrow-back-circle-outline"
+          size={40}
+          color={"#D4AA7D"}
+        />
       </Pressable>
 
       <View style={styles.headerContainer}>
