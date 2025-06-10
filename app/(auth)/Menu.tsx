@@ -227,7 +227,7 @@ export default function Menu() {
                 }}
               >
                 <Ionicons name="add" size={24} color="#fff" />
-                <Text style={styles.buttonText}>Set daily progress</Text>
+                <Text style={styles.buttonText}>Set to daily progress</Text>
               </Pressable>
             )}
             <Pressable

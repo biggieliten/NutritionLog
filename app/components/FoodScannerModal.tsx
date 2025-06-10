@@ -81,7 +81,7 @@ export function FoodScannerModal({
             <Text style={styles.title}>
               {data?.product?.product_name || "Unknown Product"}
             </Text>
-            <Text style={styles.subtitle}>Nutrition per 100g</Text>
+            <Text style={styles.subtitle}>(per 100g)</Text>
 
             <View style={styles.macroRow}>
               <Text style={styles.macroLabel}>Calories:</Text>
@@ -162,9 +162,10 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   subtitle: {
-    fontSize: 18,
+    fontSize: 14,
     color: "#fff",
     marginBottom: 20,
+    fontWeight: "light",
   },
   macroRow: {
     flexDirection: "row",

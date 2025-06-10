@@ -90,7 +90,7 @@ export const MealCard = ({ meals, remove, edit, eat }: Props) => {
           <Ionicons size={24} color="#D4AA7D" name="fast-food" />
         </Pressable>
       </View>
-      <View style={{ position: "absolute", top: 10, right: 10 }}></View>
+      {/* <View style={{ position: "absolute", top: 10, right: 10 }}></View> */}
       <Text style={styles.mealName}>{meals.name}</Text>
       <Text style={styles.mealLabel}>{meals.label}</Text>
 
@@ -122,8 +122,8 @@ export const MealCard = ({ meals, remove, edit, eat }: Props) => {
       </View>
       {isFoodsVisible && (
         <View style={styles.dropdownContentContainer}>
-          {meals.foods.map((food: any) => (
-            <View style={styles.ingredientInfoContainer}>
+          {meals.foods.map((food: any, i) => (
+            <View key={i} style={styles.ingredientInfoContainer}>
               <Text style={styles.ingredientName}>
                 {food.name}{" "}
                 <Text style={styles.ingredientBrand}>({food.brand})</Text>
@@ -162,6 +162,7 @@ export const MealCard = ({ meals, remove, edit, eat }: Props) => {
         <View style={styles.dropdownContentContainer}>
           {orderedKeys.map((key, i) => (
             <View
+              key={i}
               style={[
                 styles.dropdownMacroItem,
                 i === orderedKeys.length - 1 && { borderBottomWidth: 0 },

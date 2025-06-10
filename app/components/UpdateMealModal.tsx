@@ -189,6 +189,8 @@ export const UpdateMealModal = ({
               data={mealLabels}
               defaultOption={{ key: meal.label, value: meal.label }}
               inputStyles={{ color: "white" }}
+              dropdownTextStyles={{ color: "white" }}
+              //   placeholder="Select meal label"
               boxStyles={{
                 marginVertical: 5,
                 backgroundColor: "#436164",
@@ -202,6 +204,7 @@ export const UpdateMealModal = ({
                 value: `${item.name} (${item.brand})`,
               }))}
               inputStyles={{ color: "white" }}
+              dropdownTextStyles={{ color: "white" }}
               boxStyles={{
                 marginVertical: 5,
                 backgroundColor: "#436164",

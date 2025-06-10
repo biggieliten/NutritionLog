@@ -19,6 +19,7 @@ import { MealEntry, FoodItems } from "../types/types";
 import { doc, updateDoc, getDoc, arrayUnion } from "firebase/firestore";
 import { db } from "@/firebaseConfig";
 import { calculateMealMacros } from "../utils/calculateMealMacros";
+import { roundOneDecimal } from "../utils/roundTwoDecimals";
 
 export const mealLabels = [
   { key: "Breakfast", value: "Breakfast" },
@@ -259,25 +260,28 @@ export default function CreateMeal() {
             <View style={styles.macrosGrid}>
               <View style={styles.macroItem}>
                 <Text style={styles.macroValue}>
-                  {calculateMealMacros(selectedFoods).calories}
+                  {roundOneDecimal(calculateMealMacros(selectedFoods).calories)}
                 </Text>
                 <Text style={styles.macroLabel}>Calories</Text>
               </View>
               <View style={styles.macroItem}>
                 <Text style={styles.macroValue}>
-                  {calculateMealMacros(selectedFoods).protein}g
+                  {roundOneDecimal(calculateMealMacros(selectedFoods).protein)}g
                 </Text>
                 <Text style={styles.macroLabel}>Protein</Text>
               </View>
               <View style={styles.macroItem}>
                 <Text style={styles.macroValue}>
-                  {calculateMealMacros(selectedFoods).carbohydrates}g
+                  {roundOneDecimal(
+                    calculateMealMacros(selectedFoods).carbohydrates
+                  )}
+                  g
                 </Text>
                 <Text style={styles.macroLabel}>Carbs</Text>
               </View>
               <View style={styles.macroItem}>
                 <Text style={styles.macroValue}>
-                  {calculateMealMacros(selectedFoods).fat}g
+                  {roundOneDecimal(calculateMealMacros(selectedFoods).fat)}g
                 </Text>
                 <Text style={styles.macroLabel}>Fat</Text>
               </View>
@@ -396,7 +400,7 @@ const styles = StyleSheet.create({
     width: "30%",
   },
   dropdownInput: {
-    color: "white",
+    color: "#fff",
   },
   dropdown: {
     backgroundColor: "#436164",
