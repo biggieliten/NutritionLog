@@ -99,10 +99,6 @@ export const MealCard = ({ meals, remove, edit, eat }: Props) => {
         <Text style={styles.dropdownLabel}>Ingredients</Text>
         <Animated.View
           style={{
-            // position: "absolute",
-            // right: 50,
-            // top: 50,
-            // zIndex: 1,
             transform: [{ rotate: foodsRotate }],
           }}
         >
@@ -137,10 +133,6 @@ export const MealCard = ({ meals, remove, edit, eat }: Props) => {
         <Text style={styles.dropdownLabel}>Macros</Text>
         <Animated.View
           style={{
-            // position: "absolute",
-            // right: 10,
-            // top: 10,
-            // zIndex: 1,
             transform: [{ rotate: macrosRotate }],
           }}
         >

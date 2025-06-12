@@ -7,9 +7,9 @@ import { StatusBar } from "react-native";
 export default function AuthenticatedTabLayout() {
   const { user, isLoading } = useAuth();
 
-  if (isLoading) {
-    return <Loading />;
-  }
+  //   if (isLoading) {
+  //     return <Loading />;
+  //   }
 
   if (!user) return <Redirect href="/SignInAndRegister" />;
 

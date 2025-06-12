@@ -24,8 +24,6 @@ import { trackConsumption as trackTotalConsumption } from "../utils/trackConsump
 import { Consumption, Macros } from "../types/types";
 
 export default function Menu() {
-  //   const { scannedProduct, setScannedProduct } = useScannedProductStore();
-  //   const { setCurrentMacros, currentMacros } = useCurrentMacroStore();
   const [weight, setWeight] = useState<number>(0);
   const [input, setInput] = useState<string>("");
   const [burnedCalories, setBurnedCalories] = useState<string>("");
@@ -99,20 +97,6 @@ export default function Menu() {
   const handleSetWeight = () => {
     setWeight(Number(input));
     setButtonSwitch(!buttonSwitch);
-    // setInput(String(0));
-    // updateCurrentMacros({
-    //   uid: user?.uid,
-    //   newMacros: {
-    //     calories: currentMacros.calories,
-    //     protein: currentMacros.protein,
-    //     carbohydrates: currentMacros.carbohydrates,
-    //     fat: currentMacros.fat,
-    //     fiber: currentMacros.fiber,
-    //     sugar: currentMacros.sugar,
-    //   },
-    // });
-
-    // setWeight(Number(0));
   };
 
   const handleBurnedCalories = () => {
@@ -123,10 +107,6 @@ export default function Menu() {
       Number(currentMacros.calories)
     );
   };
-
-  //   useEffect(() => {
-  //     // trackTotalConsumption(user.uid, userData.consumption, currentMacros);
-  //   }, [userData.currentMacros]);
 
   const clearAsyncStorage = async () => {
     try {
@@ -145,8 +125,6 @@ export default function Menu() {
             style={styles.cancleButton}
             onPress={() => {
               setScannedProduct(null);
-              //   setButtonSwitch(false);
-              //   router.replace("/Scanner");
             }}
           >
             <Ionicons
@@ -206,12 +184,6 @@ export default function Menu() {
             placeholder="Enter weight in grams"
           />
           <View style={styles.buttonContainer}>
-            {/* <Pressable
-              onPress={() => console.log(scannedProduct)}
-              style={styles.button}
-            >
-              <Text>Save Product</Text>
-            </Pressable> */}
             {!buttonSwitch ? (
               <Pressable onPress={handleSetWeight} style={styles.optionButton}>
                 <Ionicons name="calculator" size={20} color="#fff" />
@@ -242,11 +214,6 @@ export default function Menu() {
               <Ionicons name="refresh-outline" size={24} color="#fff" />
               <Text style={styles.buttonText}>Reset Calculation</Text>
             </Pressable>
-
-            {/* <Pressable style={styles.button} onPress={clearAsyncStorage}>
-              <Text style={styles.buttonText}>Clear macroLogs</Text>
-            </Pressable> */}
-            {/* <Link href="/AddManually">Add meal manually</Link> */}
             <Pressable
               style={[styles.optionButton, { paddingLeft: 13 }]}
               onPress={() => setModalVisible(true)}
@@ -372,31 +339,22 @@ export default function Menu() {
 
 const styles = StyleSheet.create({
   container: {
-    // justifyContent: "center",
     alignItems: "center",
-    // width: "100%",
     minHeight: "100%",
     backgroundColor: "#2D3E40",
-    // padding: 20,
     position: "relative",
   },
   contentContainer: {
-    // ...containerShadow.containerShadow,
     justifyContent: "center",
     alignItems: "center",
     width: "100%",
     height: "100%",
-    // padding: 20,
-    // marginTop: 10,
     backgroundColor: "#2D3E40",
-    // borderRadius: 15,
     marginVertical: 20,
   },
   menuContainer: {
     alignItems: "center",
     width: "100%",
-    // justifyContent: "center",
-    // backgroundColor: "#ccc",
   },
   macroContainer: {
     justifyContent: "center",
@@ -407,7 +365,6 @@ const styles = StyleSheet.create({
     marginTop: 40,
     backgroundColor: "#5D7073",
     borderRadius: 15,
-    // marginVertical: 20,
   },
   totalConsumtionContainer: {
     justifyContent: "center",
@@ -444,7 +401,6 @@ const styles = StyleSheet.create({
     color: "white",
   },
   buttonContainer: {
-    // backgroundColor: "#5D7073",
     width: "90%",
     flexDirection: "row",
     flexWrap: "wrap",
@@ -486,16 +442,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     borderRadius: 10,
     marginVertical: 10,
-
-    // paddingLeft: 10,
-    // marginVertical: 10,
   },
   optionButton: {
     ...containerShadow.containerShadow,
     width: "85%",
     height: 60,
     flexDirection: "row",
-    // padding: 15,
     backgroundColor: "#D4AA7D",
     borderRadius: 10,
     alignItems: "center",
@@ -519,6 +471,5 @@ const styles = StyleSheet.create({
     height: 0,
     borderBottomWidth: 1,
     borderBottomColor: "#fff",
-    // marginVertical: "50%",
   },
 });

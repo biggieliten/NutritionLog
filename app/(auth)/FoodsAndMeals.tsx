@@ -169,7 +169,6 @@ export default function FoodsAndMeals() {
           color={"#D4AA7D"}
         />
       </Pressable>
-      {/* <Text>Meals and Foods</Text> */}
 
       {isLoading && <Loading />}
       <View style={styles.choicesContainer}>
@@ -195,9 +194,8 @@ export default function FoodsAndMeals() {
           <ScrollView
             style={styles.mealsContainer}
             nestedScrollEnabled={true}
-            showsVerticalScrollIndicator={true} // Add this
+            showsVerticalScrollIndicator={true}
           >
-            {/* <View> */}
             {meals && meals.length > 0 ? (
               meals.map((meal) => (
                 <MealCard
@@ -218,26 +216,21 @@ export default function FoodsAndMeals() {
               </View>
             )}
             {meals && meals.length <= 2 && (
-              //   <View style={styles.addMoreContentContainer}>
               <Pressable
                 style={styles.addMoreContentButton}
                 onPress={() => router.push("/CreateMeal")}
               >
                 <Ionicons name="add-circle" size={30} color="#2D3E40" />
               </Pressable>
-              //   </View>
             )}
-            {/* </View> */}
           </ScrollView>
         </View>
       ) : (
         <View>
-          {/* <Text style={styles.header}>Foods</Text> */}
-
           <ScrollView
             style={styles.foodsContainer}
             nestedScrollEnabled={true}
-            showsVerticalScrollIndicator={true} // Add this
+            showsVerticalScrollIndicator={true}
           >
             <View style={styles.foodButtonsContainer}>
               <TouchableOpacity
@@ -369,8 +362,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     paddingTop: 10,
     paddingBottom: 20,
-    // alignItems: "center",
-    // justifyContent: "center",
     height: "80%",
   },
   noContentContainer: {

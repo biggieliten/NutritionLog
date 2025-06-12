@@ -82,6 +82,7 @@ export default function AuthProvider({
         }
       );
 
+      // Runs the clean up function when the component unmounts (or when the user changes)
       return () => userDocUnsubscribe();
     });
 

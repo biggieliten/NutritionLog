@@ -3,17 +3,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 
-// export const getUserDoc = async (uid: string) => {
-//   const docRef = doc(db, "users", uid);
-//   try {
-//     const docSnap = await getDoc(docRef);
-
-//     console.log(docSnap.data(), "docSnap / user data");
-//   } catch (e) {
-//     console.error("Error getting document:", e);
-//   }
-// };
-
 export const getUserDoc = async (uid: string) => {
   try {
     const cachedUserData = await AsyncStorage.getItem(`_${uid}`);

@@ -81,6 +81,7 @@ export function FoodScannerModal({
             <Text style={styles.title}>
               {data?.product?.product_name || "Unknown Product"}
             </Text>
+            <Text style={styles.subtitle}>{data?.product.brands}</Text>
             <Text style={styles.subtitle}>(per 100g)</Text>
 
             <View style={styles.macroRow}>

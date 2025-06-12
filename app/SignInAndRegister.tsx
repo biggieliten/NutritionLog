@@ -147,11 +147,6 @@ export default function SignInAndRegister() {
         style={styles.input}
       />
       <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-        {/* <Text>{error}</Text> */}
-        {/* <Pressable style={styles.button} onPress={handleRegister}>
-          <Text style={styles.buttonText}>Register</Text>
-        </Pressable> */}
-        {/* <Text>{error}</Text> */}
         <Pressable style={styles.button} onPress={handleLogin}>
           <Text style={styles.buttonText}>Login</Text>
         </Pressable>
@@ -181,12 +176,10 @@ export default function SignInAndRegister() {
               color: "#fff",
               fontSize: 30,
               fontWeight: "bold",
-              //   marginTop: 200,
             }}
           >
             Create An Account
           </Text>
-          {/* <View style={styles.inputContainer}></View> */}
           <TextInput
             placeholder="Enter Username"
             placeholderTextColor={"#fff"}
@@ -216,12 +209,6 @@ export default function SignInAndRegister() {
           </Pressable>
         </View>
       </Modal>
-      {/* <Pressable onPress={() => console.log(!auth.currentUser, "user id")}>
-        <Text>Log user</Text>
-		</Pressable>
-		<Pressable onPress={() => router.replace("/DailyGoal")}>
-        <Text>Route</Text>
-		</Pressable> */}
     </View>
   );
 }
@@ -247,11 +234,8 @@ const styles = StyleSheet.create({
   logoContainer: {
     marginBottom: 20,
     alignItems: "center",
-    // backgroundColor: "#B2C9AD",
     height: "auto",
     width: "auto",
-    // position: "absolute",
-    // top: 260,
   },
   button: {
     width: "auto",

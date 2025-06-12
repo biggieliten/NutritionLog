@@ -131,21 +131,16 @@ export default function SetGoal() {
 
 const styles = StyleSheet.create({
   container: {
-    // alignItems: "center",
     width: "100%",
     minHeight: "100%",
     backgroundColor: "#2D3E40",
-    // paddingTop: 45,
-    // paddingBottom: 20,
   },
   inputContainer: {
     width: "90%",
     marginHorizontal: "auto",
-    // backgroundColor: "#5D7073",
     borderRadius: 7,
     padding: 20,
     marginTop: 10,
-    // ...containerShadow.containerShadow,
   },
   title: {
     borderRadius: 7,
@@ -173,7 +168,6 @@ const styles = StyleSheet.create({
     width: "100%",
     padding: 12,
     marginBottom: 10,
-    // backgroundColor: "#8FA3A6",
     backgroundColor: "#fff",
     borderTopRightRadius: 5,
     borderTopLeftRadius: 5,
@@ -187,7 +181,6 @@ const styles = StyleSheet.create({
     width: "100%",
     padding: 15,
     backgroundColor: "#fff",
-    // backgroundColor: "#D4AA7D",
     borderRadius: 5,
     alignItems: "center",
     marginTop: 20,

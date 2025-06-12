@@ -40,8 +40,6 @@ export default function Pofile() {
 
   if (!user || !userData) return;
 
-  //   const correctFieldType = (type: string) => {};
-
   useEffect(() => {
     if (userData?.profilePicUrl) {
       setImage(userData.profilePicUrl);
@@ -75,7 +73,6 @@ export default function Pofile() {
       const selectedImage = result.assets[0].uri;
       setImage(selectedImage);
       updateProfilePiture(selectedImage);
-      //   cacheImage(result.assets[0].uri);
     }
   };
 

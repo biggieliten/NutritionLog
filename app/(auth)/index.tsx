@@ -83,7 +83,6 @@ export default function Index() {
                 flexDirection: "row",
                 alignItems: "center",
                 position: "relative",
-                // justifyContent: "space-evenly",
               }}
             >
               <Text
@@ -92,10 +91,8 @@ export default function Index() {
                   color: "#fff",
                   width: "auto",
                   marginLeft: 30,
-                  //   flex: 1,
                   fontSize: 18,
                   fontWeight: "bold",
-                  //   backgroundColor: "#ccc",
                 }}
               >
                 Define Todays Goal
@@ -254,12 +251,9 @@ const styles = StyleSheet.create({
     color: "#D4AA7D",
     fontSize: 20,
     fontWeight: "bold",
-    // marginBottom: 10,
     marginTop: 10,
     marginLeft: 20,
     alignSelf: "flex-start",
-    // marginLeft: "auto",
-    // marginRight: "auto",
   },
   historyContainer: {
     width: "100%",

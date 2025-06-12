@@ -42,7 +42,6 @@ export const UpdateMealModal = ({
   setVisible,
   visible,
 }: Props) => {
-  //   const [mealData, setMealData] = useState(meal);
   const [editedMeal, setEditedMeal] = useState<MealEntry>({ ...meal });
   const [mealLabel, setMealLabel] = useState(meal.label);
   const [mealName, setMealName] = useState(meal.name);
@@ -50,7 +49,6 @@ export const UpdateMealModal = ({
   const [selectedFood, setSelectedFood] = useState<FoodItems[]>(meal.foods);
   const [selectedFoodId, setSelectedFoodId] = useState<string | null>();
   console.log(selectedFoodId, mealLabel);
-  //   setMealLabel(meal.label);
 
   const handleEditMeal = async () => {
     if (!user) {
@@ -415,11 +413,6 @@ const styles = StyleSheet.create({
   inputGroup: {
     marginVertical: 5,
   },
-  //   inputLabel: {
-  //     fontSize: 16,
-  //     color: "white",
-  //     marginBottom: 8,
-  //   },
   input: {
     backgroundColor: "#436164",
     padding: 12,
@@ -482,34 +475,6 @@ const styles = StyleSheet.create({
     color: "white",
     marginBottom: 10,
   },
-  //   selectedFoodItem: {
-  //     flexDirection: "row",
-  //     justifyContent: "space-between",
-  //     alignItems: "center",
-  //     backgroundColor: "#436164",
-  //     borderRadius: 10,
-  //     padding: 12,
-  //     marginBottom: 8,
-  //   },
-  //   foodInfo: {
-  //     flex: 1,
-  //   },
-  //   foodName: {
-  //     color: "white",
-  //     fontWeight: "bold",
-  //     fontSize: 16,
-  //   },
-  //   foodBrand: {
-  //     color: "#ccc",
-  //     fontSize: 14,
-  //   },
-  //   foodMacros: {
-  //     color: "white",
-  //     marginTop: 4,
-  //   },
-  //   removeButton: {
-  //     padding: 5,
-  //   },
   macrosContainer: {
     backgroundColor: "#436164",
     borderRadius: 10,
