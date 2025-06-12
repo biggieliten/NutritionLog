@@ -316,7 +316,6 @@ export default function CreateMeal() {
   );
 }
 
-// Keep your existing helper components
 type ScannerProps = {
   setShowScanner: (bool: boolean) => void;
   showScanner: boolean;
